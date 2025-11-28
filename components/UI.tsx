@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Notification, NotificationType } from '../types';
+import { Notification } from '../types'; // <--- AQUÍ: Se eliminó NotificationType
 import { CheckIcon, XMarkIcon, FlagIcon } from './Icons';
 
 // Button
