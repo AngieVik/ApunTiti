@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // <--- AQUÍ FALTABA useEffect
 import { View, Theme } from '../types';
 import { ClockIcon, CalendarIcon, CogIcon, SunIcon, MoonIcon } from './Icons';
 
@@ -34,7 +33,17 @@ const NavButton: React.FC<{
 
 
 const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView, theme, toggleTheme }) => {
-const [liveTime] = useState(new Date());
+  // CORRECCIÓN AQUÍ: Añadido setLiveTime dentro de los corchetes
+  const [liveTime, setLiveTime] = useState(new Date());
+
+  // NUEVO: El efecto para actualizar el reloj cada segundo
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setLiveTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <header className="bg-white/90 dark:bg-black/90 backdrop-blur-md p-2 shadow-xl sticky top-0 z-50 border-b border-yellow-500/20">
       <div className="container mx-auto flex justify-between items-center">
