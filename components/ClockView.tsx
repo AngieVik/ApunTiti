@@ -142,7 +142,7 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
   };
 
   return (
-    <div className="space-y-2 max-w-3xl mx-auto">
+    <div className="space-y-2">
       {/* Registration Card */}
       <Card className="border-t-2 border-t-yellow-500">
         <div className="flex items-center justify-between mb-2">

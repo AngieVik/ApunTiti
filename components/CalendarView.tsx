@@ -524,18 +524,19 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
     return (
         <div id="calendar-container" className="space-y-2">
             
-            {/* BARRA DE CONTROLES UNIFICADA Y RESPONSIVE EN 1 SOLA FILA */}
+            {/* BARRA DE CONTROLES UNIFICADA Y RESPONSIVE (Mejorada para Móvil y PC) */}
             <Card className="print:hidden bg-white dark:bg-[#111]">
-                {/* overflow-x-auto permite scroll en móviles muy pequeños, pero en general todo cabe en una fila */}
-                <div className="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-1">
+                {/* Flex-wrap permite que en móviles se divida en dos filas si es necesario, 
+                    y en PC (md:flex-nowrap) se mantenga en una sola línea */}
+                <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-3 py-1">
                     
-                    {/* GRUPO 1: Botones de Vista - Flex-none para que no se aplasten */}
-                    <div className="flex items-center gap-1 shrink-0">
+                    {/* GRUPO 1: Botones de Vista - Ocupan todo el ancho en móvil (w-full) */}
+                    <div className="flex items-center gap-1 w-full md:w-auto justify-between md:justify-start">
                         {['year', 'month', 'week', 'day'].map((type) => (
                             <button 
                                 key={type}
                                 onClick={() => handleViewChange(type as CalendarViewType)} 
-                                className={`h-8 w-auto px-3 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all whitespace-nowrap ${viewType === type ? 'bg-yellow-500 text-black border-yellow-600 shadow-sm' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}
+                                className={`h-8 flex-1 md:flex-none md:w-16 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all whitespace-nowrap ${viewType === type ? 'bg-yellow-500 text-black border-yellow-600 shadow-sm' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}
                             >
                                 {type === 'year' && 'Año'}
                                 {type === 'month' && 'Mes'}
@@ -545,22 +546,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                         ))}
                     </div>
 
-                    {/* GRUPO 2: Selectores de Fecha - Estilo exacto a UI.tsx pero inline */}
-                    <div className="flex items-center gap-1 shrink-0">
+                    {/* GRUPO 2: Selectores de Fecha - Ocupan todo el ancho en móvil (w-full) */}
+                    <div className="flex items-center gap-2 w-full md:w-auto">
                         <input 
                             type="date" 
                             value={rangeStart} 
                             onChange={handleRangeStartChange} 
-                            // w-auto en móvil (compacto), md:w-auto en escritorio (grande)
-                            // Clases copiadas de UI.tsx/Input para mantener estilo idéntico
-                            className="w-auto md:w-auto h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                            // flex-1 en móvil para que ocupe espacio, md:w-36 en escritorio
+                            className="flex-1 md:w-36 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                         />
+                        <span className="text-gray-400 font-bold hidden md:inline">-</span>
                         <input 
                             type="date" 
                             value={rangeEnd} 
                             onChange={handleRangeEndChange} 
-                            // w-auto en móvil, md:w-auto en escritorio
-                            className="w-auto md:w-auto h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                            // flex-1 en móvil para que ocupe espacio, md:w-36 en escritorio
+                            className="flex-1 md:w-36 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                         />
                     </div>
                 </div>

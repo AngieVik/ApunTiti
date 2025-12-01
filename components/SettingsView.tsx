@@ -170,7 +170,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
     };
 
     return (
-        <div className="max-w-2xl mx-auto space-y-3">
+        <div className="space-y-3">
              {/* General Settings Card */}
              <Card>
                 <h2 className="text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide">General</h2>
@@ -191,11 +191,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
             <Card className="border-l-4 border-l-blue-500">
                  <h2 className="text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide">Copia de Seguridad</h2>
                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Exporta tus datos para no perderlos si borras la caché o cambias de dispositivo.</p>
-                 <div className="flex gap-2">
-                     <Button onClick={handleExport} className="flex-1 flex justify-center items-center gap-2">
+                 <div className="grid grid-cols-2 gap-2">
+                     <Button onClick={handleExport} className="flex justify-center items-center gap-2">
                          <span className="text-[10px]">Exportar Datos</span>
                      </Button>
-                     <Button variant="secondary" onClick={handleImportClick} className="flex-1 flex justify-center items-center gap-2">
+                     <Button variant="secondary" onClick={handleImportClick} className="flex justify-center items-center gap-2">
                          <ArrowPathIcon />
                          <span className="text-[10px]">Importar Datos</span>
                      </Button>
@@ -212,40 +212,40 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
             {/* CATEGORIES CARD */}
             <Card>
                 <h2 className="text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide">Categorías</h2>
-                <div className="flex gap-2 mb-2 items-end">
-                    <div className="flex-1">
-                         <Input 
-                            label="Nueva Categoría" 
-                            type="text"
-                            value={newCategory}
-                            onChange={e => setNewCategory(e.target.value)}
-                            onKeyPress={e => e.key === 'Enter' && handleAddCategory()}
-                        />
-                    </div>
-                    <div className="w-auto">
-                       <Button onClick={handleAddCategory}>Añadir</Button>
-                    </div>
+                
+                {/* Formulario unificado con Grid */}
+                <div className="grid grid-cols-[1fr_auto] gap-2 mb-3 items-end">
+                    <Input 
+                        label="Nueva Categoría" 
+                        type="text"
+                        value={newCategory}
+                        onChange={e => setNewCategory(e.target.value)}
+                        onKeyPress={e => e.key === 'Enter' && handleAddCategory()}
+                        placeholder="Ej: Vacaciones"
+                    />
+                    <Button onClick={handleAddCategory}>Añadir</Button>
                 </div>
-                <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+
+                <ul className="divide-y divide-gray-100 dark:divide-gray-800 border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden">
                     {settings.categories.map(cat => (
-                        <li key={cat} className="py-1.5 px-1 flex justify-between items-center">
+                        <li key={cat} className="p-2 flex justify-between items-center bg-gray-50/50 dark:bg-[#1a1a1a]/50 hover:bg-gray-100 dark:hover:bg-[#222] transition-colors">
                             {editingCategory === cat ? (
-                                <div className="flex items-center gap-2 flex-1 mr-2">
+                                <div className="flex items-center gap-2 flex-1 mr-2 animate-in fade-in">
                                     <input 
                                         className="flex-1 px-2 h-7 bg-white dark:bg-black border border-yellow-500 rounded text-xs outline-none"
                                         value={tempCategoryName}
                                         onChange={e => setTempCategoryName(e.target.value)}
                                         autoFocus
                                     />
-                                    <button onClick={saveEditCategory} className="text-green-600 hover:bg-green-100 p-1 rounded"><CheckIcon className="w-4 h-4"/></button>
-                                    <button onClick={cancelEditCategory} className="text-red-600 hover:bg-red-100 p-1 rounded"><XMarkIcon className="w-4 h-4"/></button>
+                                    <button onClick={saveEditCategory} className="text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 p-1.5 rounded transition-colors"><CheckIcon className="w-4 h-4"/></button>
+                                    <button onClick={cancelEditCategory} className="text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 p-1.5 rounded transition-colors"><XMarkIcon className="w-4 h-4"/></button>
                                 </div>
                             ) : (
                                 <>
-                                    <span className="font-bold text-xs text-gray-700 dark:text-gray-200">{cat}</span>
+                                    <span className="font-bold text-xs text-gray-700 dark:text-gray-200 pl-1">{cat}</span>
                                     <div className="flex gap-1">
-                                        <button onClick={() => startEditCategory(cat)} className="p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"><PencilIcon className="w-4 h-4" /></button>
-                                        <button onClick={() => handleRemoveCategory(cat)} className="p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"><TrashIcon className="w-4 h-4" /></button>
+                                        <button onClick={() => startEditCategory(cat)} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"><PencilIcon className="w-4 h-4" /></button>
+                                        <button onClick={() => handleRemoveCategory(cat)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"><TrashIcon className="w-4 h-4" /></button>
                                     </div>
                                 </>
                             )}
@@ -257,32 +257,31 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
             {/* HOUR TYPES CARD */}
             <Card>
                 <h2 className="text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide">Tipos de Hora</h2>
-                <div className="flex gap-2 mb-2 items-end">
-                    <div className="flex-[2]">
-                         <Input 
-                            label="Nombre" 
-                            type="text"
-                            value={newHourName}
-                            onChange={e => setNewHourName(e.target.value)}
-                        />
-                    </div>
-                    <div className="flex-1">
-                        <Input 
-                            label="Precio (€)" 
-                            type="number"
-                            value={newHourPrice}
-                            onChange={e => setNewHourPrice(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                       <Button onClick={handleAddHourType}>Añadir</Button>
-                    </div>
+                
+                {/* Formulario unificado con Grid - Responsive: Stack en móvil, fila en desktop */}
+                <div className="grid grid-cols-[2fr_1fr_auto] gap-2 mb-3 items-end">
+                     <Input 
+                        label="Nombre" 
+                        type="text"
+                        value={newHourName}
+                        onChange={e => setNewHourName(e.target.value)}
+                        placeholder="Ej: Festivo"
+                    />
+                    <Input 
+                        label="Precio (€)" 
+                        type="number"
+                        value={newHourPrice}
+                        onChange={e => setNewHourPrice(e.target.value)}
+                        placeholder="0.00"
+                    />
+                    <Button onClick={handleAddHourType}>Añadir</Button>
                 </div>
-                <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+
+                <ul className="divide-y divide-gray-100 dark:divide-gray-800 border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden">
                     {(settings.hourTypes || []).map(type => (
-                        <li key={type.id} className="py-1.5 px-1 flex justify-between items-center">
+                        <li key={type.id} className="p-2 flex justify-between items-center bg-gray-50/50 dark:bg-[#1a1a1a]/50 hover:bg-gray-100 dark:hover:bg-[#222] transition-colors">
                             {editingHourId === type.id ? (
-                                <div className="flex items-center gap-2 flex-1 mr-2">
+                                <div className="flex items-center gap-2 flex-1 mr-2 animate-in fade-in">
                                      <input 
                                         className="flex-[2] px-2 h-7 bg-white dark:bg-black border border-yellow-500 rounded text-xs outline-none"
                                         value={tempHourName}
@@ -297,18 +296,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
                                         placeholder="Precio"
                                         type="number"
                                     />
-                                    <button onClick={saveEditHour} className="text-green-600 hover:bg-green-100 p-1 rounded"><CheckIcon className="w-4 h-4"/></button>
-                                    <button onClick={cancelEditHour} className="text-red-600 hover:bg-red-100 p-1 rounded"><XMarkIcon className="w-4 h-4"/></button>
+                                    <button onClick={saveEditHour} className="text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 p-1.5 rounded transition-colors"><CheckIcon className="w-4 h-4"/></button>
+                                    <button onClick={cancelEditHour} className="text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 p-1.5 rounded transition-colors"><XMarkIcon className="w-4 h-4"/></button>
                                 </div>
                             ) : (
                                 <>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2 pl-1">
                                         <span className="font-bold text-xs text-gray-700 dark:text-gray-200">{type.name}</span>
                                         <span className="text-[10px] bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-1.5 py-0 rounded border border-green-200 dark:border-green-800 font-mono">{type.price}€</span>
                                     </div>
                                     <div className="flex gap-1">
-                                        <button onClick={() => startEditHour(type)} className="p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"><PencilIcon className="w-4 h-4" /></button>
-                                        <button onClick={() => handleRemoveHourType(type.id)} className="p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"><TrashIcon className="w-4 h-4" /></button>
+                                        <button onClick={() => startEditHour(type)} className="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"><PencilIcon className="w-4 h-4" /></button>
+                                        <button onClick={() => handleRemoveHourType(type.id)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"><TrashIcon className="w-4 h-4" /></button>
                                     </div>
                                 </>
                             )}
