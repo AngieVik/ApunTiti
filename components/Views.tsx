@@ -135,6 +135,7 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
         {error && <div className="bg-red-100 border-l-2 border-red-500 text-red-700 p-1 mb-2 rounded text-xs" role="alert"><p>{error}</p></div>}
 
         <div className="grid grid-cols-2 gap-2">
+          {/* Layout Fijo: 1 columna cada uno siempre */}
           <div className="col-span-1">
              <Input 
                 label="Fecha" 
@@ -275,7 +276,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
         }, {} as Record<string, Shift[]>);
     }, [shifts]);
 
-    // Handlers
     const handleViewChange = (type: CalendarViewType) => {
         setViewType(type);
         setRangeStart('');
@@ -598,88 +598,91 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
         )
     }
 
+    // --- RENDER RANGE (GRID MODE) ---
     const renderRangeView = () => {
         const start = new Date(rangeStart).getTime();
         const end = new Date(rangeEnd).getTime();
+        const dayMilliseconds = 24 * 60 * 60 * 1000;
         
-        const filteredShifts = shifts.filter(s => {
-            const d = new Date(s.date).getTime();
-            return d >= start && d <= end;
-        }).sort((a, b) => new Date(`${a.date}T${a.startTime}`).getTime() - new Date(`${b.date}T${b.startTime}`).getTime());
+        // Calcular diferencia de días para el bucle
+        const diffDays = Math.ceil(Math.abs((end - start) / dayMilliseconds)) + 1;
+        
+        const days = [];
+        // Generar array de fechas
+        for(let i=0; i<diffDays; i++) {
+            const d = new Date(start);
+            d.setDate(d.getDate() + i); // Usar d.getDate() + i es más seguro
+            days.push(d);
+        }
 
-        let totalHours = 0;
-        let totalMoney = 0;
+        let totalRangeHours = 0;
+        let totalRangeMoney = 0;
+
+        const dayCards = days.map(d => {
+            const dateStr = toLocalISOString(d);
+            const dayShifts = shiftsByDate[dateStr] || [];
+            
+            let dayHours = 0;
+            let dayMoney = 0;
+
+            dayShifts.forEach(s => {
+                const duration = calculateDuration(s.startTime, s.endTime);
+                dayHours += duration;
+                if (s.hourTypeId) {
+                    const hType = hourTypes.find(h => h.id === s.hourTypeId);
+                    const price = hType ? hType.price : 0;
+                    dayMoney += (duration * price);
+                }
+            });
+
+            totalRangeHours += dayHours;
+            totalRangeMoney += dayMoney;
+
+            // Renderizar carta de día (estilo semanal pero en grid)
+            return (
+                <div key={dateStr} onClick={() => handleDayClick(d)} className="min-h-[100px] border border-gray-100 dark:border-white/5 bg-white dark:bg-[#1a1a1a] p-1.5 rounded cursor-pointer hover:border-yellow-500 transition-colors flex flex-col">
+                    <div className="text-center border-b border-gray-100 dark:border-white/5 pb-1 mb-1">
+                         <span className="block text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{dayNamesES[d.getDay()]}</span>
+                         <span className="block text-lg font-black text-gray-900 dark:text-white">{d.getDate()}</span>
+                         <span className="block text-[8px] text-gray-400 uppercase">{monthNamesES[d.getMonth()].substring(0,3)}</span>
+                    </div>
+                    <div className="space-y-0.5 flex-1">
+                        {dayShifts.map(s => (
+                            <div key={s.id} className="text-[9px] p-0.5 bg-yellow-100 dark:bg-yellow-900/20 border-l-2 border-yellow-500 rounded mb-0.5 truncate">
+                                <span className="font-bold dark:text-yellow-200">{s.startTime}</span> <span className="text-gray-700 dark:text-gray-300">{s.category}</span>
+                            </div>
+                        ))}
+                    </div>
+                     {dayHours > 0 && (
+                        <div className="mt-1 text-right border-t border-gray-50 dark:border-white/5 pt-1">
+                            <span className="block font-mono font-bold text-[10px] text-gray-900 dark:text-white">{dayHours.toFixed(1)}h</span>
+                            {dayMoney > 0 && <span className="block text-[9px] font-bold text-green-600 dark:text-green-500">{dayMoney.toFixed(2)}€</span>}
+                        </div>
+                     )}
+                </div>
+            );
+        });
 
         return (
             <div className="space-y-2">
-                <div className="flex items-baseline gap-2 border-b border-gray-100 dark:border-white/5 pb-1">
-                    <h3 className="text-lg font-black text-gray-900 dark:text-white capitalize leading-tight">
-                        Rango Seleccionado
-                    </h3>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">
-                        {new Date(rangeStart).toLocaleDateString()} - {new Date(rangeEnd).toLocaleDateString()}
-                    </span>
+                <div className="flex justify-between items-baseline border-b border-gray-100 dark:border-white/5 pb-1 mb-2">
+                    <div>
+                        <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wide">Resumen Rango</h3>
+                        <p className="text-[10px] text-gray-500">{new Date(rangeStart).toLocaleDateString()} - {new Date(rangeEnd).toLocaleDateString()}</p>
+                    </div>
+                    <div className="text-right">
+                        <span className="block font-mono font-bold text-lg text-gray-900 dark:text-white leading-none">{totalRangeHours.toFixed(2)}h</span>
+                        {totalRangeMoney > 0 && <span className="block font-bold text-xs text-green-600 dark:text-green-500">{totalRangeMoney.toFixed(2)}€</span>}
+                    </div>
                 </div>
-
-                {filteredShifts.length > 0 ? (
-                    <div className="space-y-2">
-                        {filteredShifts.map(shift => {
-                             const duration = calculateDuration(shift.startTime, shift.endTime);
-                             totalHours += duration;
-                             
-                             let typeName = 'Sin tipo';
-                             let price = 0;
-                             let hasType = false;
-
-                             if (shift.hourTypeId) {
-                                 const hType = hourTypes.find(h => h.id === shift.hourTypeId);
-                                 typeName = hType ? hType.name : 'Desc.';
-                                 price = hType ? hType.price : 0;
-                                 totalMoney += (duration * price);
-                                 hasType = true;
-                             }
-
-                             return (
-                                <div key={shift.id} className="group flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-white/5 border-l-2 border-l-yellow-500 rounded-lg shadow-sm">
-                                    <div className="flex-1 w-full">
-                                        <div className="flex items-center gap-2 mb-0.5">
-                                            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 mr-1">{shift.date}</span>
-                                            <span className="text-sm font-mono font-bold text-gray-900 dark:text-white">{shift.startTime} - {shift.endTime}</span>
-                                            <span className="px-1.5 py-0 text-[9px] font-bold bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300">{duration.toFixed(2)}h</span>
-                                            {hasType && (price * duration) > 0 && (
-                                                <span className="px-1.5 py-0 text-[9px] font-bold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded border border-green-200 dark:border-green-800">{ (duration * price).toFixed(2) }€</span>
-                                            )}
-                                        </div>
-                                        <div className="flex gap-2 text-xs">
-                                            <span className="font-bold text-yellow-600 dark:text-yellow-500 uppercase tracking-wide">{shift.category}</span>
-                                            <span className="text-gray-300">|</span>
-                                            <span className="text-gray-600 dark:text-gray-300 font-medium">{typeName}</span>
-                                        </div>
-                                        {shift.notes && <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 italic border-t border-gray-100 dark:border-white/5 pt-1 block">"{shift.notes}"</p>}
-                                    </div>
-                                    <div className="flex gap-2 mt-2 sm:mt-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity self-end sm:self-center">
-                                        <button onClick={() => openEditModal(shift)} className="p-1.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"><PencilIcon className="w-4 h-4" /></button>
-                                        <button onClick={() => confirmDelete(shift.id)} className="p-1.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"><TrashIcon className="w-4 h-4" /></button>
-                                    </div>
-                                </div>
-                             )
-                        })}
-                         <div className="mt-2 p-2 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-100 dark:border-white/5 flex justify-between items-center">
-                            <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase">Total Rango</span>
-                             <div className="text-right">
-                                <span className="block text-lg font-mono font-bold text-gray-900 dark:text-white">{totalHours.toFixed(2)} h</span>
-                                {totalMoney > 0 && <span className="text-xs font-bold text-green-600 dark:text-green-400">{totalMoney.toFixed(2)}€</span>}
-                             </div>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="py-8 text-center rounded-lg border border-dashed border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-[#1a1a1a]/50">
-                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">No hay registros en este rango.</p>
-                    </div>
-                )}
+                
+                {/* GRID RESPONSIVE: 2 cols en móvil, 3 en sm, 4 en md, 7 en lg */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-1">
+                    {dayCards}
+                </div>
             </div>
         );
-    }
+    };
 
     const handleSave = () => {
         if (settings.downloadFormat === 'pdf') {
@@ -740,33 +743,33 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
 
     return (
         <div id="calendar-container" className="space-y-2">
-            <Card className="print:hidden bg-white dark:bg-[#111]">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="flex flex-wrap items-center gap-4 w-full">
-                        <div className="flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded p-1 shrink-0">
-                            <button onClick={() => handleViewChange('year')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'year' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Año</button>
-                            <button onClick={() => handleViewChange('month')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'month' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Mes</button>
-                            <button onClick={() => handleViewChange('week')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'week' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Semana</button>
-                            <button onClick={() => handleViewChange('day')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'day' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Día</button>
-                        </div>
+            <Card className="print:hidden bg-white dark:bg-[#111] overflow-hidden">
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                    {/* View Switcher Group */}
+                    <div className="flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded p-1 shrink-0">
+                        <button onClick={() => handleViewChange('year')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'year' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Año</button>
+                        <button onClick={() => handleViewChange('month')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'month' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Mes</button>
+                        <button onClick={() => handleViewChange('week')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'week' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Semana</button>
+                        <button onClick={() => handleViewChange('day')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'day' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Día</button>
+                    </div>
 
-                        <div className="flex items-center gap-2">
-                            <Input 
-                                label="" 
-                                type="date" 
-                                value={rangeStart} 
-                                onChange={handleRangeStartChange} 
-                                className="w-32 h-7 text-[10px] [&::-webkit-calendar-picker-indicator]:w-4 [&::-webkit-calendar-picker-indicator]:h-4 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-                            />
-                            <span className="text-gray-400">-</span>
-                            <Input 
-                                label="" 
-                                type="date" 
-                                value={rangeEnd} 
-                                onChange={handleRangeEndChange} 
-                                className="w-32 h-7 text-[10px] [&::-webkit-calendar-picker-indicator]:w-4 [&::-webkit-calendar-picker-indicator]:h-4 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-                            />
-                        </div>
+                    {/* Range Inputs Group - Now forcing flex row and no wrap */}
+                    <div className="flex items-center gap-1 shrink-0 bg-gray-50 dark:bg-[#1a1a1a] p-1 rounded border border-gray-100 dark:border-white/5">
+                         <Input 
+                            label="" 
+                            type="date" 
+                            value={rangeStart} 
+                            onChange={handleRangeStartChange} 
+                            className="w-24 h-6 text-[10px] p-0 px-1 border-none bg-transparent focus:ring-0 [&::-webkit-calendar-picker-indicator]:w-3 [&::-webkit-calendar-picker-indicator]:h-3 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                        />
+                        <span className="text-gray-400 font-bold text-[10px]">-</span>
+                        <Input 
+                            label="" 
+                            type="date" 
+                            value={rangeEnd} 
+                            onChange={handleRangeEndChange} 
+                            className="w-24 h-6 text-[10px] p-0 px-1 border-none bg-transparent focus:ring-0 [&::-webkit-calendar-picker-indicator]:w-3 [&::-webkit-calendar-picker-indicator]:h-3 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                        />
                     </div>
                 </div>
             </Card>
