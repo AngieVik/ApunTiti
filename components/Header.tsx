@@ -22,11 +22,11 @@ const NavButton: React.FC<{
   return (
     <button
       onClick={onClick}
-      className={`flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 px-2 py-2 rounded-lg transition-all duration-200 ${isActive ? activeClasses : inactiveClasses}`}
+      className={`flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 px-2 py-2 rounded-lg transition-all duration-200 w-full sm:w-auto ${isActive ? activeClasses : inactiveClasses}`}
       aria-label={label}
     >
-      {icon}
-      <span className="hidden sm:inline">{label}</span>
+      <span className="flex items-center justify-center">{icon}</span>
+      {label && <span className="hidden sm:inline">{label}</span>}
     </button>
   );
 };
@@ -58,14 +58,16 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView, theme, tog
             </h2>
         </div>
 
-        <nav className="flex-1 flex justify-center items-center gap-1">
-          <NavButton label="" icon={<ClockIcon className="w-6 h-6" />} isActive={currentView === View.Clock} onClick={() => setCurrentView(View.Clock)} />
-          <NavButton label="" icon={<CalendarIcon className="w-6 h-6" />} isActive={currentView === View.Calendar} onClick={() => setCurrentView(View.Calendar)} />
-          <NavButton label="" icon={<CogIcon className="w-6 h-6" />} isActive={currentView === View.Settings} onClick={() => setCurrentView(View.Settings)} />
+        <nav className="flex-1 flex justify-center items-center gap-2">
+          <div className="flex items-center gap-1">
+            <NavButton label="" icon={<ClockIcon className="w-6 h-6" />} isActive={currentView === View.Clock} onClick={() => setCurrentView(View.Clock)} />
+            <NavButton label="" icon={<CalendarIcon className="w-6 h-6" />} isActive={currentView === View.Calendar} onClick={() => setCurrentView(View.Calendar)} />
+            <NavButton label="" icon={<CogIcon className="w-6 h-6" />} isActive={currentView === View.Settings} onClick={() => setCurrentView(View.Settings)} />
+          </div>
         </nav>
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-full text-gray-600 dark:text-yellow-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200 border border-transparent dark:border-yellow-500/50"
+          className="p-2 rounded-full text-gray-600 dark:text-yellow-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors duration-200 border border-transparent dark:border-yellow-500/50 flex items-center justify-center"
           aria-label="Cambiar tema"
         >
           {theme === Theme.Light ? <MoonIcon className="w-6 h-6" /> : <SunIcon className="w-6 h-6" />}

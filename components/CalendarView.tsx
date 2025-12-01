@@ -421,23 +421,21 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
             totalRangeMoney += dayMoney;
 
             return (
-                <div key={dateStr} onClick={() => handleDayClick(d)} className="min-h-[100px] border border-gray-100 dark:border-white/5 bg-white dark:bg-[#1a1a1a] p-1.5 rounded cursor-pointer hover:border-yellow-500 transition-colors flex flex-col">
-                    <div className="text-center border-b border-gray-100 dark:border-white/5 pb-1 mb-1">
-                         <span className="block text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{dayNamesES[d.getDay()]}</span>
-                         <span className="block text-lg font-black text-gray-900 dark:text-white">{d.getDate()}</span>
-                         <span className="block text-[8px] text-gray-400 uppercase">{monthNamesES[d.getMonth()].substring(0,3)}</span>
+                <div key={dateStr} onClick={() => handleDayClick(d)} className="min-h-[35px] border border-gray-100 dark:border-white/5 bg-white dark:bg-[#1a1a1a] p-0.5 rounded cursor-pointer hover:border-yellow-500 transition-colors flex flex-col">
+                    <div className="text-center border-b border-gray-100 dark:border-white/5 pb-0.5 mb-0.5 flex justify-between items-center px-0.5">
+                         <span className="block text-[7px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">{dayNamesES[d.getDay()].substring(0, 2)}</span>
+                         <span className="block text-xs font-black text-gray-900 dark:text-white leading-tight">{d.getDate()}</span>
                     </div>
                     <div className="space-y-0.5 flex-1">
                         {dayShifts.map(s => (
-                            <div key={s.id} className="text-[9px] p-0.5 bg-yellow-100 dark:bg-yellow-900/20 border-l-2 border-yellow-500 rounded mb-0.5 truncate">
-                                <span className="font-bold dark:text-yellow-200">{s.startTime}</span> <span className="text-gray-700 dark:text-gray-300">{s.category}</span>
+                            <div key={s.id} className="text-[7px] p-0.5 bg-yellow-100 dark:bg-yellow-900/20 border-l-2 border-yellow-500 rounded mb-0.5 truncate leading-tight">
+                                <span className="font-bold dark:text-yellow-200">{s.startTime}</span>
                             </div>
                         ))}
                     </div>
                      {dayHours > 0 && (
-                        <div className="mt-1 text-right border-t border-gray-50 dark:border-white/5 pt-1">
-                            <span className="block font-mono font-bold text-[10px] text-gray-900 dark:text-white">{dayHours.toFixed(1)}h</span>
-                            {dayMoney > 0 && <span className="block text-[9px] font-bold text-green-600 dark:text-green-500">{dayMoney.toFixed(2)}€</span>}
+                        <div className="mt-0.5 text-right border-t border-gray-50 dark:border-white/5 pt-0.5">
+                            <span className="block font-mono font-bold text-[8px] text-gray-900 dark:text-white leading-none">{dayHours.toFixed(1)}h</span>
                         </div>
                      )}
                 </div>
@@ -457,7 +455,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                     </div>
                 </div>
                 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-1">
+                {/* Cuadrícula de 7 columnas siempre (como un calendario), muy compacto */}
+                <div className="grid grid-cols-7 gap-1">
                     {dayCards}
                 </div>
             </div>
@@ -524,19 +523,18 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
     return (
         <div id="calendar-container" className="space-y-2">
             
-            {/* BARRA DE CONTROLES UNIFICADA Y RESPONSIVE (Mejorada para Móvil y PC) */}
+            {/* BARRA DE CONTROLES UNIFICADA Y RESPONSIVE EN 1 SOLA FILA */}
             <Card className="print:hidden bg-white dark:bg-[#111]">
-                {/* Flex-wrap permite que en móviles se divida en dos filas si es necesario, 
-                    y en PC (md:flex-nowrap) se mantenga en una sola línea */}
-                <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-3 py-1">
+                {/* overflow-x-auto permite scroll en móviles muy pequeños, pero en general todo cabe en una fila */}
+                <div className="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-1">
                     
-                    {/* GRUPO 1: Botones de Vista - Ocupan todo el ancho en móvil (w-full) */}
-                    <div className="flex items-center gap-1 w-full md:w-auto justify-between md:justify-start">
+                    {/* GRUPO 1: Botones de Vista - Flex-none para que no se aplasten */}
+                    <div className="flex items-center gap-1 shrink-0">
                         {['year', 'month', 'week', 'day'].map((type) => (
                             <button 
                                 key={type}
                                 onClick={() => handleViewChange(type as CalendarViewType)} 
-                                className={`h-8 flex-1 md:flex-none md:w-16 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all whitespace-nowrap ${viewType === type ? 'bg-yellow-500 text-black border-yellow-600 shadow-sm' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}
+                                className={`h-8 w-auto px-3 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all whitespace-nowrap ${viewType === type ? 'bg-yellow-500 text-black border-yellow-600 shadow-sm' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}
                             >
                                 {type === 'year' && 'Año'}
                                 {type === 'month' && 'Mes'}
@@ -546,22 +544,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                         ))}
                     </div>
 
-                    {/* GRUPO 2: Selectores de Fecha - Ocupan todo el ancho en móvil (w-full) */}
-                    <div className="flex items-center gap-2 w-full md:w-auto">
+                    {/* GRUPO 2: Selectores de Fecha - Estilo exacto a UI.tsx pero inline */}
+                    <div className="flex items-center gap-1 shrink-0">
                         <input 
                             type="date" 
                             value={rangeStart} 
                             onChange={handleRangeStartChange} 
-                            // flex-1 en móvil para que ocupe espacio, md:w-36 en escritorio
-                            className="flex-1 md:w-36 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                            // w-auto en móvil (compacto), md:w-auto en escritorio (grande)
+                            // Clases copiadas de UI.tsx/Input para mantener estilo idéntico
+                            className="w-auto md:w-auto h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                         />
-                        <span className="text-gray-400 font-bold hidden md:inline">-</span>
                         <input 
                             type="date" 
                             value={rangeEnd} 
                             onChange={handleRangeEndChange} 
-                            // flex-1 en móvil para que ocupe espacio, md:w-36 en escritorio
-                            className="flex-1 md:w-36 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                            // w-auto en móvil, md:w-auto en escritorio
+                            className="w-auto md:w-auto h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                         />
                     </div>
                 </div>
