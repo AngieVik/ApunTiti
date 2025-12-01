@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useRef } from 'react';
 import { Shift, Settings, HourType, BackupData, NotificationType } from '../types';
 import { Card, Button, Input, Select, ConfirmDialog } from './UI';
@@ -6,7 +5,6 @@ import { ChevronLeftIcon, ChevronRightIcon, PencilIcon, TrashIcon, CheckIcon, XM
 
 // --- HELPER FUNCTIONS ---
 
-// Fix Timezone issues: Ensure we get YYYY-MM-DD in local time, not UTC
 const toLocalISOString = (date: Date) => {
     const offset = date.getTimezoneOffset() * 60000;
     return new Date(date.getTime() - offset).toISOString().split('T')[0];
@@ -22,7 +20,6 @@ const calculateDuration = (start: string, end: string) => {
     const s = parseInt(start.split(':')[0]) + parseInt(start.split(':')[1])/60;
     const e = parseInt(end.split(':')[0]) + parseInt(end.split(':')[1])/60;
     
-    // Handle overnight shifts (e.g. 23:00 to 02:00)
     if (e < s) {
         return (24 - s) + e;
     }
@@ -45,11 +42,9 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
   const [endTime, setEndTime] = useState('17:00');
   const [notes, setNotes] = useState('');
   const [category, setCategory] = useState(categories[0] || '');
-  // Default to empty ("Sin tipo")
   const [selectedHourType, setSelectedHourType] = useState('');
   const [error, setError] = useState<string | null>(null);
   
-  // Stats Calculation
   const stats = useMemo(() => {
       const now = new Date();
       const currentMonth = now.getMonth();
@@ -68,7 +63,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
           const duration = calculateDuration(s.startTime, s.endTime);
           totalHours += duration;
           
-          // Calculate earnings if type exists
           if (s.hourTypeId) {
               const hType = hourTypes.find(h => h.id === s.hourTypeId);
               const price = hType ? hType.price : 0;
@@ -131,7 +125,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
 
   return (
     <div className="space-y-2 max-w-3xl mx-auto">
-      {/* Registration Card */}
       <Card className="border-t-2 border-t-yellow-500">
         <div className="flex items-center justify-between mb-2">
              <h2 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-tighter leading-none">
@@ -142,8 +135,7 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
         {error && <div className="bg-red-100 border-l-2 border-red-500 text-red-700 p-1 mb-2 rounded text-xs" role="alert"><p>{error}</p></div>}
 
         <div className="grid grid-cols-2 gap-2">
-          {/* Unified sizing for all inputs */}
-          <div className="col-span-2 sm:col-span-1">
+          <div className="col-span-1">
              <Input 
                 label="Fecha" 
                 type="date" 
@@ -152,7 +144,7 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                 className="[&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer" 
              />
           </div>
-          <div className="col-span-2 sm:col-span-1">
+          <div className="col-span-1">
             <Select 
                 label="Categoría" 
                 value={category} 
@@ -178,7 +170,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                 type="time" 
                 value={startTime} 
                 onChange={e => setStartTime(e.target.value)} 
-                // Large clock icon for Entrada
                 className="font-mono tracking-widest text-center [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
             />
           </div>
@@ -188,19 +179,16 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                 type="time" 
                 value={endTime} 
                 onChange={e => setEndTime(e.target.value)} 
-                // Large clock icon for Salida
                 className="font-mono tracking-widest text-center [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
             />
           </div>
         </div>
 
         <div className="flex justify-end pt-2">
-          {/* w-auto by default so it doesn't expand on mobile */}
           <Button onClick={handleSaveShift} className="px-6">Guardar</Button>
         </div>
       </Card>
 
-      {/* Month Summary Card - UNIFIED FONT SIZES & LAYOUT */}
       <Card className="relative overflow-hidden p-3">
           <div className="absolute top-0 left-0 w-1 h-full bg-gray-200 dark:bg-gray-800"></div>
           
@@ -212,7 +200,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
           </div>
           
           <div className="grid grid-cols-2 gap-2 pl-2">
-              {/* Hours Block */}
               <div className="bg-gray-50 dark:bg-[#1a1a1a] p-2 rounded border border-gray-100 dark:border-gray-800">
                   <div className="flex justify-between items-center mb-1">
                       <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase">Horas</span>
@@ -226,7 +213,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                    )}
               </div>
 
-              {/* Shifts Block - Unified Row */}
               <div className="bg-gray-50 dark:bg-[#1a1a1a] p-2 rounded border border-gray-100 dark:border-gray-800 flex flex-col justify-center">
                   <div className="flex justify-between items-center">
                       <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase">Turnos</span>
@@ -234,7 +220,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                   </div>
               </div>
 
-              {/* Category Breakdown (Full Width if needed) */}
               <div className="col-span-2 bg-gray-50 dark:bg-[#1a1a1a] p-2 rounded border border-gray-100 dark:border-gray-800">
                    <div className="flex flex-wrap gap-2">
                     {Object.keys(stats.categoryBreakdown).length > 0 ? (
@@ -272,11 +257,9 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     
-    // Custom Range Logic
     const [rangeStart, setRangeStart] = useState('');
     const [rangeEnd, setRangeEnd] = useState('');
 
-    // Modal State
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [shiftToDelete, setShiftToDelete] = useState<string | null>(null);
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -292,37 +275,13 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
         }, {} as Record<string, Shift[]>);
     }, [shifts]);
 
-    // Range Calculation
-    const rangeStats = useMemo(() => {
-        if (!rangeStart || !rangeEnd) return null;
-        
-        const start = new Date(rangeStart).getTime();
-        const end = new Date(rangeEnd).getTime();
-        
-        let totalHours = 0;
-        let totalMoney = 0;
-        let count = 0;
+    // Handlers
+    const handleViewChange = (type: CalendarViewType) => {
+        setViewType(type);
+        setRangeStart('');
+        setRangeEnd('');
+    };
 
-        shifts.forEach(s => {
-            const d = new Date(s.date).getTime();
-            if (d >= start && d <= end) {
-                const duration = calculateDuration(s.startTime, s.endTime);
-                totalHours += duration;
-                
-                if (s.hourTypeId) {
-                    const hType = hourTypes.find(h => h.id === s.hourTypeId);
-                    const price = hType ? hType.price : 0;
-                    totalMoney += (duration * price);
-                }
-                count++;
-            }
-        });
-
-        return { totalHours: totalHours.toFixed(2), totalMoney: totalMoney, count };
-    }, [shifts, rangeStart, rangeEnd, hourTypes]);
-
-
-    // Navigation Logic
     const handlePrev = () => {
         const newDate = new Date(currentDate);
         if (viewType === 'year') newDate.setFullYear(year - 1);
@@ -359,7 +318,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
         if (e.target.value) setSelectedDate(null);
     };
 
-    // Delete Logic
     const confirmDelete = (id: string) => {
         setShiftToDelete(id);
         setIsConfirmOpen(true);
@@ -374,7 +332,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
         }
     }
 
-    // Edit Logic
     const openEditModal = (shift: Shift) => {
         setEditingShift(shift);
         setIsEditOpen(true);
@@ -409,7 +366,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                 {monthNamesES.map((mName, idx) => (
                     <div 
                         key={idx} 
-                        onClick={() => { setCurrentDate(new Date(year, idx, 1)); setViewType('month'); }}
+                        onClick={() => { setCurrentDate(new Date(year, idx, 1)); handleViewChange('month'); }}
                         className={`p-2 border rounded-lg cursor-pointer hover:border-yellow-500/50 transition-all ${idx === month ? 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/10' : 'border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-[#1a1a1a]'}`}
                     >
                         <h3 className="font-bold text-xs dark:text-white uppercase tracking-wide">{mName}</h3>
@@ -641,7 +598,88 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
         )
     }
 
-    // --- ACTIONS ---
+    const renderRangeView = () => {
+        const start = new Date(rangeStart).getTime();
+        const end = new Date(rangeEnd).getTime();
+        
+        const filteredShifts = shifts.filter(s => {
+            const d = new Date(s.date).getTime();
+            return d >= start && d <= end;
+        }).sort((a, b) => new Date(`${a.date}T${a.startTime}`).getTime() - new Date(`${b.date}T${b.startTime}`).getTime());
+
+        let totalHours = 0;
+        let totalMoney = 0;
+
+        return (
+            <div className="space-y-2">
+                <div className="flex items-baseline gap-2 border-b border-gray-100 dark:border-white/5 pb-1">
+                    <h3 className="text-lg font-black text-gray-900 dark:text-white capitalize leading-tight">
+                        Rango Seleccionado
+                    </h3>
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
+                        {new Date(rangeStart).toLocaleDateString()} - {new Date(rangeEnd).toLocaleDateString()}
+                    </span>
+                </div>
+
+                {filteredShifts.length > 0 ? (
+                    <div className="space-y-2">
+                        {filteredShifts.map(shift => {
+                             const duration = calculateDuration(shift.startTime, shift.endTime);
+                             totalHours += duration;
+                             
+                             let typeName = 'Sin tipo';
+                             let price = 0;
+                             let hasType = false;
+
+                             if (shift.hourTypeId) {
+                                 const hType = hourTypes.find(h => h.id === shift.hourTypeId);
+                                 typeName = hType ? hType.name : 'Desc.';
+                                 price = hType ? hType.price : 0;
+                                 totalMoney += (duration * price);
+                                 hasType = true;
+                             }
+
+                             return (
+                                <div key={shift.id} className="group flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-white/5 border-l-2 border-l-yellow-500 rounded-lg shadow-sm">
+                                    <div className="flex-1 w-full">
+                                        <div className="flex items-center gap-2 mb-0.5">
+                                            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 mr-1">{shift.date}</span>
+                                            <span className="text-sm font-mono font-bold text-gray-900 dark:text-white">{shift.startTime} - {shift.endTime}</span>
+                                            <span className="px-1.5 py-0 text-[9px] font-bold bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300">{duration.toFixed(2)}h</span>
+                                            {hasType && (price * duration) > 0 && (
+                                                <span className="px-1.5 py-0 text-[9px] font-bold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded border border-green-200 dark:border-green-800">{ (duration * price).toFixed(2) }€</span>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2 text-xs">
+                                            <span className="font-bold text-yellow-600 dark:text-yellow-500 uppercase tracking-wide">{shift.category}</span>
+                                            <span className="text-gray-300">|</span>
+                                            <span className="text-gray-600 dark:text-gray-300 font-medium">{typeName}</span>
+                                        </div>
+                                        {shift.notes && <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 italic border-t border-gray-100 dark:border-white/5 pt-1 block">"{shift.notes}"</p>}
+                                    </div>
+                                    <div className="flex gap-2 mt-2 sm:mt-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity self-end sm:self-center">
+                                        <button onClick={() => openEditModal(shift)} className="p-1.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"><PencilIcon className="w-4 h-4" /></button>
+                                        <button onClick={() => confirmDelete(shift.id)} className="p-1.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"><TrashIcon className="w-4 h-4" /></button>
+                                    </div>
+                                </div>
+                             )
+                        })}
+                         <div className="mt-2 p-2 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-100 dark:border-white/5 flex justify-between items-center">
+                            <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase">Total Rango</span>
+                             <div className="text-right">
+                                <span className="block text-lg font-mono font-bold text-gray-900 dark:text-white">{totalHours.toFixed(2)} h</span>
+                                {totalMoney > 0 && <span className="text-xs font-bold text-green-600 dark:text-green-400">{totalMoney.toFixed(2)}€</span>}
+                             </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="py-8 text-center rounded-lg border border-dashed border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-[#1a1a1a]/50">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">No hay registros en este rango.</p>
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     const handleSave = () => {
         if (settings.downloadFormat === 'pdf') {
@@ -703,78 +741,68 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
     return (
         <div id="calendar-container" className="space-y-2">
             <Card className="print:hidden bg-white dark:bg-[#111]">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-2">
-                    <div className="flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded p-1">
-                        {/* Unified button styles for view switchers */}
-                        <button onClick={() => setViewType('year')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'year' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Año</button>
-                        <button onClick={() => setViewType('month')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'month' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Mes</button>
-                        <button onClick={() => setViewType('week')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'week' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Semana</button>
-                        <button onClick={() => setViewType('day')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'day' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Día</button>
-                    </div>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex flex-wrap items-center gap-4 w-full">
+                        <div className="flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded p-1 shrink-0">
+                            <button onClick={() => handleViewChange('year')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'year' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Año</button>
+                            <button onClick={() => handleViewChange('month')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'month' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Mes</button>
+                            <button onClick={() => handleViewChange('week')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'week' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Semana</button>
+                            <button onClick={() => handleViewChange('day')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'day' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Día</button>
+                        </div>
 
-                    <div className="flex items-center gap-2">
-                        <Button onClick={handlePrev} variant="secondary" className="!px-2 !w-8"><ChevronLeftIcon /></Button>
-                        <h2 className="text-xs font-black w-32 text-center text-gray-900 dark:text-white uppercase tracking-wide truncate">
-                            {viewType === 'year' && year}
-                            {viewType === 'month' && `${monthNamesES[month]} ${year}`}
-                            {viewType === 'week' && `Sem. ${currentDate.getDate()}/${month+1}`}
-                            {viewType === 'day' && currentDate.toLocaleDateString()}
-                        </h2>
-                        <Button onClick={handleNext} variant="secondary" className="!px-2 !w-8"><ChevronRightIcon /></Button>
+                        <div className="flex items-center gap-2">
+                            <Input 
+                                label="" 
+                                type="date" 
+                                value={rangeStart} 
+                                onChange={handleRangeStartChange} 
+                                className="w-32 h-7 text-[10px] [&::-webkit-calendar-picker-indicator]:w-4 [&::-webkit-calendar-picker-indicator]:h-4 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                            />
+                            <span className="text-gray-400">-</span>
+                            <Input 
+                                label="" 
+                                type="date" 
+                                value={rangeEnd} 
+                                onChange={handleRangeEndChange} 
+                                className="w-32 h-7 text-[10px] [&::-webkit-calendar-picker-indicator]:w-4 [&::-webkit-calendar-picker-indicator]:h-4 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                            />
+                        </div>
                     </div>
                 </div>
             </Card>
             
-            {/* PRINT HEADER ONLY */}
             <div className="hidden print:block mb-4 border-b pb-2">
                 <h1 className="text-xl font-bold">Reporte de Turnos</h1>
                 <p className="text-sm text-gray-500">Generado el {new Date().toLocaleDateString()}</p>
             </div>
 
             <Card id="printable-area" className="min-h-[300px] print:shadow-none print:border-none print:p-0">
-                {viewType === 'year' && renderYearView()}
-                {viewType === 'month' && renderMonthView()}
-                {viewType === 'week' && renderWeekView()}
-                {viewType === 'day' && renderDayView()}
-            </Card>
+                {!rangeStart || !rangeEnd ? (
+                    <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5">
+                        <Button onClick={handlePrev} variant="secondary" className="!px-2 !w-8 h-7"><ChevronLeftIcon /></Button>
+                        <h2 className="text-sm font-black text-center text-gray-900 dark:text-white uppercase tracking-wide">
+                            {viewType === 'year' && year}
+                            {viewType === 'month' && `${monthNamesES[month]} ${year}`}
+                            {viewType === 'week' && `Semana ${currentDate.getDate()} - ${monthNamesES[month]}`}
+                            {viewType === 'day' && currentDate.toLocaleDateString()}
+                        </h2>
+                        <Button onClick={handleNext} variant="secondary" className="!px-2 !w-8 h-7"><ChevronRightIcon /></Button>
+                    </div>
+                ) : null}
 
-            {/* Custom Range Selection */}
-            <Card className="print:hidden border-t-2 border-blue-500 p-2">
-                <h3 className="text-[10px] font-black text-gray-600 dark:text-gray-300 uppercase tracking-widest mb-2">Selección por Rango</h3>
-                <div className="flex flex-col md:flex-row items-end gap-2">
-                    <div className="grid grid-cols-2 gap-2 w-full md:flex-1">
-                        <Input 
-                            label="Desde" 
-                            type="date" 
-                            value={rangeStart} 
-                            onChange={handleRangeStartChange} 
-                            className="[&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:p-1 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
-                        />
-                        <Input 
-                            label="Hasta" 
-                            type="date" 
-                            value={rangeEnd} 
-                            onChange={handleRangeEndChange} 
-                            className="[&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:p-1 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
-                        />
-                    </div>
-                    <div className="w-full md:w-auto p-1.5 bg-gray-50 dark:bg-[#1a1a1a] rounded border border-gray-100 dark:border-white/5 flex justify-between sm:block min-w-[120px]">
-                         <span className="block text-[9px] font-bold text-gray-600 dark:text-gray-400 uppercase">Total Rango</span>
-                         {rangeStats ? (
-                             <>
-                                <span className="block font-mono font-bold text-sm text-gray-900 dark:text-white leading-none">{rangeStats.totalHours}h</span>
-                                {rangeStats.totalMoney > 0 && <span className="block font-bold text-xs text-green-600 dark:text-green-500">{rangeStats.totalMoney.toFixed(2)}€</span>}
-                             </>
-                         ) : (
-                             <span className="text-[10px] text-gray-400 italic">...</span>
-                         )}
-                    </div>
-                </div>
+                {rangeStart && rangeEnd ? renderRangeView() : (
+                    <>
+                        {viewType === 'year' && renderYearView()}
+                        {viewType === 'month' && renderMonthView()}
+                        {viewType === 'week' && renderWeekView()}
+                        {viewType === 'day' && renderDayView()}
+                    </>
+                )}
             </Card>
 
             <div className="flex justify-end print:hidden">
                 <Button onClick={handleSave} className="flex items-center gap-1">
-                    Guardar
+                    Descargar
                 </Button>
             </div>
 
@@ -786,7 +814,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                 onCancel={() => setIsConfirmOpen(false)}
             />
 
-            {/* Edit Modal */}
             {isEditOpen && editingShift && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
                     <div className="bg-white dark:bg-[#121212] rounded-xl shadow-2xl shadow-black border border-yellow-500/30 max-w-lg w-full p-4">
@@ -843,17 +870,14 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                     #calendar-container {
                         margin-top: 20px;
                     }
-                    /* Ensure grid items are visible */
                     .bg-white, .dark\\:bg-\\[\\#111\\], .bg-gray-50, .dark\\:bg-\\[\\#1a1a1a\\] {
                         background-color: white !important;
                         color: black !important;
                         border-color: #ddd !important;
                     }
-                    /* Hide scrollbars in print */
                     .overflow-hidden {
                         overflow: visible !important;
                     }
-                    /* Compact fonts for print */
                     * {
                         font-family: sans-serif;
                         font-size: 10pt !important;
@@ -878,14 +902,10 @@ interface SettingsViewProps {
 }
 
 export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSettings, shifts, setShifts, notify }) => {
-    // Categories State
     const [newCategory, setNewCategory] = useState('');
-    
-    // Hour Types State
     const [newHourName, setNewHourName] = useState('');
     const [newHourPrice, setNewHourPrice] = useState('');
 
-    // Editing State
     const [editingCategory, setEditingCategory] = useState<string | null>(null);
     const [tempCategoryName, setTempCategoryName] = useState('');
 
@@ -893,10 +913,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
     const [tempHourName, setTempHourName] = useState('');
     const [tempHourPrice, setTempHourPrice] = useState('');
 
-    // Backup
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // --- CATEGORY HANDLERS ---
     const handleAddCategory = () => {
         if(newCategory && !settings.categories.includes(newCategory)) {
             setSettings(prev => ({...prev, categories: [...prev.categories, newCategory]}));
@@ -933,7 +951,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
         setEditingCategory(null);
     }
 
-    // --- HOUR TYPE HANDLERS ---
     const handleAddHourType = () => {
         if(newHourName && newHourPrice) {
             const price = parseFloat(newHourPrice);
@@ -989,7 +1006,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
         setEditingHourId(null);
     }
 
-    // --- BACKUP HANDLERS ---
     const handleExport = () => {
         const backupData: BackupData = {
             version: 1,
@@ -1043,7 +1059,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
 
     return (
         <div className="max-w-2xl mx-auto space-y-3">
-             {/* General Settings Card */}
              <Card>
                 <h2 className="text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide">General</h2>
                 <Select 
@@ -1059,7 +1074,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
                 </Select>
              </Card>
 
-            {/* BACKUP CARD */}
             <Card className="border-l-4 border-l-blue-500">
                  <h2 className="text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide">Copia de Seguridad</h2>
                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Exporta tus datos para no perderlos si borras la caché o cambias de dispositivo.</p>
@@ -1081,7 +1095,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
                  </div>
             </Card>
 
-            {/* CATEGORIES CARD */}
             <Card>
                 <h2 className="text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide">Categorías</h2>
                 <div className="flex gap-2 mb-2 items-end">
@@ -1126,7 +1139,6 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ settings, setSetting
                 </ul>
             </Card>
 
-            {/* HOUR TYPES CARD */}
             <Card>
                 <h2 className="text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide">Tipos de Hora</h2>
                 <div className="flex gap-2 mb-2 items-end">
