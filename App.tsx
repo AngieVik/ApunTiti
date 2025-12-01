@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import useLocalStorage from './hooks/useLocalStorage';
 import { View, Theme, Shift, Settings, Notification, NotificationType } from './types';
@@ -54,6 +53,12 @@ const App: React.FC = () => {
       metaThemeColor?.setAttribute("content", "#f3f4f6"); // Actualiza barra a gris claro
     }
   }, [theme]);
+
+  // --- FUNCIÓN RESTAURADA ---
+  const notify = (message: string, type: NotificationType = 'success') => {
+      setNotification({ message, type });
+  };
+  // --------------------------
 
   const renderView = () => {
     switch (currentView) {
