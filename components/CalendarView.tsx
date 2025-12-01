@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Shift, Settings, HourType, NotificationType } from '../types';
-import { Card, Button, Input, Select, ConfirmDialog } from './UI';
+import { Card, Button, ConfirmDialog } from './UI'; // Quitamos Input/Select de aquí para usar estilo directo y ahorrar espacio
 import { ChevronLeftIcon, ChevronRightIcon, PencilIcon, TrashIcon, XMarkIcon } from './Icons';
 
 // --- HELPER FUNCTIONS ---
@@ -523,31 +523,45 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
 
     return (
         <div id="calendar-container" className="space-y-2">
+            
+            {/* BARRA DE CONTROLES UNIFICADA Y RESPONSIVE EN 1 SOLA FILA */}
             <Card className="print:hidden bg-white dark:bg-[#111]">
-                <div className="flex items-center justify-between gap-2">
+                {/* overflow-x-auto permite scroll en móviles muy pequeños, pero en general todo cabe en una fila */}
+                <div className="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar py-1">
                     
-                    {/* GRUPO 1: Botones de Vista (Diseño unificado con Inputs) */}
-                    <div className="flex items-center gap-1">
-                        <button onClick={() => handleViewChange('year')} className={`h-8 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'year' ? 'bg-yellow-500 text-black border-yellow-600' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}>Año</button>
-                        <button onClick={() => handleViewChange('month')} className={`h-8 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'month' ? 'bg-yellow-500 text-black border-yellow-600' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}>Mes</button>
-                        <button onClick={() => handleViewChange('week')} className={`h-8 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'week' ? 'bg-yellow-500 text-black border-yellow-600' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}>Sem</button>
-                        <button onClick={() => handleViewChange('day')} className={`h-8 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'day' ? 'bg-yellow-500 text-black border-yellow-600' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}>Día</button>
+                    {/* GRUPO 1: Botones de Vista - Flex-none para que no se aplasten */}
+                    <div className="flex items-center gap-1 shrink-0">
+                        {['year', 'month', 'week', 'day'].map((type) => (
+                            <button 
+                                key={type}
+                                onClick={() => handleViewChange(type as CalendarViewType)} 
+                                className={`h-8 px-3 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all whitespace-nowrap ${viewType === type ? 'bg-yellow-500 text-black border-yellow-600 shadow-sm' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}
+                            >
+                                {type === 'year' && 'Año'}
+                                {type === 'month' && 'Mes'}
+                                {type === 'week' && 'Sem'}
+                                {type === 'day' && 'Día'}
+                            </button>
+                        ))}
                     </div>
 
-                    {/* GRUPO 2: Inputs de Rango (Diseño idéntico a Input component) */}
-                    <div className="flex items-center gap-2 justify-end shrink-0">
+                    {/* GRUPO 2: Selectores de Fecha - Estilo exacto a UI.tsx pero inline */}
+                    <div className="flex items-center gap-2 shrink-0">
                         <input 
                             type="date" 
                             value={rangeStart} 
                             onChange={handleRangeStartChange} 
-                            className="w-32 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                            // w-28 en móvil (compacto), md:w-36 en escritorio (grande)
+                            // Clases copiadas de UI.tsx/Input para mantener estilo idéntico
+                            className="w-28 md:w-36 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                         />
                         <span className="text-gray-400 font-bold">-</span>
                         <input 
                             type="date" 
                             value={rangeEnd} 
                             onChange={handleRangeEndChange} 
-                            className="w-32 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                            // w-28 en móvil, md:w-36 en escritorio
+                            className="w-28 md:w-36 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
                         />
                     </div>
                 </div>
@@ -588,14 +602,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                 </Button>
             </div>
 
-            <ConfirmDialog 
-                isOpen={isConfirmOpen}
-                title="¿Borrar Registro?"
-                message="Esta acción eliminará permanentemente el registro seleccionado. ¿Deseas continuar?"
-                onConfirm={handleDelete}
-                onCancel={() => setIsConfirmOpen(false)}
-            />
-
+            {/* Componente para Editar Registro (Copiar de ClockView el estilo de inputs) */}
             {isEditOpen && editingShift && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
                     <div className="bg-white dark:bg-[#121212] rounded-xl shadow-2xl shadow-black border border-yellow-500/30 max-w-lg w-full p-4">
@@ -604,23 +611,40 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                              <button onClick={() => setIsEditOpen(false)} className="text-gray-500 hover:text-gray-900 dark:hover:text-white"><XMarkIcon /></button>
                         </div>
                         
+                        {/* Reutilizamos componentes de UI para el modal de edición */}
                         <div className="grid grid-cols-2 gap-3 mb-4">
-                            <Input label="Fecha" type="date" value={editingShift.date} onChange={e => setEditingShift({...editingShift, date: e.target.value})} />
-                            <Select label="Categoría" value={editingShift.category} onChange={e => setEditingShift({...editingShift, category: e.target.value})}>
-                                <option value={editingShift.category}>{editingShift.category}</option>
-                            </Select>
-
-                            <Input label="Hora Entrada" type="time" value={editingShift.startTime} onChange={e => setEditingShift({...editingShift, startTime: e.target.value})} />
-                            <Input label="Hora Salida" type="time" value={editingShift.endTime} onChange={e => setEditingShift({...editingShift, endTime: e.target.value})} />
+                            {/* Input manual con label para mantener estilo ClockView */}
+                            <div className="w-full group">
+                                <label className="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider">Fecha</label>
+                                <input type="date" value={editingShift.date} onChange={e => setEditingShift({...editingShift, date: e.target.value})} className="w-full px-2 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all" />
+                            </div>
                             
-                            <div className="col-span-2">
-                                <Select label="Tipo de Hora" value={editingShift.hourTypeId || ''} onChange={e => setEditingShift({...editingShift, hourTypeId: e.target.value || undefined})}>
+                            <div className="w-full group">
+                                <label className="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider">Categoría</label>
+                                <select value={editingShift.category} onChange={e => setEditingShift({...editingShift, category: e.target.value})} className="w-full pl-2 pr-6 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all">
+                                    <option value={editingShift.category}>{editingShift.category}</option>
+                                </select>
+                            </div>
+
+                            <div className="w-full group">
+                                <label className="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider">Entrada</label>
+                                <input type="time" value={editingShift.startTime} onChange={e => setEditingShift({...editingShift, startTime: e.target.value})} className="w-full px-2 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all text-center font-mono tracking-widest" />
+                            </div>
+                            <div className="w-full group">
+                                <label className="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider">Salida</label>
+                                <input type="time" value={editingShift.endTime} onChange={e => setEditingShift({...editingShift, endTime: e.target.value})} className="w-full px-2 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all text-center font-mono tracking-widest" />
+                            </div>
+                            
+                            <div className="col-span-2 w-full group">
+                                <label className="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider">Tipo de Hora</label>
+                                <select value={editingShift.hourTypeId || ''} onChange={e => setEditingShift({...editingShift, hourTypeId: e.target.value || undefined})} className="w-full pl-2 pr-6 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all">
                                     <option value="">Sin tipo</option>
                                     {hourTypes.map(type => <option key={type.id} value={type.id}>{type.name} ({type.price}€)</option>)}
-                                </Select>
+                                </select>
                             </div>
-                             <div className="col-span-2">
-                                <Input label="Notas" type="text" value={editingShift.notes} onChange={e => setEditingShift({...editingShift, notes: e.target.value})} />
+                             <div className="col-span-2 w-full group">
+                                <label className="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider">Notas</label>
+                                <input type="text" value={editingShift.notes} onChange={e => setEditingShift({...editingShift, notes: e.target.value})} className="w-full px-2 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all" />
                             </div>
                         </div>
 
@@ -635,6 +659,14 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                     </div>
                 </div>
             )}
+
+            <ConfirmDialog 
+                isOpen={isConfirmOpen}
+                title="¿Borrar Registro?"
+                message="Esta acción eliminará permanentemente el registro seleccionado. ¿Deseas continuar?"
+                onConfirm={handleDelete}
+                onCancel={() => setIsConfirmOpen(false)}
+            />
             
             <style>{`
                 @media print {
