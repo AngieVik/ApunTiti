@@ -11,7 +11,7 @@ const toLocalISOString = (date: Date) => {
 };
 
 const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay(); // 0=Sun, 6=Sat
+const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
 
 const monthNamesES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const dayNamesES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
@@ -41,6 +41,7 @@ interface CalendarViewProps {
 export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, hourTypes, settings, notify }) => {
     const [viewType, setViewType] = useState<CalendarViewType>('month');
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     
     const [rangeStart, setRangeStart] = useState('');
     const [rangeEnd, setRangeEnd] = useState('');
@@ -85,6 +86,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
     };
 
     const handleDayClick = (date: Date) => {
+        setSelectedDate(date);
         setCurrentDate(date);
         setRangeStart('');
         setRangeEnd('');
@@ -93,10 +95,12 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
 
     const handleRangeStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setRangeStart(e.target.value);
+        if (e.target.value) setSelectedDate(null);
     };
 
     const handleRangeEndChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setRangeEnd(e.target.value);
+        if (e.target.value) setSelectedDate(null);
     };
 
     const confirmDelete = (id: string) => {
@@ -126,7 +130,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
     }
 
     // --- RENDERERS ---
-
     const renderYearView = () => {
         const statsByMonth = Array(12).fill(0).map(() => ({ hours: 0, money: 0 }));
         shifts.forEach(s => {
@@ -180,17 +183,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
             
             const dayShifts = shiftsByDate[dateStr] || [];
             const isToday = toLocalISOString(new Date()) === dateStr;
-            
-            // Comprobar si está seleccionado en el rango actual
-            let isSelected = false;
-            if (rangeStart && rangeEnd) {
-                const d = dateObj.getTime();
-                const s = new Date(rangeStart).getTime();
-                const e = new Date(rangeEnd).getTime();
-                isSelected = d >= s && d <= e;
-            } else {
-                 isSelected = toLocalISOString(currentDate) === dateStr && viewType === 'day';
-            }
+            const isSelected = selectedDate && toLocalISOString(selectedDate) === dateStr;
 
             let hoursToday = 0;
             let moneyToday = 0;
@@ -533,25 +526,28 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
             <Card className="print:hidden bg-white dark:bg-[#111]">
                 <div className="flex items-center justify-between gap-2">
                     
-                    <div className="flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded p-1 h-8 shrink-0">
-                        <button onClick={() => handleViewChange('year')} className={`h-full px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all flex items-center justify-center ${viewType === 'year' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Año</button>
-                        <button onClick={() => handleViewChange('month')} className={`h-full px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all flex items-center justify-center ${viewType === 'month' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Mes</button>
-                        <button onClick={() => handleViewChange('week')} className={`h-full px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all flex items-center justify-center ${viewType === 'week' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Semana</button>
-                        <button onClick={() => handleViewChange('day')} className={`h-full px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all flex items-center justify-center ${viewType === 'day' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Día</button>
+                    {/* GRUPO 1: Botones de Vista (Diseño unificado con Inputs) */}
+                    <div className="flex items-center gap-1">
+                        <button onClick={() => handleViewChange('year')} className={`h-8 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'year' ? 'bg-yellow-500 text-black border-yellow-600' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}>Año</button>
+                        <button onClick={() => handleViewChange('month')} className={`h-8 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'month' ? 'bg-yellow-500 text-black border-yellow-600' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}>Mes</button>
+                        <button onClick={() => handleViewChange('week')} className={`h-8 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'week' ? 'bg-yellow-500 text-black border-yellow-600' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}>Sem</button>
+                        <button onClick={() => handleViewChange('day')} className={`h-8 px-2 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'day' ? 'bg-yellow-500 text-black border-yellow-600' : 'bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500'}`}>Día</button>
                     </div>
 
+                    {/* GRUPO 2: Inputs de Rango (Diseño idéntico a Input component) */}
                     <div className="flex items-center gap-2 justify-end shrink-0">
                         <input 
                             type="date" 
                             value={rangeStart} 
                             onChange={handleRangeStartChange} 
-                            className="w-32 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                            className="w-32 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                         />
+                        <span className="text-gray-400 font-bold">-</span>
                         <input 
                             type="date" 
                             value={rangeEnd} 
                             onChange={handleRangeEndChange} 
-                            className="w-32 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                            className="w-32 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                         />
                     </div>
                 </div>

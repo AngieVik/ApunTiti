@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Shift, HourType, NotificationType } from '../types';
 import { Card, Button, Input, Select } from './UI';
+import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
 
-// --- HELPER FUNCTIONS (Locales para este componente por ahora) ---
+// --- HELPER FUNCTIONS ---
 
 const toLocalISOString = (date: Date) => {
     const offset = date.getTimezoneOffset() * 60000;
@@ -15,7 +16,7 @@ const calculateDuration = (start: string, end: string) => {
     const s = parseInt(start.split(':')[0]) + parseInt(start.split(':')[1])/60;
     const e = parseInt(end.split(':')[0]) + parseInt(end.split(':')[1])/60;
     
-    // Handle overnight shifts (e.g. 23:00 to 02:00)
+    // Handle overnight shifts
     if (e < s) {
         return (24 - s) + e;
     }
@@ -38,15 +39,16 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
   const [endTime, setEndTime] = useState('17:00');
   const [notes, setNotes] = useState('');
   const [category, setCategory] = useState(categories[0] || '');
-  // Default to empty ("Sin tipo")
   const [selectedHourType, setSelectedHourType] = useState('');
   const [error, setError] = useState<string | null>(null);
   
+  // State for Summary Card Navigation (defaults to current real time)
+  const [statsDate, setStatsDate] = useState(new Date());
+  
   // Stats Calculation
   const stats = useMemo(() => {
-      const now = new Date();
-      const currentMonth = now.getMonth();
-      const currentYear = now.getFullYear();
+      const currentMonth = statsDate.getMonth();
+      const currentYear = statsDate.getFullYear();
 
       const monthShifts = shifts.filter(s => {
           const d = new Date(s.date);
@@ -61,7 +63,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
           const duration = calculateDuration(s.startTime, s.endTime);
           totalHours += duration;
           
-          // Calculate earnings if type exists
           if (s.hourTypeId) {
               const hType = hourTypes.find(h => h.id === s.hourTypeId);
               const price = hType ? hType.price : 0;
@@ -73,12 +74,30 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
 
       return {
           monthName: monthNamesES[currentMonth],
+          year: currentYear,
           totalHours: totalHours.toFixed(2),
           totalEarnings: totalEarnings,
           shiftCount: monthShifts.length,
           categoryBreakdown: categoryCounts
       };
-  }, [shifts, hourTypes]);
+  }, [shifts, hourTypes, statsDate]);
+
+  // Navigation Handlers
+  const handlePrevMonth = () => {
+      setStatsDate(prev => {
+          const newDate = new Date(prev);
+          newDate.setMonth(prev.getMonth() - 1);
+          return newDate;
+      });
+  };
+
+  const handleNextMonth = () => {
+      setStatsDate(prev => {
+          const newDate = new Date(prev);
+          newDate.setMonth(prev.getMonth() + 1);
+          return newDate;
+      });
+  };
 
   const handleSaveShift = () => {
     setError(null);
@@ -135,7 +154,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
         {error && <div className="bg-red-100 border-l-2 border-red-500 text-red-700 p-1 mb-2 rounded text-xs" role="alert"><p>{error}</p></div>}
 
         <div className="grid grid-cols-2 gap-2">
-          {/* Unified sizing for all inputs */}
           <div className="col-span-1">
              <Input 
                 label="Fecha" 
@@ -171,7 +189,6 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                 type="time" 
                 value={startTime} 
                 onChange={e => setStartTime(e.target.value)} 
-                // Large clock icon for Entrada
                 className="font-mono tracking-widest text-center [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
             />
           </div>
@@ -181,26 +198,29 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                 type="time" 
                 value={endTime} 
                 onChange={e => setEndTime(e.target.value)} 
-                // Large clock icon for Salida
                 className="font-mono tracking-widest text-center [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
             />
           </div>
         </div>
 
         <div className="flex justify-end pt-2">
-          {/* w-auto by default so it doesn't expand on mobile */}
           <Button onClick={handleSaveShift} className="px-6">Guardar</Button>
         </div>
       </Card>
 
-      {/* Month Summary Card - UNIFIED FONT SIZES & LAYOUT */}
+      {/* Month Summary Card */}
       <Card className="relative overflow-hidden p-3">
           <div className="absolute top-0 left-0 w-1 h-full bg-gray-200 dark:bg-gray-800"></div>
           
-          <div className="flex justify-between items-start mb-3 pl-2">
+          <div className="flex justify-between items-center mb-3 pl-2">
               <div>
-                  <h3 className="text-[10px] font-black text-gray-600 dark:text-gray-300 uppercase tracking-widest">Resumen</h3>
-                  <h2 className="text-sm font-black text-gray-900 dark:text-white uppercase">{stats.monthName}</h2>
+                  <h3 className="text-[10px] font-black text-gray-600 dark:text-gray-300 uppercase tracking-widest mb-0.5">Resumen</h3>
+                  {/* Month Selector */}
+                  <div className="flex items-center gap-2">
+                    <button onClick={handlePrevMonth} className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 transition-colors"><ChevronLeftIcon className="w-4 h-4"/></button>
+                    <h2 className="text-sm font-black text-gray-900 dark:text-white uppercase">{stats.monthName} <span className="text-gray-400 text-xs">{stats.year}</span></h2>
+                    <button onClick={handleNextMonth} className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 transition-colors"><ChevronRightIcon className="w-4 h-4"/></button>
+                  </div>
               </div>
           </div>
           
@@ -219,7 +239,7 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                    )}
               </div>
 
-              {/* Shifts Block - Unified Row */}
+              {/* Shifts Block */}
               <div className="bg-gray-50 dark:bg-[#1a1a1a] p-2 rounded border border-gray-100 dark:border-gray-800 flex flex-col justify-center">
                   <div className="flex justify-between items-center">
                       <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase">Turnos</span>
@@ -227,7 +247,7 @@ export const ClockView: React.FC<ClockViewProps> = ({ shifts, setShifts, categor
                   </div>
               </div>
 
-              {/* Category Breakdown (Full Width if needed) */}
+              {/* Category Breakdown */}
               <div className="col-span-2 bg-gray-50 dark:bg-[#1a1a1a] p-2 rounded border border-gray-100 dark:border-gray-800">
                    <div className="flex flex-wrap gap-2">
                     {Object.keys(stats.categoryBreakdown).length > 0 ? (
