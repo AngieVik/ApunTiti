@@ -45,16 +45,15 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
+    const metaThemeColor = document.querySelector("meta[name='theme-color']");
     if (theme === Theme.Dark) {
       document.documentElement.classList.add('dark');
+      metaThemeColor?.setAttribute("content", "#111111"); // Actualiza barra a negro
     } else {
       document.documentElement.classList.remove('dark');
+      metaThemeColor?.setAttribute("content", "#f3f4f6"); // Actualiza barra a gris claro
     }
   }, [theme]);
-
-  const notify = (message: string, type: NotificationType = 'success') => {
-      setNotification({ message, type });
-  };
 
   const renderView = () => {
     switch (currentView) {

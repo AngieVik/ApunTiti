@@ -2,8 +2,16 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Personal Time Tracker Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ApunTiti - Registro de Horas</title>
+    
+    <meta name="theme-color" content="#111111" id="theme-color-meta" />
+    <meta name="description" content="ApunTiti - Herramienta offline para el registro de turnos de trabajo y cálculo de ganancias." />
+    
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    
+    <link rel="icon" href="/favicon.ico" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -21,16 +29,19 @@
       }
     </script>
     <script>
-      // Apply theme from localStorage on initial load to prevent FOUC
+      // Script para aplicar el tema y el color de la barra de estado antes de que cargue React
       try {
         const storedTheme = localStorage.getItem('theme');
         const theme = storedTheme ? JSON.parse(storedTheme) : null;
+        const metaThemeColor = document.querySelector("meta[name='theme-color']");
         
-        // Default to DARK if null, or if explicitly dark
+        // Por defecto MODO OSCURO si es null, o si está explícito, o si el sistema es oscuro
         if (theme === 'dark' || !theme || window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          document.documentElement.classList.add('dark')
+          document.documentElement.classList.add('dark');
+          if(metaThemeColor) metaThemeColor.setAttribute("content", "#111111"); // Negro para modo oscuro
         } else {
-          document.documentElement.classList.remove('dark')
+          document.documentElement.classList.remove('dark');
+          if(metaThemeColor) metaThemeColor.setAttribute("content", "#f3f4f6"); // Gris claro para modo claro
         }
       } catch (e) {
         console.error("Error loading theme:", e);
