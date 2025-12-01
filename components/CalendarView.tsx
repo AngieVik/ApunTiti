@@ -540,19 +540,18 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                         <button onClick={() => handleViewChange('day')} className={`h-full px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all flex items-center justify-center ${viewType === 'day' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Día</button>
                     </div>
 
-                    <div className="flex items-center gap-1 bg-gray-100 dark:bg-[#1a1a1a] rounded p-1 h-8 flex-1 min-w-0">
+                    <div className="flex items-center gap-2 justify-end shrink-0">
                         <input 
                             type="date" 
                             value={rangeStart} 
                             onChange={handleRangeStartChange} 
-                            className="w-full h-full min-w-0 bg-transparent border-none p-0 px-1 text-[10px] font-bold uppercase tracking-wide text-gray-600 dark:text-gray-400 focus:ring-0 cursor-pointer text-center [&::-webkit-calendar-picker-indicator]:w-3 [&::-webkit-calendar-picker-indicator]:h-3 [&::-webkit-calendar-picker-indicator]:opacity-50 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                            className="w-32 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                         />
-                        <span className="text-gray-400 font-bold text-[10px]">-</span>
                         <input 
                             type="date" 
                             value={rangeEnd} 
                             onChange={handleRangeEndChange} 
-                            className="w-full h-full min-w-0 bg-transparent border-none p-0 px-1 text-[10px] font-bold uppercase tracking-wide text-gray-600 dark:text-gray-400 focus:ring-0 cursor-pointer text-center [&::-webkit-calendar-picker-indicator]:w-3 [&::-webkit-calendar-picker-indicator]:h-3 [&::-webkit-calendar-picker-indicator]:opacity-50 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                            className="w-32 h-8 px-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                         />
                     </div>
                 </div>
