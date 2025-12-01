@@ -744,46 +744,32 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
     return (
         <div id="calendar-container" className="space-y-2">
             <Card className="print:hidden bg-white dark:bg-[#111] overflow-hidden">
-                {/* Contenedor Flex principal: Se asegura que todo esté en una línea con scroll horizontal si falta espacio */}
-                <div className="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar py-1">
-                    
-                    <div className="flex items-center gap-2">
-                        {/* GRUPO 1: Selectores de Vista (Año, Mes, etc) */}
-                        {/* Unificamos estilo: bg-gray-100, altura fija y padding idéntico al otro grupo */}
-                        <div className="flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-1 shrink-0 h-9">
-                            <button onClick={() => handleViewChange('year')} className={`h-7 px-2.5 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wide transition-all ${viewType === 'year' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Año</button>
-                            <button onClick={() => handleViewChange('month')} className={`h-7 px-2.5 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wide transition-all ${viewType === 'month' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Mes</button>
-                            <button onClick={() => handleViewChange('week')} className={`h-7 px-2.5 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wide transition-all ${viewType === 'week' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Sem</button>
-                            <button onClick={() => handleViewChange('day')} className={`h-7 px-2.5 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wide transition-all ${viewType === 'day' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Día</button>
-                        </div>
-
-                        {/* GRUPO 2: Selectores de Rango */}
-                        {/* Unificamos estilo: Mismo bg-gray-100, misma altura h-9, mismo padding p-1 */}
-                        <div className="flex items-center gap-1 shrink-0 bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-1 h-9 border border-transparent focus-within:border-yellow-500/30 focus-within:ring-1 focus-within:ring-yellow-500/30 transition-all">
-                             <Input 
-                                label="" 
-                                type="date" 
-                                value={rangeStart} 
-                                onChange={handleRangeStartChange} 
-                                // Clave: bg-transparent y border-none para que se funda con el contenedor
-                                className="w-24 sm:w-28 h-7 text-[10px] sm:text-xs font-medium bg-transparent border-none p-0 px-1 text-gray-700 dark:text-gray-300 focus:ring-0 cursor-pointer [&::-webkit-calendar-picker-indicator]:w-3.5 [&::-webkit-calendar-picker-indicator]:h-3.5 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
-                            />
-                            <span className="text-gray-400 font-bold text-[10px]">-</span>
-                            <Input 
-                                label="" 
-                                type="date" 
-                                value={rangeEnd} 
-                                onChange={handleRangeEndChange} 
-                                // Clave: bg-transparent y border-none
-                                className="w-24 sm:w-28 h-7 text-[10px] sm:text-xs font-medium bg-transparent border-none p-0 px-1 text-gray-700 dark:text-gray-300 focus:ring-0 cursor-pointer [&::-webkit-calendar-picker-indicator]:w-3.5 [&::-webkit-calendar-picker-indicator]:h-3.5 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
-                            />
-                        </div>
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                    {/* View Switcher Group */}
+                    <div className="flex items-center bg-gray-100 dark:bg-[#1a1a1a] rounded p-1 shrink-0">
+                        <button onClick={() => handleViewChange('year')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'year' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Año</button>
+                        <button onClick={() => handleViewChange('month')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'month' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Mes</button>
+                        <button onClick={() => handleViewChange('week')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'week' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Semana</button>
+                        <button onClick={() => handleViewChange('day')} className={`h-6 px-2 rounded text-[10px] font-bold uppercase tracking-wide transition-all ${viewType === 'day' ? 'bg-white dark:bg-[#111] shadow-sm text-yellow-600 dark:text-yellow-500' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300'}`}>Día</button>
                     </div>
 
-                    {/* Botones de navegación (Integrados a la derecha) */}
-                    <div className="flex items-center gap-1">
-                        <Button onClick={handlePrev} variant="secondary" className="!px-0 !w-7 !h-7 flex items-center justify-center rounded-full"><ChevronLeftIcon className="w-3 h-3" /></Button>
-                        <Button onClick={handleNext} variant="secondary" className="!px-0 !w-7 !h-7 flex items-center justify-center rounded-full"><ChevronRightIcon className="w-3 h-3" /></Button>
+                    {/* Range Inputs Group - Now forcing flex row and no wrap */}
+                    <div className="flex items-center gap-1 shrink-0 bg-gray-50 dark:bg-[#1a1a1a] p-1 rounded border border-gray-100 dark:border-white/5">
+                         <Input 
+                            label="" 
+                            type="date" 
+                            value={rangeStart} 
+                            onChange={handleRangeStartChange} 
+                            className="w-24 h-6 text-[10px] p-0 px-1 border-none bg-transparent focus:ring-0 [&::-webkit-calendar-picker-indicator]:w-3 [&::-webkit-calendar-picker-indicator]:h-3 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                        />
+                        <span className="text-gray-400 font-bold text-[10px]">-</span>
+                        <Input 
+                            label="" 
+                            type="date" 
+                            value={rangeEnd} 
+                            onChange={handleRangeEndChange} 
+                            className="w-24 h-6 text-[10px] p-0 px-1 border-none bg-transparent focus:ring-0 [&::-webkit-calendar-picker-indicator]:w-3 [&::-webkit-calendar-picker-indicator]:h-3 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                        />
                     </div>
                 </div>
             </Card>
@@ -795,13 +781,15 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
 
             <Card id="printable-area" className="min-h-[300px] print:shadow-none print:border-none print:p-0">
                 {!rangeStart || !rangeEnd ? (
-                    <div className="flex items-center justify-center mb-4 pb-2 border-b border-gray-100 dark:border-white/5">
+                    <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5">
+                        <Button onClick={handlePrev} variant="secondary" className="!px-2 !w-8 h-7"><ChevronLeftIcon /></Button>
                         <h2 className="text-sm font-black text-center text-gray-900 dark:text-white uppercase tracking-wide">
                             {viewType === 'year' && year}
                             {viewType === 'month' && `${monthNamesES[month]} ${year}`}
                             {viewType === 'week' && `Semana ${currentDate.getDate()} - ${monthNamesES[month]}`}
                             {viewType === 'day' && currentDate.toLocaleDateString()}
                         </h2>
+                        <Button onClick={handleNext} variant="secondary" className="!px-2 !w-8 h-7"><ChevronRightIcon /></Button>
                     </div>
                 ) : null}
 
@@ -829,7 +817,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ shifts, setShifts, h
                 onCancel={() => setIsConfirmOpen(false)}
             />
 
-            {/* ... (El resto del Edit Modal se mantiene igual) ... */}
             {isEditOpen && editingShift && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
                     <div className="bg-white dark:bg-[#121212] rounded-xl shadow-2xl shadow-black border border-yellow-500/30 max-w-lg w-full p-4">
