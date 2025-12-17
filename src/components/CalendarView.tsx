@@ -721,15 +721,15 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         {/* overflow-x-auto permite scroll en móviles muy pequeños, pero en general todo cabe en una fila */}
         <div className={APP_STYLES.CALENDARIO.controlsInner}>
           {/* GRUPO 1: Botones de Vista - Flex-none para que no se aplasten */}
-          <div className="flex items-center gap-1 shrink-0">
+          <div className={APP_STYLES.CALENDARIO.viewButtonsGroup}>
             {["year", "month", "week", "day"].map((type) => (
               <button
                 key={type}
                 onClick={() => handleViewChange(type as CalendarViewType)}
-                className={`h-8 w-auto px-3 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all whitespace-nowrap ${
+                className={`${APP_STYLES.CALENDARIO.viewButton} ${
                   viewType === type
-                    ? "bg-yellow-500 text-black border-yellow-600 shadow-sm"
-                    : "bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500"
+                    ? APP_STYLES.CALENDARIO.viewButtonActive
+                    : APP_STYLES.CALENDARIO.viewButtonInactive
                 }`}
               >
                 {type === "year" && "Año"}
@@ -741,47 +741,41 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           </div>
 
           {/* GRUPO 2: Selectores de Fecha - Estilo exacto a UI.tsx pero inline */}
-          <div className="flex items-center gap-1 shrink-0">
+          <div className={APP_STYLES.CALENDARIO.dateSelectorsGroup}>
             <input
               type="date"
               value={rangeStart}
               onChange={handleRangeStartChange}
-              // w-auto en móvil (compacto), md:w-auto en escritorio (grande)
-              // Clases copiadas de UI.tsx/Input para mantener estilo idéntico
-              className="w-auto md:w-auto h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+              className={APP_STYLES.CALENDARIO.dateInput}
             />
             <input
               type="date"
               value={rangeEnd}
               onChange={handleRangeEndChange}
-              // w-auto en móvil, md:w-auto en escritorio
-              className="w-auto md:w-auto h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+              className={APP_STYLES.CALENDARIO.dateInput}
             />
           </div>
         </div>
       </Card>
 
-      <div className="hidden print:block mb-4 border-b pb-2">
-        <h1 className="text-xl font-bold">Reporte de Turnos</h1>
-        <p className="text-sm text-gray-500">
+      <div className={APP_STYLES.CALENDARIO.printHeader}>
+        <h1 className={APP_STYLES.CALENDARIO.printTitle}>Reporte de Turnos</h1>
+        <p className={APP_STYLES.CALENDARIO.printSubtitle}>
           Generado el {new Date().toLocaleDateString()}
         </p>
       </div>
 
-      <Card
-        id="printable-area"
-        className="min-h-[300px] print:shadow-none print:border-none print:p-0"
-      >
+      <Card id="printable-area" className={APP_STYLES.CALENDARIO.printableCard}>
         {!rangeStart || !rangeEnd ? (
-          <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5">
+          <div className={APP_STYLES.CALENDARIO.navigationHeader}>
             <Button
               onClick={handlePrev}
               variant="secondary"
-              className="!px-2 !w-8 h-7"
+              className={APP_STYLES.CALENDARIO.navButton}
             >
               <ChevronLeftIcon />
             </Button>
-            <h2 className="text-sm font-black text-center text-gray-900 dark:text-white uppercase tracking-wide">
+            <h2 className={APP_STYLES.CALENDARIO.navTitle}>
               {viewType === "year" && year}
               {viewType === "month" && `${monthNamesES[month]} ${year}`}
               {viewType === "week" &&
@@ -791,7 +785,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
             <Button
               onClick={handleNext}
               variant="secondary"
-              className="!px-2 !w-8 h-7"
+              className={APP_STYLES.CALENDARIO.navButton}
             >
               <ChevronRightIcon />
             </Button>
