@@ -27,27 +27,42 @@ export default defineConfig({
         start_url: "/",
         icons: [
           {
-            src: "icons/pwa-64x64.png", // <--- Ruta actualizada a carpeta icons
-            sizes: "64x64",
-            type: "image/png",
+            src: "icons/pwa-48-48.png",
+            sizes: "48x48",
+            type: "image/png"
           },
           {
-            src: "icons/pwa-192x192.png", // <--- Ruta actualizada a carpeta icons
+            src: "icons/pwa-72-72.png",
+            sizes: "72x72",
+            type: "image/png"
+          },
+          {
+            src: "icons/pwa-96-96.png",
+            sizes: "96x96",
+            type: "image/png"
+          },
+          {
+            src: "icons/pwa-144-144.png",
+            sizes: "144x144",
+            type: "image/png"
+          },
+          {
+            src: "icons/pwa-192-192.png",
             sizes: "192x192",
-            type: "image/png",
+            type: "image/png"
           },
           {
-            src: "icons/pwa-512x512.png", // <--- Ruta actualizada a carpeta icons
+            src: "icons/pwa-512-512.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "any",
+            purpose: "any" // "any" sirve para iconos generales
           },
           {
-            src: "icons/maskable-icon-512x512.png", // <--- Ruta actualizada a carpeta icons
+            src: "icons/pwa-maskable-512-512.png",
             sizes: "512x512",
             type: "image/png",
-            purpose: "maskable",
-          },
+            purpose: "maskable" // Reusamos el mismo para maskable si tiene fondo sólido
+          }
         ],
       },
     }),
