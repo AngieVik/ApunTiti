@@ -192,7 +192,9 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                 : APP_STYLES.CALENDARIO.yearMonthCardInactive
             }`}
           >
-            <h3 className={APP_STYLES.CALENDARIO.yearMonthTitle}>{mName}</h3>
+            <h3 className={APP_STYLES.CALENDARIO.yearMonthTitle}>
+              {mName}
+            </h3>
             <div className={APP_STYLES.CALENDARIO.yearMonthStats}>
               <p className={APP_STYLES.CALENDARIO.yearMonthHours}>
                 {statsByMonth[idx].hours.toFixed(0)}h
@@ -297,134 +299,127 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       <>
         <div className={APP_STYLES.CALENDARIO.weekdayHeader}>
           {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((d) => (
-            <div key={d} className={APP_STYLES.CALENDARIO.weekdayLabel}>
+            <div
+              key={d}
+              className={APP_STYLES.CALENDARIO.weekdayLabel}
+            >
               {d}
             </div>
           ))}
         </div>
-        <div className={APP_STYLES.CALENDARIO.monthGrid}>{grid}</div>
-
-        {monthlyHours > 0 && (
-          <div className={APP_STYLES.CALENDARIO.monthTotal}>
-            <span className={APP_STYLES.CALENDARIO.monthTotalLabel}>
-              TOTAL {monthNamesES[month]}
+        <div className={APP_STYLES.CALENDARIO.monthGrid}>
+          {grid}
+        </div>
+        <div className={APP_STYLES.CALENDARIO.monthTotal}>
+          <span className={APP_STYLES.CALENDARIO.monthTotalLabel}>
+            Total Mensual
+          </span>
+          <div className="text-right">
+            <span className={APP_STYLES.CALENDARIO.monthTotalValue}>
+              {monthlyHours.toFixed(2)} h
             </span>
-            <div>
-              <span className={APP_STYLES.CALENDARIO.monthTotalValue}>
-                {monthlyHours.toFixed(2)} h
+            {monthlyMoney > 0 && (
+              <span className={APP_STYLES.CALENDARIO.monthTotalEarnings}>
+                {monthlyMoney.toFixed(2)}€
               </span>
-              {monthlyMoney > 0 && (
-                <span className={APP_STYLES.CALENDARIO.monthTotalEarnings}>
-                  {monthlyMoney.toFixed(2)}€
-                </span>
-              )}
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </>
     );
   };
 
   const renderWeekView = () => {
     const startOfWeek = new Date(currentDate);
-    const dayOfWeek = startOfWeek.getDay();
-    const offset = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    startOfWeek.setDate(startOfWeek.getDate() - offset);
+    const day = startOfWeek.getDay(); // 0 Sun
+    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
+    startOfWeek.setDate(diff);
 
     const weekDays = [];
+    let weekTotal = 0;
+    let weekMoney = 0;
+
     for (let i = 0; i < 7; i++) {
       const d = new Date(startOfWeek);
       d.setDate(startOfWeek.getDate() + i);
-      weekDays.push(d);
-    }
+      const dateStr = toLocalISOString(d);
+      const dayShifts = shiftsByDate[dateStr] || [];
 
-    let totalWeekHours = 0;
-    let totalWeekMoney = 0;
+      let hoursToday = 0;
+      dayShifts.forEach((s) => {
+        const duration = calculateDuration(s.startTime, s.endTime);
+        hoursToday += duration;
+        if (s.hourTypeId) {
+          const hType = hourTypes.find((h) => h.id === s.hourTypeId);
+          const price = hType ? hType.price : 0;
+          weekMoney += duration * price;
+        }
+      });
+      weekTotal += hoursToday;
+      const isToday = toLocalISOString(new Date()) === dateStr;
+
+      weekDays.push(
+        <div
+          key={i}
+          onClick={() => handleDayClick(d)}
+          className={APP_STYLES.CALENDARIO.weekDayColumn}
+        >
+          <div className={APP_STYLES.CALENDARIO.weekDayHeader}>
+            <span className={APP_STYLES.CALENDARIO.weekDayName}>
+              {dayNamesES[d.getDay()]}
+            </span>
+            <span
+              className={`${APP_STYLES.CALENDARIO.weekDayNumber} ${
+                isToday ? APP_STYLES.CALENDARIO.weekDayNumberToday : APP_STYLES.CALENDARIO.weekDayNumberDefault
+              }`}
+            >
+              {d.getDate()}
+            </span>
+          </div>
+          <div className={APP_STYLES.CALENDARIO.weekShiftsList}>
+            {dayShifts.map((s) => (
+              <div
+                key={s.id}
+                className={APP_STYLES.CALENDARIO.weekShiftBadge}
+              >
+                <div className={APP_STYLES.CALENDARIO.weekShiftTime}>
+                  {s.startTime}
+                </div>
+                <div className={APP_STYLES.CALENDARIO.weekShiftCategory}>
+                  {s.category}
+                </div>
+              </div>
+            ))}
+          </div>
+          {hoursToday > 0 && (
+            <div className={APP_STYLES.CALENDARIO.weekDayTotal}>
+              {hoursToday.toFixed(1)}h
+            </div>
+          )}
+        </div>
+      );
+    }
 
     return (
       <>
         <div className={APP_STYLES.CALENDARIO.weekContainer}>
-          {weekDays.map((day) => {
-            const dateStr = toLocalISOString(day);
-            const dayShifts = shiftsByDate[dateStr] || [];
-            const isToday = toLocalISOString(new Date()) === dateStr;
-
-            let dayHours = 0;
-            let dayMoney = 0;
-            dayShifts.forEach((s) => {
-              const duration = calculateDuration(s.startTime, s.endTime);
-              dayHours += duration;
-              if (s.hourTypeId) {
-                const hType = hourTypes.find((h) => h.id === s.hourTypeId);
-                const price = hType ? hType.price : 0;
-                dayMoney += duration * price;
-              }
-            });
-            totalWeekHours += dayHours;
-            totalWeekMoney += dayMoney;
-
-            return (
-              <div
-                key={dateStr}
-                onClick={() => handleDayClick(day)}
-                className={APP_STYLES.CALENDARIO.weekDayColumn}
-              >
-                <div className={APP_STYLES.CALENDARIO.weekDayHeader}>
-                  <span className={APP_STYLES.CALENDARIO.weekDayName}>
-                    {dayNamesES[day.getDay()]}
-                  </span>
-                  <span
-                    className={`${APP_STYLES.CALENDARIO.weekDayNumber} ${
-                      isToday
-                        ? APP_STYLES.CALENDARIO.weekDayNumberToday
-                        : APP_STYLES.CALENDARIO.weekDayNumberDefault
-                    }`}
-                  >
-                    {day.getDate()}
-                  </span>
-                </div>
-                <div className={APP_STYLES.CALENDARIO.weekShiftsList}>
-                  {dayShifts.map((shift, i) => (
-                    <div
-                      key={i}
-                      className={APP_STYLES.CALENDARIO.weekShiftBadge}
-                    >
-                      <div className={APP_STYLES.CALENDARIO.weekShiftTime}>
-                        {shift.startTime} - {shift.endTime}
-                      </div>
-                      <div className={APP_STYLES.CALENDARIO.weekShiftCategory}>
-                        {shift.category}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {dayHours > 0 && (
-                  <div className={APP_STYLES.CALENDARIO.weekDayTotal}>
-                    {dayHours.toFixed(1)}h
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {weekDays}
         </div>
-
-        {totalWeekHours > 0 && (
-          <div className={APP_STYLES.CALENDARIO.weekTotal}>
-            <span className={APP_STYLES.CALENDARIO.monthTotalLabel}>
-              TOTAL SEMANA
+        <div className={APP_STYLES.CALENDARIO.weekTotal}>
+          <span className={APP_STYLES.CALENDARIO.monthTotalLabel}>
+            Total Semanal
+          </span>
+          <div className="text-right">
+            <span className={APP_STYLES.CALENDARIO.monthTotalValue}>
+              {weekTotal.toFixed(2)} h
             </span>
-            <div>
-              <span className={APP_STYLES.CALENDARIO.monthTotalValue}>
-                {totalWeekHours.toFixed(2)} h
+            {weekMoney > 0 && (
+              <span className={APP_STYLES.CALENDARIO.monthTotalEarnings}>
+                {weekMoney.toFixed(2)}€
               </span>
-              {totalWeekMoney > 0 && (
-                <span className={APP_STYLES.CALENDARIO.monthTotalEarnings}>
-                  {totalWeekMoney.toFixed(2)}€
-                </span>
-              )}
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </>
     );
   };
@@ -480,30 +475,20 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                       <span className={APP_STYLES.CALENDARIO.dayViewShiftTime}>
                         {shift.startTime} - {shift.endTime}
                       </span>
-                      <span
-                        className={APP_STYLES.CALENDARIO.dayViewShiftDuration}
-                      >
+                      <span className={APP_STYLES.CALENDARIO.dayViewShiftDuration}>
                         {duration.toFixed(2)}h
                       </span>
                       {hasType && price * duration > 0 && (
-                        <span
-                          className={APP_STYLES.CALENDARIO.dayViewShiftEarnings}
-                        >
+                        <span className={APP_STYLES.CALENDARIO.dayViewShiftEarnings}>
                           {(duration * price).toFixed(2)}€
                         </span>
                       )}
                     </div>
                     <div className={APP_STYLES.CALENDARIO.dayViewShiftMeta}>
-                      <span
-                        className={APP_STYLES.CALENDARIO.dayViewShiftCategory}
-                      >
+                      <span className={APP_STYLES.CALENDARIO.dayViewShiftCategory}>
                         {shift.category}
                       </span>
-                      <span
-                        className={APP_STYLES.CALENDARIO.dayViewShiftSeparator}
-                      >
-                        |
-                      </span>
+                      <span className={APP_STYLES.CALENDARIO.dayViewShiftSeparator}>|</span>
                       <span className={APP_STYLES.CALENDARIO.dayViewShiftType}>
                         {typeName}
                       </span>
@@ -535,7 +520,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               <span className={APP_STYLES.CALENDARIO.dayViewTotalLabel}>
                 Total Diario
               </span>
-              <div>
+              <div className="text-right">
                 <span className={APP_STYLES.CALENDARIO.dayViewTotalValue}>
                   {total.toFixed(2)} h
                 </span>
@@ -612,7 +597,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           </div>
           <div className={APP_STYLES.CALENDARIO.rangeShiftsList}>
             {dayShifts.map((s) => (
-              <div key={s.id} className={APP_STYLES.CALENDARIO.rangeShiftBadge}>
+              <div
+                key={s.id}
+                className={APP_STYLES.CALENDARIO.rangeShiftBadge}
+              >
                 <span className={APP_STYLES.CALENDARIO.rangeShiftTime}>
                   {s.startTime}
                 </span>
@@ -634,13 +622,15 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       <div className={APP_STYLES.CALENDARIO.rangeContainer}>
         <div className={APP_STYLES.CALENDARIO.rangeHeader}>
           <div>
-            <h3 className={APP_STYLES.CALENDARIO.rangeTitle}>Resumen Rango</h3>
+            <h3 className={APP_STYLES.CALENDARIO.rangeTitle}>
+              Resumen Rango
+            </h3>
             <p className={APP_STYLES.CALENDARIO.rangeSubtitle}>
               {new Date(rangeStart).toLocaleDateString()} -{" "}
               {new Date(rangeEnd).toLocaleDateString()}
             </p>
           </div>
-          <div>
+          <div className="text-right">
             <span className={APP_STYLES.CALENDARIO.rangeTotalValue}>
               {totalRangeHours.toFixed(2)}h
             </span>
@@ -651,6 +641,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
             )}
           </div>
         </div>
+
+        {/* Cuadrícula de 7 columnas siempre (como un calendario), muy compacto */}
         <div className={APP_STYLES.CALENDARIO.rangeGrid}>{dayCards}</div>
       </div>
     );
@@ -812,8 +804,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         )}
       </Card>
 
-      <div className="flex justify-end print:hidden">
-        <Button onClick={handleSave} className="flex items-center gap-1">
+      <div className={APP_STYLES.CALENDARIO.downloadContainer}>
+        <Button onClick={handleSave} className={APP_STYLES.CALENDARIO.downloadButton}>
           Descargar
         </Button>
       </div>
@@ -827,10 +819,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
       />
 
       {isEditOpen && editingShift && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-[#121212] rounded-xl shadow-2xl shadow-black border border-yellow-500/30 max-w-lg w-full p-4">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wide">
+        <div className={APP_STYLES.CALENDARIO.editModal}>
+          <div className={APP_STYLES.CALENDARIO.editModalContent}>
+            <div className={APP_STYLES.CALENDARIO.editModalHeader}>
+              <h3 className={APP_STYLES.CALENDARIO.editModalTitle}>
                 Editar Registro
               </h3>
               <button
@@ -841,7 +833,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className={APP_STYLES.CALENDARIO.editModalGrid}>
               <Input
                 label="Fecha"
                 type="date"
@@ -882,7 +874,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                 }
               />
 
-              <div className="col-span-2">
+              <div className={APP_STYLES.CALENDARIO.editModalColSpan}>
                 <Select
                   label="Tipo de Hora"
                   value={editingShift.hourTypeId || ""}
@@ -901,7 +893,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                   ))}
                 </Select>
               </div>
-              <div className="col-span-2">
+              <div className={APP_STYLES.CALENDARIO.editModalColSpan}>
                 <Input
                   label="Notas"
                   type="text"
@@ -913,7 +905,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               </div>
             </div>
 
-            <div className="flex justify-end gap-2">
+            <div className={APP_STYLES.CALENDARIO.editModalActions}>
               <Button variant="secondary" onClick={() => setIsEditOpen(false)}>
                 Cancelar
               </Button>
