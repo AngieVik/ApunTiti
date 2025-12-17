@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Tailwind v4 Configuration */
+@theme {
+  /* Custom colors */
+  --color-gray-900: #111;
+  --color-gray-800: #222;
+}
+
+/* Configure dark mode to use class strategy */
+@variant dark (&:is(.dark *));
+
+/* Global styles */
+body {
+  @apply bg-gray-100 dark:bg-black text-gray-900 dark:text-gray-100 transition-colors duration-300;
+}
+
+::selection {
+  @apply bg-yellow-500 text-black;
+}
