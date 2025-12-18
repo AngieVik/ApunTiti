@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useId } from "react";
 import { Notification } from "../types";
 import { CheckIcon, XMarkIcon, FlagIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
@@ -60,13 +60,16 @@ export const Input: React.FC<InputProps> = ({
   className,
   ...props
 }) => {
+  const generatedId = useId();
+  const inputId = id || generatedId;
+
   return (
     <div className={APP_STYLES.MODOS.uiInputWrapper}>
-      <label htmlFor={id} className={APP_STYLES.MODOS.uiInputLabel}>
+      <label htmlFor={inputId} className={APP_STYLES.MODOS.uiInputLabel}>
         {label}
       </label>
       <input
-        id={id}
+        id={inputId}
         className={`${APP_STYLES.MODOS.uiInputField} ${className || ""}`}
         {...props}
       />
@@ -87,23 +90,26 @@ export const Select: React.FC<SelectProps> = ({
   className,
   ...props
 }) => {
+  const generatedId = useId();
+  const selectId = id || generatedId;
+
   return (
     <div className={APP_STYLES.MODOS.uiSelectWrapper}>
       {label && (
-        <label htmlFor={id} className={APP_STYLES.MODOS.uiSelectLabel}>
+        <label htmlFor={selectId} className={APP_STYLES.MODOS.uiSelectLabel}>
           {label}
         </label>
       )}
       <div className={APP_STYLES.MODOS.uiSelectContainer}>
         <select
-          id={id}
+          id={selectId}
           className={`${APP_STYLES.MODOS.uiSelectField} ${className || ""}`}
           {...props}
         >
           {children}
         </select>
         {/* Custom arrow for cleaner look */}
-        <div className={APP_STYLES.MODOS.uiSelectArrow}>
+        <div className={APP_STYLES.MODOS.uiSelectArrow} aria-hidden="true">
           <svg
             className="fill-current h-3 w-3"
             xmlns="http://www.w3.org/2000/svg"
@@ -133,13 +139,26 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   onCancel,
 }) => {
+  const titleId = useId();
+  const descId = useId();
+
   if (!isOpen) return null;
 
   return (
-    <div className={APP_STYLES.MODOS.confirmDialogOverlay}>
+    <div
+      className={APP_STYLES.MODOS.confirmDialogOverlay}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={titleId}
+      aria-describedby={descId}
+    >
       <div className={APP_STYLES.MODOS.confirmDialogContent}>
-        <h3 className={APP_STYLES.MODOS.confirmDialogTitle}>{title}</h3>
-        <p className={APP_STYLES.MODOS.confirmDialogMessage}>{message}</p>
+        <h3 id={titleId} className={APP_STYLES.MODOS.confirmDialogTitle}>
+          {title}
+        </h3>
+        <p id={descId} className={APP_STYLES.MODOS.confirmDialogMessage}>
+          {message}
+        </p>
         <div className={APP_STYLES.MODOS.confirmDialogActions}>
           <Button variant="secondary" onClick={onCancel}>
             Cancelar
