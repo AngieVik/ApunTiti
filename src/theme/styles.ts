@@ -44,11 +44,11 @@ export const APP_STYLES = {
     // Main container
     container: "space-y-2",
 
-    // Registration Card
+    // REGISTRAR TURNO //
     card: "border-t-2 border-t-yellow-500",
     cardHeader: "flex items-center justify-between mb-2",
     cardTitle:
-      "text-sm font-black text-gray-900 dark:text-white uppercase tracking-tighter leading-none",
+      "text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest leading-none",
     cardTitleAccent: "text-yellow-600 dark:text-yellow-500",
 
     // Error alert
@@ -75,14 +75,14 @@ export const APP_STYLES = {
       "absolute top-0 left-0 w-1 h-full bg-gray-200 dark:bg-gray-800",
     summaryHeader: "flex justify-between items-center mb-3 pl-2",
     summaryTitleSmall:
-      "text-[10px] font-black text-gray-600 dark:text-gray-300 uppercase tracking-widest mb-0.5",
+      "text-sm font-black text-gray-900 dark:text-gray-300 uppercase tracking-widest mb-0.5",
 
     // Month selector
-    monthSelector: "flex items-center gap-2",
+    monthSelector: "flex items-center gap-1",
     monthNavButton:
       "p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 transition-colors",
-    monthTitle: "text-sm font-black text-gray-900 dark:text-white uppercase",
-    monthYearSmall: "text-gray-400 text-xs",
+    monthTitle: "text-[10px] font-black text-gray-900 dark:text-white uppercase",
+    monthYearSmall: "text-gray-400 text-[10px]",
 
     // Summary stats grid
     statsGrid: "grid grid-cols-2 gap-2 pl-2",
@@ -93,22 +93,22 @@ export const APP_STYLES = {
     statsRow: "flex justify-between items-center mb-1",
     statsRowNoMargin: "flex justify-between items-center",
     statsLabel:
-      "text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase",
+      "text-xs font-bold text-gray-900 dark:text-gray-200 uppercase",
     statsValueHours:
-      "text-xs font-mono font-bold text-yellow-600 dark:text-yellow-500",
+      "text-xs font-bold text-green-600 dark:text-green-500",
     statsValueEarnings:
-      "text-xs font-mono font-bold text-green-600 dark:text-green-500",
-    statsValueCount: "text-xs font-bold text-gray-900 dark:text-white",
+      "text-xs font-bold text-green-600 dark:text-green-500",
+    statsValueCount: "text-xs font-bold text-gray-900 dark:text-gray-200",
 
     // Category breakdown
     categoryGrid:
       "col-span-2 bg-gray-50 dark:bg-[#1a1a1a] p-2 rounded border border-gray-100 dark:border-gray-800",
     categoryWrapper: "flex flex-wrap gap-2",
     categoryBadge:
-      "flex items-center gap-1 text-[10px] bg-white dark:bg-black px-1.5 py-0.5 rounded border border-gray-100 dark:border-gray-800",
-    categoryName: "text-gray-700 dark:text-gray-300",
-    categoryCount: "font-bold text-gray-900 dark:text-white",
-    categoryEmpty: "text-[10px] text-gray-500 dark:text-gray-400 italic",
+      "flex items-center gap-1 text-xs bg-white dark:bg-black px-1.5 py-0.5 rounded border border-gray-100 dark:border-gray-800",
+    categoryName: "text-gray-900 dark:text-gray-200",
+    categoryCount: "font-bold text-gray-900 dark:text-gray-200",
+    categoryEmpty: "text-xs text-gray-900 dark:text-gray-200 italic",
   },
 
   /**
@@ -120,21 +120,17 @@ export const APP_STYLES = {
 
     // Controls card
     controlsCard: "print:hidden bg-white dark:bg-[#111]",
-    controlsInner:
-      "flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-1",
+    // CORRECCIÓN: flex, justify-between (izquierda/derecha), sin wrap, sin overflow
+    controlsInner: "flex items-center justify-between gap-2 py-1",
 
-    // View buttons group
-    viewButtonsGroup: "flex items-center gap-1 shrink-0",
-    viewButton:
-      "h-8 w-auto px-3 rounded-lg border text-[10px] font-bold uppercase tracking-wide transition-all whitespace-nowrap",
-    viewButtonActive: "bg-yellow-500 text-black border-yellow-600 shadow-sm",
-    viewButtonInactive:
-      "bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:border-yellow-500",
+    // BOTONES SELECTORES // AÑO MES SEM DÍA //
+    viewButtonsGroup: "flex items-center gap-1 min-w-0",
+    viewButton: "miw-full h-8 px-2 rounded-lg border text-gray-900 dark:text-gray-100 text-xs font-medium uppercase transition-all",
+    viewButtonInactive: "bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 dark:focus:ring-yellow-500/50 dark:focus:border-yellow-500 transition-all cursor-pointer",
 
-    // Date range selectors
-    dateSelectorsGroup: "flex items-center gap-1 shrink-0",
-    dateInput:
-      "w-auto md:w-auto h-8 bg-gray-50 p-1 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-60 hover:[&::-webkit-calendar-picker-indicator]:opacity-100",
+    // BOTONES SELECTORES // RANGO FECHAS //
+    dateSelectorsGroup: "flex items-center gap-1 min-w-0",
+    dateInput: "min-w-0 w-full px-2 h-8 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all cursor-pointer",
 
     // Print header
     printHeader: "hidden print:block mb-4 border-b pb-2",
@@ -148,13 +144,13 @@ export const APP_STYLES = {
       "flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5",
     navButton: "!px-2 !w-8 h-7",
     navTitle:
-      "text-sm font-black text-center text-gray-900 dark:text-white uppercase tracking-wide",
+      "text-xs font-black text-center text-gray-900 dark:text-white uppercase tracking-wide",
 
     // Calendar grids
     weekdayHeader:
       "grid grid-cols-7 text-center font-bold bg-gray-50 dark:bg-[#1a1a1a] p-1.5 rounded-t-lg border-b border-gray-100 dark:border-gray-800",
     weekdayLabel:
-      "text-[9px] uppercase tracking-widest text-gray-500 dark:text-gray-400",
+      "text-xs uppercase tracking-widest text-gray-900 dark:text-gray-200",
     monthGrid:
       "grid grid-cols-7 bg-white dark:bg-[#111] rounded-b-lg overflow-hidden",
 
@@ -166,7 +162,7 @@ export const APP_STYLES = {
     dayCellSelected: "ring-1 ring-inset ring-yellow-500 z-10",
     dayCellHeader: "flex justify-between items-start",
     dayNumber:
-      "w-5 h-5 text-[10px] flex items-center justify-center rounded-full mb-0.5 font-bold",
+      "w-5 h-5 text-xs flex items-center justify-center rounded-full mb-0.5 font-bold",
     dayNumberToday: "bg-yellow-500 text-black",
     dayNumberDefault:
       "text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white",
@@ -181,7 +177,7 @@ export const APP_STYLES = {
     monthTotal:
       "mt-2 p-2 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-100 dark:border-white/5 flex justify-between items-center",
     monthTotalLabel:
-      "text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase",
+      "text-xs font-bold text-gray-700 dark:text-gray-300 uppercase",
     monthTotalValue:
       "block text-sm font-mono font-bold text-gray-900 dark:text-white",
     monthTotalEarnings: "text-xs font-bold text-green-600 dark:text-green-400",
@@ -196,7 +192,7 @@ export const APP_STYLES = {
     yearMonthTitle: "font-bold text-xs dark:text-white uppercase tracking-wide",
     yearMonthStats: "flex justify-between items-end mt-1",
     yearMonthHours: "text-xs font-mono text-gray-600 dark:text-gray-300",
-    yearMonthMoney: "text-[10px] font-bold text-green-600 dark:text-green-500",
+    yearMonthMoney: "text-xs font-bold text-green-600 dark:text-green-500",
 
     // Week view
     weekContainer:
@@ -206,18 +202,18 @@ export const APP_STYLES = {
     weekDayHeader:
       "text-center border-b border-gray-100 dark:border-white/5 pb-1 mb-1",
     weekDayName:
-      "block text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest",
+      "block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest",
     weekDayNumber: "block text-lg font-black",
     weekDayNumberToday: "text-yellow-500",
-    weekDayNumberDefault: "text-gray-800 dark:text-white",
+    weekDayNumberDefault: "text-gray-900 dark:text-white",
     weekShiftsList: "space-y-0.5",
     weekShiftBadge:
-      "text-[9px] p-0.5 bg-yellow-100 dark:bg-yellow-900/20 border-l-2 border-yellow-500 rounded mb-0.5",
+      "text-xs p-0.5 bg-yellow-100 dark:bg-yellow-900/20 border-l-2 border-yellow-500 rounded mb-0.5",
     weekShiftTime: "font-bold dark:text-yellow-200 leading-tight",
     weekShiftCategory:
       "truncate text-gray-700 dark:text-gray-300 leading-tight",
     weekDayTotal:
-      "mt-auto pt-1 text-center font-mono font-bold text-gray-500 dark:text-gray-400 text-[10px]",
+      "mt-auto pt-1 text-center font-mono font-bold text-gray-500 dark:text-gray-400 text-xs",
     weekTotal:
       "mt-2 p-2 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-100 dark:border-white/5 flex justify-between items-center",
 
@@ -236,9 +232,9 @@ export const APP_STYLES = {
     dayViewShiftTime:
       "text-sm font-mono font-bold text-gray-900 dark:text-white",
     dayViewShiftDuration:
-      "px-1.5 py-0 text-[9px] font-bold bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300",
+      "px-1.5 py-0 text-xs font-bold bg-gray-100 dark:bg-gray-800 rounded text-gray-700 dark:text-gray-300",
     dayViewShiftEarnings:
-      "px-1.5 py-0 text-[9px] font-bold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded border border-green-200 dark:border-green-800",
+      "px-1.5 py-0 text-xs font-bold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded border border-green-200 dark:border-green-800",
     dayViewShiftMeta: "flex gap-2 text-xs",
     dayViewShiftCategory:
       "font-bold text-yellow-600 dark:text-yellow-500 uppercase tracking-wide",
@@ -258,7 +254,7 @@ export const APP_STYLES = {
     dayViewTotal:
       "mt-2 p-2 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-100 dark:border-white/5 flex justify-between items-center",
     dayViewTotalLabel:
-      "text-[10px] font-bold text-gray-700 dark:text-gray-300 uppercase",
+      "text-xs font-bold text-gray-700 dark:text-gray-300 uppercase",
     dayViewTotalValue:
       "block text-lg font-mono font-bold text-gray-900 dark:text-white",
     dayViewTotalEarnings:
@@ -270,7 +266,7 @@ export const APP_STYLES = {
       "flex justify-between items-baseline border-b border-gray-100 dark:border-white/5 pb-1 mb-2",
     rangeTitle:
       "text-sm font-black text-gray-900 dark:text-white uppercase tracking-wide",
-    rangeSubtitle: "text-[10px] text-gray-500",
+    rangeSubtitle: "text-xs text-gray-500",
     rangeTotalValue:
       "block font-mono font-bold text-lg text-gray-900 dark:text-white leading-none",
     rangeTotalEarnings:
@@ -319,8 +315,8 @@ export const APP_STYLES = {
 
     // Card sections
     sectionTitle:
-      "text-sm font-black text-gray-900 dark:text-white mb-2 uppercase tracking-wide",
-    sectionDesc: "text-xs text-gray-500 dark:text-gray-400 mb-3",
+      "text-sm font-black text-gray-900 dark:text-white mb-1 uppercase tracking-wide",
+    sectionDesc: "text-xs text-gray-500 dark:text-gray-400 mb-1",
 
     // General settings
     generalCard: "",
@@ -338,21 +334,21 @@ export const APP_STYLES = {
     categoriesList:
       "divide-y divide-gray-100 dark:divide-gray-800 border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden",
     categoryItem:
-      "p-2 flex justify-between items-center bg-gray-50/50 dark:bg-[#1a1a1a]/50 hover:bg-gray-100 dark:hover:bg-[#222] transition-colors",
+      "p-1 flex justify-between items-center bg-gray-50/50 dark:bg-[#1a1a1a]/50 hover:bg-gray-100 dark:hover:bg-[#222] transition-colors",
     categoryEditContainer:
       "flex items-center gap-2 flex-1 mr-2 animate-in fade-in",
     categoryEditInput:
       "flex-1 px-2 h-7 bg-white dark:bg-black border border-yellow-500 rounded text-xs outline-none",
     categoryEditSave:
-      "text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 p-1.5 rounded transition-colors",
+      "text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors",
     categoryEditCancel:
-      "text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 p-1.5 rounded transition-colors",
+      "text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors",
     categoryName: "font-bold text-xs text-gray-700 dark:text-gray-200 pl-1",
     categoryActions: "flex gap-1",
     categoryEditButton:
-      "p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors",
+      "p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors",
     categoryDeleteButton:
-      "p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors",
+      "p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors",
 
     // Hour types section
     hourTypesCard: "",
@@ -360,7 +356,7 @@ export const APP_STYLES = {
     hourTypesList:
       "divide-y divide-gray-100 dark:divide-gray-800 border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden",
     hourTypeItem:
-      "p-2 flex justify-between items-center bg-gray-50/50 dark:bg-[#1a1a1a]/50 hover:bg-gray-100 dark:hover:bg-[#222] transition-colors",
+      "p-1 flex justify-between items-center bg-gray-50/50 dark:bg-[#1a1a1a]/50 hover:bg-gray-100 dark:hover:bg-[#222] transition-colors",
     hourTypeEditContainer:
       "flex items-center gap-2 flex-1 mr-2 animate-in fade-in",
     hourTypeEditNameInput:
@@ -368,18 +364,18 @@ export const APP_STYLES = {
     hourTypeEditPriceInput:
       "flex-1 w-16 px-2 h-7 bg-white dark:bg-black border border-yellow-500 rounded text-xs outline-none",
     hourTypeEditSave:
-      "text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 p-1.5 rounded transition-colors",
+      "text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 rounded transition-colors",
     hourTypeEditCancel:
-      "text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 p-1.5 rounded transition-colors",
+      "text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 p-1 rounded transition-colors",
     hourTypeDisplay: "flex items-center gap-2 pl-1",
     hourTypeName: "font-bold text-xs text-gray-700 dark:text-gray-200",
     hourTypePrice:
       "text-[10px] bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-1.5 py-0 rounded border border-green-200 dark:border-green-800 font-mono",
     hourTypeActions: "flex gap-1",
     hourTypeEditButton:
-      "p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors",
+      "p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors",
     hourTypeDeleteButton:
-      "p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors",
+      "p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors",
   },
 
   /**

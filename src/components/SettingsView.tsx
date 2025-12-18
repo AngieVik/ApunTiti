@@ -242,84 +242,6 @@ export const SettingsView: React.FC = () => {
         </div>
       </Card>
 
-      {/* BACKUP CARD */}
-      <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
-        <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
-          Copia de Seguridad
-        </h2>
-        <p className={APP_STYLES.CONFIGURACIÓN.sectionDesc}>
-          Exporta tus datos para no perderlos si borras la caché o cambias de
-          dispositivo.
-        </p>
-        <div className={APP_STYLES.CONFIGURACIÓN.backupGrid}>
-          <Button
-            onClick={handleExport}
-            className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
-          >
-            <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
-              Exportar Datos
-            </span>
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleImportClick}
-            className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
-          >
-            <ArrowPathIcon />
-            <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
-              Importar Datos
-            </span>
-          </Button>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImportFile}
-            accept=".json"
-            className={APP_STYLES.CONFIGURACIÓN.fileInputHidden}
-          />
-        </div>
-      </Card>
-
-      {/* SYNC CARD */}
-      <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
-        <div className="flex justify-between items-center mb-2">
-          <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
-            Sincronización Nube
-          </h2>
-          {syncStatus === "syncing" && (
-            <span className="text-yellow-500 text-sm animate-pulse">
-              Sincronizando...
-            </span>
-          )}
-          {syncStatus === "success" && (
-            <span className="text-green-500 text-sm">Sincronizado</span>
-          )}
-          {syncStatus === "error" && (
-            <span className="text-red-500 text-sm">Error</span>
-          )}
-        </div>
-
-        <p className={APP_STYLES.CONFIGURACIÓN.sectionDesc}>
-          Simula la sincronización de tus datos con un servidor remoto.
-        </p>
-        <div className={APP_STYLES.CONFIGURACIÓN.backupGrid}>
-          <Button
-            onClick={() => sync()}
-            disabled={syncStatus === "syncing"}
-            className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
-          >
-            <ArrowPathIcon
-              className={syncStatus === "syncing" ? "animate-spin" : ""}
-            />
-            <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
-              {syncStatus === "syncing"
-                ? "Sincronizando..."
-                : "Sincronizar Ahora"}
-            </span>
-          </Button>
-        </div>
-      </Card>
-
       {/* CATEGORIES CARD */}
       <Card className={APP_STYLES.CONFIGURACIÓN.categoriesCard}>
         <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>Categorías</h2>
@@ -471,6 +393,83 @@ export const SettingsView: React.FC = () => {
             </li>
           ))}
         </ul>
+      </Card>
+{/* BACKUP CARD */}
+      <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
+        <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
+          Copia de Seguridad
+        </h2>
+        <p className={APP_STYLES.CONFIGURACIÓN.sectionDesc}>
+          Exporta tus datos para no perderlos si borras la caché o cambias de
+          dispositivo.
+        </p>
+        <div className={APP_STYLES.CONFIGURACIÓN.backupGrid}>
+          <Button
+            onClick={handleExport}
+            className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
+          >
+            <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
+              Exportar Datos
+            </span>
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleImportClick}
+            className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
+          >
+            <ArrowPathIcon />
+            <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
+              Importar Datos
+            </span>
+          </Button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImportFile}
+            accept=".json"
+            className={APP_STYLES.CONFIGURACIÓN.fileInputHidden}
+          />
+        </div>
+      </Card>
+
+      {/* SYNC CARD */}
+      <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
+        <div className="flex justify-between items-center mb-2">
+          <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
+            Sincronización Nube
+          </h2>
+          {syncStatus === "syncing" && (
+            <span className="text-yellow-500 text-sm animate-pulse">
+              Sincronizando...
+            </span>
+          )}
+          {syncStatus === "success" && (
+            <span className="text-green-500 text-sm">Sincronizado</span>
+          )}
+          {syncStatus === "error" && (
+            <span className="text-red-500 text-sm">Error</span>
+          )}
+        </div>
+
+        <p className={APP_STYLES.CONFIGURACIÓN.sectionDesc}>
+          Simula la sincronización de tus datos con un servidor remoto.
+        </p>
+        <div className={APP_STYLES.CONFIGURACIÓN.backupGrid}>
+          <Button
+            onClick={() => sync()}
+            disabled={syncStatus === "syncing"}
+            className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
+          >
+            <ArrowPathIcon
+              className={syncStatus === "syncing" ? "animate-spin" : ""}
+            />
+            <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
+              {syncStatus === "syncing"
+                ? "Sincronizando..."
+                : "Sincronizar Ahora"}
+            </span>
+          </Button>
+        </div>
       </Card>
     </div>
   );
