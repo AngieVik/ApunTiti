@@ -62,6 +62,21 @@ export default defineConfig({
             purpose: "maskable" // Reusamos el mismo para maskable si tiene fondo sólido
           }
         ],
+        screenshots: [
+  {
+    src: "screenshots/mobile.png", // Tienes que crear esta imagen
+    sizes: "390x844", // El tamaño real de tu imagen
+    type: "image/png",
+    form_factor: "narrow"
+  },
+  {
+    src: "screenshots/desktop.png", // Tienes que crear esta imagen
+    sizes: "1920x1080", // El tamaño real de tu imagen
+    type: "image/png",
+    form_factor: "wide"
+  }
+],
+categories: ["productivity", "utilities", "finance"],
       },
     }),
   ],
