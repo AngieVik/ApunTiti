@@ -81,7 +81,8 @@ export const APP_STYLES = {
     monthSelector: "flex items-center gap-1",
     monthNavButton:
       "p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 transition-colors",
-    monthTitle: "text-[10px] font-black text-gray-900 dark:text-white uppercase",
+    monthTitle:
+      "text-[10px] font-black text-gray-900 dark:text-white uppercase",
     monthYearSmall: "text-gray-400 text-[10px]",
 
     // Summary stats grid
@@ -92,12 +93,9 @@ export const APP_STYLES = {
       "bg-gray-50 dark:bg-[#1a1a1a] p-2 rounded border border-gray-100 dark:border-gray-800 flex flex-col justify-center",
     statsRow: "flex justify-between items-center mb-1",
     statsRowNoMargin: "flex justify-between items-center",
-    statsLabel:
-      "text-xs font-bold text-gray-900 dark:text-gray-200 uppercase",
-    statsValueHours:
-      "text-xs font-bold text-green-600 dark:text-green-500",
-    statsValueEarnings:
-      "text-xs font-bold text-green-600 dark:text-green-500",
+    statsLabel: "text-xs font-bold text-gray-900 dark:text-gray-200 uppercase",
+    statsValueHours: "text-xs font-bold text-green-600 dark:text-green-500",
+    statsValueEarnings: "text-xs font-bold text-green-600 dark:text-green-500",
     statsValueCount: "text-xs font-bold text-gray-900 dark:text-gray-200",
 
     // Category breakdown
@@ -124,13 +122,16 @@ export const APP_STYLES = {
     controlsInner: "flex items-center justify-between gap-2 py-1",
 
     // BOTONES SELECTORES // AÑO MES SEM DÍA //
-    viewButtonsGroup: "flex items-center gap-1 min-w-0",
-    viewButton: "miw-full h-8 px-2 rounded-lg border text-gray-900 dark:text-gray-100 text-xs font-medium uppercase transition-all",
-    viewButtonInactive: "bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 dark:focus:ring-yellow-500/50 dark:focus:border-yellow-500 transition-all cursor-pointer",
+    viewButtonsGroup: "flex flex-1 items-center w-full min-w-0",
+    viewButton:
+      "px-1 flex-1 w-full h-8 rounded-lg border text-gray-900 dark:text-gray-100 text-xs font-medium uppercase transition-all",
+    viewButtonInactive:
+      "px-1 flex-1 w-full h-8 bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 dark:focus:ring-yellow-500/50 dark:focus:border-yellow-500 transition-all cursor-pointer",
 
     // BOTONES SELECTORES // RANGO FECHAS //
-    dateSelectorsGroup: "flex items-center gap-1 min-w-0",
-    dateInput: "min-w-0 w-full px-2 h-8 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all cursor-pointer",
+    dateSelectorsGroup: "flex justify-end items-center min-w-0",
+    dateInput:
+      "px-1 flex w-full h-8 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all cursor-pointer",
 
     // Print header
     printHeader: "hidden print:block mb-4 border-b pb-2",
