@@ -103,10 +103,10 @@ export const SettingsView: React.FC = () => {
   };
 
   const handleRemoveHourType = (id: string) => {
-    if (settings.hourTypes.length <= 1) {
-      alert("Debe haber al menos un tipo de hora.");
-      return;
-    }
+    // if (settings.hourTypes.length <= 1) {
+    //   alert("Debe haber al menos un tipo de hora.");
+    //   return;
+    // }
     setSettings((prev) => ({
       ...prev,
       hourTypes: prev.hourTypes.filter((h) => h.id !== id),
@@ -280,7 +280,7 @@ export const SettingsView: React.FC = () => {
                     onClick={cancelEditCategory}
                     className={APP_STYLES.CONFIGURACIÓN.categoryEditCancel}
                   >
-                    <XMarkIcon className="w-4 h-4" />
+                    <XMarkIcon className={APP_STYLES.MODOS.iconSmall} />
                   </button>
                 </div>
               ) : (
@@ -299,7 +299,7 @@ export const SettingsView: React.FC = () => {
                       onClick={() => handleRemoveCategory(cat)}
                       className={APP_STYLES.CONFIGURACIÓN.categoryDeleteButton}
                     >
-                      <TrashIcon className="w-4 h-4" />
+                      <TrashIcon className={APP_STYLES.MODOS.iconContent} />
                     </button>
                   </div>
                 </>
@@ -361,7 +361,7 @@ export const SettingsView: React.FC = () => {
                     onClick={cancelEditHour}
                     className={APP_STYLES.CONFIGURACIÓN.hourTypeEditCancel}
                   >
-                    <XMarkIcon className="w-4 h-4" />
+                    <XMarkIcon className={APP_STYLES.MODOS.iconSmall} />
                   </button>
                 </div>
               ) : (
@@ -379,13 +379,13 @@ export const SettingsView: React.FC = () => {
                       onClick={() => startEditHour(type)}
                       className={APP_STYLES.CONFIGURACIÓN.hourTypeEditButton}
                     >
-                      <PencilIcon className="w-4 h-4" />
+                      <PencilIcon className={APP_STYLES.MODOS.iconContent} />
                     </button>
                     <button
                       onClick={() => handleRemoveHourType(type.id)}
                       className={APP_STYLES.CONFIGURACIÓN.hourTypeDeleteButton}
                     >
-                      <TrashIcon className="w-4 h-4" />
+                      <TrashIcon className={APP_STYLES.MODOS.iconContent} />
                     </button>
                   </div>
                 </>
@@ -394,7 +394,7 @@ export const SettingsView: React.FC = () => {
           ))}
         </ul>
       </Card>
-{/* BACKUP CARD */}
+      {/* BACKUP CARD */}
       <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
         <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
           Copia de Seguridad
@@ -417,7 +417,7 @@ export const SettingsView: React.FC = () => {
             onClick={handleImportClick}
             className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
           >
-            <ArrowPathIcon />
+            <ArrowPathIcon className={APP_STYLES.MODOS.iconSmall} />
             <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
               Importar Datos
             </span>
@@ -439,15 +439,19 @@ export const SettingsView: React.FC = () => {
             Sincronización Nube
           </h2>
           {syncStatus === "syncing" && (
-            <span className="text-yellow-500 text-sm animate-pulse">
+            <span
+              className={`${APP_STYLES.MODOS.textYellow} text-sm ${APP_STYLES.MODOS.animateSpin}`}
+            >
               Sincronizando...
             </span>
           )}
           {syncStatus === "success" && (
-            <span className="text-green-500 text-sm">Sincronizado</span>
+            <span className={`${APP_STYLES.MODOS.textGreen} text-sm`}>
+              Sincronizado
+            </span>
           )}
           {syncStatus === "error" && (
-            <span className="text-red-500 text-sm">Error</span>
+            <span className={`${APP_STYLES.MODOS.textRed} text-sm`}>Error</span>
           )}
         </div>
 
@@ -461,7 +465,11 @@ export const SettingsView: React.FC = () => {
             className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
           >
             <ArrowPathIcon
-              className={syncStatus === "syncing" ? "animate-spin" : ""}
+              className={
+                syncStatus === "syncing"
+                  ? `${APP_STYLES.MODOS.animateSpin} ${APP_STYLES.MODOS.iconSmall}`
+                  : APP_STYLES.MODOS.iconSmall
+              }
             />
             <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
               {syncStatus === "syncing"

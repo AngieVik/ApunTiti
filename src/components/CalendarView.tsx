@@ -505,13 +505,13 @@ export const CalendarView: React.FC = () => {
                       onClick={() => openEditModal(shift)}
                       className={APP_STYLES.CALENDARIO.dayViewEditButton}
                     >
-                      <PencilIcon className="w-4 h-4" />
+                      <PencilIcon className={APP_STYLES.MODOS.iconContent} />
                     </button>
                     <button
                       onClick={() => confirmDelete(shift.id)}
                       className={APP_STYLES.CALENDARIO.dayViewDeleteButton}
                     >
-                      <TrashIcon className="w-4 h-4" />
+                      <TrashIcon className={APP_STYLES.MODOS.iconContent} />
                     </button>
                   </div>
                 </div>
@@ -825,7 +825,7 @@ export const CalendarView: React.FC = () => {
               variant="secondary"
               className={APP_STYLES.CALENDARIO.navButton}
             >
-              <ChevronLeftIcon />
+              <ChevronLeftIcon className={APP_STYLES.MODOS.iconContent} />
             </Button>
             <h2 className={APP_STYLES.CALENDARIO.navTitle}>
               {viewType === "year" && year}
@@ -839,7 +839,7 @@ export const CalendarView: React.FC = () => {
               variant="secondary"
               className={APP_STYLES.CALENDARIO.navButton}
             >
-              <ChevronRightIcon />
+              <ChevronRightIcon className={APP_STYLES.MODOS.iconContent} />
             </Button>
           </div>
         ) : null}
@@ -884,7 +884,7 @@ export const CalendarView: React.FC = () => {
                 onClick={() => setIsEditOpen(false)}
                 className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
               >
-                <XMarkIcon />
+                <XMarkIcon className={APP_STYLES.MODOS.iconContent} />
               </button>
             </div>
 

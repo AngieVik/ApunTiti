@@ -72,21 +72,21 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
             <NavButton
               label=""
               ariaLabel="Reloj"
-              icon={<ClockIcon className="w-6 h-6" />}
+              icon={<ClockIcon className={APP_STYLES.MODOS.iconMedium} />}
               isActive={currentView === View.Clock}
               onClick={() => setCurrentView(View.Clock)}
             />
             <NavButton
               label=""
               ariaLabel="Calendario"
-              icon={<CalendarIcon className="w-6 h-6" />}
+              icon={<CalendarIcon className={APP_STYLES.MODOS.iconMedium} />}
               isActive={currentView === View.Calendar}
               onClick={() => setCurrentView(View.Calendar)}
             />
             <NavButton
               label=""
               ariaLabel="Ajustes"
-              icon={<CogIcon className="w-6 h-6" />}
+              icon={<CogIcon className={APP_STYLES.MODOS.iconMedium} />}
               isActive={currentView === View.Settings}
               onClick={() => setCurrentView(View.Settings)}
             />
@@ -98,9 +98,9 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
           aria-label="Cambiar tema"
         >
           {theme === Theme.Light ? (
-            <MoonIcon className="w-6 h-6" />
+            <MoonIcon className={APP_STYLES.MODOS.iconMedium} />
           ) : (
-            <SunIcon className="w-6 h-6" />
+            <SunIcon className={APP_STYLES.MODOS.iconMedium} />
           )}
         </button>
       </div>

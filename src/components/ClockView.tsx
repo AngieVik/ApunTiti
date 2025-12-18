@@ -124,19 +124,33 @@ export const ClockView: React.FC = () => {
       return;
     }
 
-    const newShiftStart = new Date(`${date}T${startTime}`).getTime();
+    // Helper to get time in minutes for easier overlap check (0 - 1440+)
+    const parseTime = (timeStr: string) => {
+      const [h, m] = timeStr.split(":").map(Number);
+      return h * 60 + m;
+    };
+
+    const startMins = parseTime(startTime);
+    let endMins = parseTime(endTime);
+    // Handle overnight shift: if end is before start, assume it ends next day (+24h)
+    // NOTE: This simple logic assumes shifts don't span more than 24h.
+    if (endMins < startMins) {
+      endMins += 24 * 60;
+    }
+
+    // Check overlaps
     const hasOverlap = shifts.some((shift) => {
       if (shift.date !== date) return false;
-      const existingStart = new Date(
-        `${shift.date}T${shift.startTime}`
-      ).getTime();
-      const existingEnd = new Date(`${shift.date}T${shift.endTime}`).getTime();
-      const currentEnd = new Date(`${date}T${endTime}`).getTime();
 
-      if (currentEnd < newShiftStart) {
-        return newShiftStart >= existingStart && newShiftStart < existingEnd;
+      const existingStart = parseTime(shift.startTime);
+      let existingEnd = parseTime(shift.endTime);
+      if (existingEnd < existingStart) {
+        existingEnd += 24 * 60;
       }
-      return newShiftStart < existingEnd && currentEnd > existingStart;
+
+      // Check for intersection
+      // Overlap if (StartA < EndB) and (EndA > StartB)
+      return startMins < existingEnd && endMins > existingStart;
     });
 
     if (hasOverlap) {
@@ -277,7 +291,7 @@ export const ClockView: React.FC = () => {
                 onClick={handlePrevMonth}
                 className={APP_STYLES.REGISTRO.monthNavButton}
               >
-                <ChevronLeftIcon className="w-4 h-4" />
+                <ChevronLeftIcon className={APP_STYLES.MODOS.iconContent} />
               </button>
               <h2 className={APP_STYLES.REGISTRO.monthTitle}>
                 {stats.monthName}{" "}
@@ -289,7 +303,7 @@ export const ClockView: React.FC = () => {
                 onClick={handleNextMonth}
                 className={APP_STYLES.REGISTRO.monthNavButton}
               >
-                <ChevronRightIcon className="w-4 h-4" />
+                <ChevronRightIcon className={APP_STYLES.MODOS.iconContent} />
               </button>
             </div>
           </div>

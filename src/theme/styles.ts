@@ -61,9 +61,9 @@ export const APP_STYLES = {
 
     // Input field specific classes
     dateInput:
-      "[&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer",
+      "[&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer dark:[&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]",
     timeInput:
-      "font-mono tracking-widest text-center [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer",
+      "font-mono tracking-widest text-center [&::-webkit-calendar-picker-indicator]:w-6 [&::-webkit-calendar-picker-indicator]:h-6 [&::-webkit-calendar-picker-indicator]:cursor-pointer dark:[&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]",
 
     // Save button container
     buttonContainer: "flex justify-end pt-2",
@@ -127,11 +127,13 @@ export const APP_STYLES = {
       "px-1 flex-1 w-full h-8 rounded-lg border text-gray-900 dark:text-gray-100 text-xs font-medium uppercase transition-all",
     viewButtonInactive:
       "px-1 flex-1 w-full h-8 bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 dark:focus:ring-yellow-500/50 dark:focus:border-yellow-500 transition-all cursor-pointer",
+    viewButtonActive:
+      "px-1 flex-1 w-full h-8 bg-yellow-500 text-black font-bold border border-yellow-500 rounded shadow-sm",
 
     // BOTONES SELECTORES // RANGO FECHAS //
     dateSelectorsGroup: "flex justify-end items-center min-w-0",
     dateInput:
-      "px-1 flex w-full h-8 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all cursor-pointer",
+      "px-1 flex w-full h-8 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:hover:border-yellow-500 dark:[&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)] rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all cursor-pointer",
 
     // Print header
     printHeader: "hidden print:block mb-4 border-b pb-2",
@@ -439,6 +441,19 @@ export const APP_STYLES = {
     toastError: "bg-red-500 text-white",
     toastInfo: "bg-blue-500 text-white",
     toastText: "text-[10px] font-bold uppercase tracking-wide",
+
+    // Icons
+    iconSmall: "w-4 h-4",
+    iconMedium: "w-6 h-6",
+    // Icono genérico para contenido (no header/nav) que asegura visibilidad en dark mode (amarillo)
+    iconContent: "w-4 h-4 text-gray-700 dark:text-yellow-500",
+    // Icono genérico para contenido 
+    iconGreyBlue: "w-4 h-4 text-gray-7 p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors",
+    // Utilities
+    animateSpin: "animate-spin",
+    textYellow: "text-yellow-500",
+    textGreen: "text-green-500",
+    textRed: "text-red-500",
   },
 } as const;
 
