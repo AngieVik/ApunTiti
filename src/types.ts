@@ -1,13 +1,12 @@
-
 export enum View {
-  Clock = 'CLOCK',
-  Calendar = 'CALENDAR',
-  Settings = 'SETTINGS',
+  Clock = "CLOCK",
+  Calendar = "CALENDAR",
+  Settings = "SETTINGS",
 }
 
 export enum Theme {
-  Light = 'light',
-  Dark = 'dark',
+  Light = "light",
+  Dark = "dark",
 }
 
 export interface HourType {
@@ -29,7 +28,8 @@ export interface Shift {
 export interface Settings {
   categories: string[];
   hourTypes: HourType[];
-  downloadFormat: 'txt' | 'pdf';
+  downloadFormat: "txt" | "pdf";
+  pushEnabled?: boolean;
 }
 
 export interface BackupData {
@@ -39,7 +39,7 @@ export interface BackupData {
   settings: Settings;
 }
 
-export type NotificationType = 'success' | 'error' | 'info';
+export type NotificationType = "success" | "error" | "info";
 
 export interface Notification {
   message: string;

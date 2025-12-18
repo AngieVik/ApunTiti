@@ -1,11 +1,5 @@
 import React, { useState, useRef } from "react";
-import {
-  Shift,
-  Settings,
-  HourType,
-  BackupData,
-  NotificationType,
-} from "../types";
+import { HourType, BackupData } from "../types";
 import { Card, Button, Input, Select } from "./UI";
 import {
   ArrowPathIcon,
@@ -15,22 +9,22 @@ import {
   TrashIcon,
 } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
+import {
+  requestNotificationPermission,
+  sendLocalNotification,
+} from "../utils/notifications";
 
-interface SettingsViewProps {
-  settings: Settings;
-  setSettings: React.Dispatch<React.SetStateAction<Settings>>;
-  shifts: Shift[];
-  setShifts: React.Dispatch<React.SetStateAction<Shift[]>>;
-  notify: (msg: string, type: NotificationType) => void;
-}
+import { useAppStore } from "../store/useAppStore";
 
-export const SettingsView: React.FC<SettingsViewProps> = ({
-  settings,
-  setSettings,
-  shifts,
-  setShifts,
-  notify,
-}) => {
+export const SettingsView: React.FC = () => {
+  // Store
+  const settings = useAppStore((state) => state.settings);
+  const { updateSettings, notify, sync, syncStatus } = useAppStore(); // mapped to setSettings name
+  const shifts = useAppStore((state) => state.shifts);
+  const setShifts = useAppStore((state) => state.setShifts);
+
+  // Alias for compatibility with existing code
+  const setSettings = updateSettings;
   const [newCategory, setNewCategory] = useState("");
   const [newHourName, setNewHourName] = useState("");
   const [newHourPrice, setNewHourPrice] = useState("");
@@ -220,6 +214,32 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <option value="txt">Texto (.txt)</option>
           <option value="pdf">Documento (.pdf)</option>
         </Select>
+
+        <div className="mt-2">
+          <Select
+            label="Notificaciones"
+            value={settings.pushEnabled ? "enabled" : "disabled"}
+            onChange={async (e) => {
+              const value = e.target.value === "enabled";
+              if (value) {
+                const granted = await requestNotificationPermission();
+                if (granted) {
+                  updateSettings((prev) => ({ ...prev, pushEnabled: true }));
+                  notify("Notificaciones activadas", "success");
+                  sendLocalNotification("ApunTiti", "Notificaciones activadas");
+                } else {
+                  notify("Permiso denegado por el navegador", "error");
+                }
+              } else {
+                updateSettings((prev) => ({ ...prev, pushEnabled: false }));
+                notify("Notificaciones desactivadas", "info");
+              }
+            }}
+          >
+            <option value="disabled">Desactivadas</option>
+            <option value="enabled">Activadas</option>
+          </Select>
+        </div>
       </Card>
 
       {/* BACKUP CARD */}
@@ -257,6 +277,46 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             accept=".json"
             className={APP_STYLES.CONFIGURACIÓN.fileInputHidden}
           />
+        </div>
+      </Card>
+
+      {/* SYNC CARD */}
+      <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
+        <div className="flex justify-between items-center mb-2">
+          <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
+            Sincronización Nube
+          </h2>
+          {syncStatus === "syncing" && (
+            <span className="text-yellow-500 text-sm animate-pulse">
+              Sincronizando...
+            </span>
+          )}
+          {syncStatus === "success" && (
+            <span className="text-green-500 text-sm">Sincronizado</span>
+          )}
+          {syncStatus === "error" && (
+            <span className="text-red-500 text-sm">Error</span>
+          )}
+        </div>
+
+        <p className={APP_STYLES.CONFIGURACIÓN.sectionDesc}>
+          Simula la sincronización de tus datos con un servidor remoto.
+        </p>
+        <div className={APP_STYLES.CONFIGURACIÓN.backupGrid}>
+          <Button
+            onClick={() => sync()}
+            disabled={syncStatus === "syncing"}
+            className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
+          >
+            <ArrowPathIcon
+              className={syncStatus === "syncing" ? "animate-spin" : ""}
+            />
+            <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
+              {syncStatus === "syncing"
+                ? "Sincronizando..."
+                : "Sincronizar Ahora"}
+            </span>
+          </Button>
         </div>
       </Card>
 

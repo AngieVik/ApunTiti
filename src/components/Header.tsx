@@ -2,20 +2,20 @@ import React, { useState, useEffect } from "react";
 import { View, Theme } from "../types";
 import { ClockIcon, CalendarIcon, CogIcon, SunIcon, MoonIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
+import { useAppStore } from "../store/useAppStore";
 
 interface HeaderProps {
   currentView: View;
   setCurrentView: (view: View) => void;
-  theme: Theme;
-  toggleTheme: () => void;
 }
 
 const NavButton: React.FC<{
   label: string;
+  ariaLabel?: string;
   icon: React.ReactNode;
   isActive: boolean;
   onClick: () => void;
-}> = ({ label, icon, isActive, onClick }) => {
+}> = ({ label, ariaLabel, icon, isActive, onClick }) => {
   const buttonClasses = `${APP_STYLES.HEADER.navButtonBase} ${
     isActive
       ? APP_STYLES.HEADER.navButtonActive
@@ -23,7 +23,11 @@ const NavButton: React.FC<{
   }`;
 
   return (
-    <button onClick={onClick} className={buttonClasses} aria-label={label}>
+    <button
+      onClick={onClick}
+      className={buttonClasses}
+      aria-label={ariaLabel || label}
+    >
       <span className={APP_STYLES.HEADER.navButtonIcon}>{icon}</span>
       {label && (
         <span className={APP_STYLES.HEADER.navButtonLabel}>{label}</span>
@@ -32,12 +36,10 @@ const NavButton: React.FC<{
   );
 };
 
-const Header: React.FC<HeaderProps> = ({
-  currentView,
-  setCurrentView,
-  theme,
-  toggleTheme,
-}) => {
+const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
+  const theme = useAppStore((state) => state.theme);
+  const toggleTheme = useAppStore((state) => state.toggleTheme);
+
   const [liveTime, setLiveTime] = useState(new Date());
 
   useEffect(() => {
@@ -69,18 +71,21 @@ const Header: React.FC<HeaderProps> = ({
           <div className={APP_STYLES.HEADER.navButtonsWrapper}>
             <NavButton
               label=""
+              ariaLabel="Reloj"
               icon={<ClockIcon className="w-6 h-6" />}
               isActive={currentView === View.Clock}
               onClick={() => setCurrentView(View.Clock)}
             />
             <NavButton
               label=""
+              ariaLabel="Calendario"
               icon={<CalendarIcon className="w-6 h-6" />}
               isActive={currentView === View.Calendar}
               onClick={() => setCurrentView(View.Calendar)}
             />
             <NavButton
               label=""
+              ariaLabel="Ajustes"
               icon={<CogIcon className="w-6 h-6" />}
               isActive={currentView === View.Settings}
               onClick={() => setCurrentView(View.Settings)}

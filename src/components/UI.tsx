@@ -2,9 +2,10 @@ import React, { useEffect, useId } from "react";
 import { Notification } from "../types";
 import { CheckIcon, XMarkIcon, FlagIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
+import { motion, AnimatePresence, HTMLMotionProps } from "framer-motion";
 
 // Button
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends HTMLMotionProps<"button"> {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "danger";
 }
@@ -23,14 +24,16 @@ export const Button: React.FC<ButtonProps> = ({
       : APP_STYLES.MODOS.uiButtonDanger;
 
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.95 }}
       className={`${APP_STYLES.MODOS.uiButtonBase} ${variantClass} ${
         className || ""
       }`}
       {...props}
     >
       {children}
-    </button>
+    </motion.button>
   );
 };
 
@@ -43,9 +46,15 @@ interface CardProps {
 
 export const Card: React.FC<CardProps> = ({ children, className, id }) => {
   return (
-    <div id={id} className={`${APP_STYLES.MODOS.uiCard} ${className || ""}`}>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      id={id}
+      className={`${APP_STYLES.MODOS.uiCard} ${className || ""}`}
+    >
       {children}
-    </div>
+    </motion.div>
   );
 };
 
@@ -142,33 +151,43 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   const titleId = useId();
   const descId = useId();
 
-  if (!isOpen) return null;
-
   return (
-    <div
-      className={APP_STYLES.MODOS.confirmDialogOverlay}
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby={titleId}
-      aria-describedby={descId}
-    >
-      <div className={APP_STYLES.MODOS.confirmDialogContent}>
-        <h3 id={titleId} className={APP_STYLES.MODOS.confirmDialogTitle}>
-          {title}
-        </h3>
-        <p id={descId} className={APP_STYLES.MODOS.confirmDialogMessage}>
-          {message}
-        </p>
-        <div className={APP_STYLES.MODOS.confirmDialogActions}>
-          <Button variant="secondary" onClick={onCancel}>
-            Cancelar
-          </Button>
-          <Button variant="primary" onClick={onConfirm}>
-            Confirmar
-          </Button>
-        </div>
-      </div>
-    </div>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className={APP_STYLES.MODOS.confirmDialogOverlay}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={descId}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className={APP_STYLES.MODOS.confirmDialogContent}
+          >
+            <h3 id={titleId} className={APP_STYLES.MODOS.confirmDialogTitle}>
+              {title}
+            </h3>
+            <p id={descId} className={APP_STYLES.MODOS.confirmDialogMessage}>
+              {message}
+            </p>
+            <div className={APP_STYLES.MODOS.confirmDialogActions}>
+              <Button variant="secondary" onClick={onCancel}>
+                Cancelar
+              </Button>
+              <Button variant="primary" onClick={onConfirm}>
+                Confirmar
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

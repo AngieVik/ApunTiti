@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from "react";
-import { Shift, HourType, NotificationType } from "../types";
+import { Shift } from "../types";
 import { Card, Button, Input, Select } from "./UI";
 import { ChevronLeftIcon, ChevronRightIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
+import { useAnalytics } from "../hooks/useAnalytics";
+import { useAppStore } from "../store/useAppStore";
 
 // --- HELPER FUNCTIONS ---
 
@@ -39,21 +41,16 @@ const calculateDuration = (start: string, end: string) => {
 
 // --- COMPONENT ---
 
-interface ClockViewProps {
-  shifts: Shift[];
-  setShifts: React.Dispatch<React.SetStateAction<Shift[]>>;
-  categories: string[];
-  hourTypes: HourType[];
-  notify: (msg: string, type: NotificationType) => void;
-}
+export const ClockView: React.FC = () => {
+  // Store
+  const shifts = useAppStore((state) => state.shifts);
+  const addShift = useAppStore((state) => state.addShift);
+  const settings = useAppStore((state) => state.settings);
+  const notify = useAppStore((state) => state.notify);
 
-export const ClockView: React.FC<ClockViewProps> = ({
-  shifts,
-  setShifts,
-  categories,
-  hourTypes,
-  notify,
-}) => {
+  const { categories, hourTypes } = settings;
+
+  const { trackEvent } = useAnalytics();
   const [date, setDate] = useState(toLocalISOString(new Date()));
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("17:00");
@@ -158,15 +155,18 @@ export const ClockView: React.FC<ClockViewProps> = ({
       hourTypeId: selectedHourType || undefined,
     };
 
-    setShifts((prev) =>
-      [...prev, newShift].sort(
-        (a, b) =>
-          new Date(`${a.date}T${a.startTime}`).getTime() -
-          new Date(`${b.date}T${b.startTime}`).getTime()
-      )
-    );
+    addShift(newShift);
+
     setNotes("");
     notify("Turno registrado correctamente", "success");
+    trackEvent({
+      name: "save_shift",
+      properties: {
+        category,
+        type: hourTypes.find((h) => h.id === selectedHourType)?.name,
+        duration: calculateDuration(startTime, endTime),
+      },
+    });
   };
 
   return (

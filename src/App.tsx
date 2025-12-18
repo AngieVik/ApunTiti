@@ -1,124 +1,92 @@
-import React, { useState, useEffect } from "react";
-import useLocalStorage from "./hooks/useLocalStorage";
-import {
-  View,
-  Theme,
-  Shift,
-  Settings,
-  Notification,
-  NotificationType,
-} from "./types";
+import React, { useState, useEffect, Suspense } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useAnalytics } from "./hooks/useAnalytics";
+import { View, Theme } from "./types";
 import Header from "./components/Header";
-import { ClockView, CalendarView, SettingsView } from "./components/Views";
+import { useAppStore } from "./store/useAppStore";
 import { Toast } from "./components/UI";
 import { APP_STYLES } from "./theme/styles";
 
+// Lazy load views
+const ClockView = React.lazy(() =>
+  import("./components/ClockView").then((module) => ({
+    default: module.ClockView,
+  }))
+);
+const CalendarView = React.lazy(() =>
+  import("./components/CalendarView").then((module) => ({
+    default: module.CalendarView,
+  }))
+);
+const SettingsView = React.lazy(() =>
+  import("./components/SettingsView").then((module) => ({
+    default: module.SettingsView,
+  }))
+);
+
+// Simple Loading Spinner for Suspense fallback
+const LoadingSpinner = () => (
+  <div className="flex h-full w-full items-center justify-center p-10">
+    <div className="h-8 w-8 animate-spin rounded-full border-4 border-yellow-500 border-t-transparent"></div>
+  </div>
+);
+
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.Clock);
-  const [theme, setTheme] = useLocalStorage<Theme>("theme", Theme.Dark); // Default to Dark
-  const [shifts, setShifts] = useLocalStorage<Shift[]>(
-    "time-tracker-shifts",
-    []
-  );
 
-  // Notification State
-  const [notification, setNotification] = useState<Notification | null>(null);
+  // Store usage
+  const theme = useAppStore((state) => state.theme);
+  const notification = useAppStore((state) => state.notification);
+  const setNotification = useAppStore((state) => state.setNotification);
 
-  // Initialize settings with default Hour Types
-  const [settings, setSettings] = useLocalStorage<Settings>(
-    "time-tracker-settings",
-    {
-      categories: ["Programado", "DRP", "Traslado", "Guardia"],
-      hourTypes: [
-        { id: "1", name: "Normal", price: 10 },
-        { id: "2", name: "Especial", price: 15 },
-        { id: "3", name: "Extra", price: 20 },
-      ],
-      downloadFormat: "txt",
-    }
-  );
-
-  // Ensure default hourTypes exist for older local storage versions
+  // Analytics
+  const { trackEvent } = useAnalytics();
   useEffect(() => {
-    if (!settings.hourTypes || settings.hourTypes.length === 0) {
-      setSettings((prev) => ({
-        ...prev,
-        hourTypes: [
-          { id: "1", name: "Normal", price: 10 },
-          { id: "2", name: "Especial", price: 15 },
-          { id: "3", name: "Extra", price: 20 },
-        ],
-      }));
-    }
-  }, [settings.hourTypes, setSettings]);
+    trackEvent({ name: "view_change", properties: { view: currentView } });
+  }, [currentView, trackEvent]);
 
-  const toggleTheme = () => {
-    const newTheme = theme === Theme.Light ? Theme.Dark : Theme.Light;
-    setTheme(newTheme);
-  };
-
+  // Theme effect
   useEffect(() => {
     const metaThemeColor = document.querySelector("meta[name='theme-color']");
     if (theme === Theme.Dark) {
       document.documentElement.classList.add("dark");
-      metaThemeColor?.setAttribute("content", "#111111"); // Actualiza barra a negro
+      metaThemeColor?.setAttribute("content", "#111111");
     } else {
       document.documentElement.classList.remove("dark");
-      metaThemeColor?.setAttribute("content", "#f3f4f6"); // Actualiza barra a gris claro
+      metaThemeColor?.setAttribute("content", "#f3f4f6");
     }
   }, [theme]);
-
-  // --- FUNCIÓN RESTAURADA ---
-  const notify = (message: string, type: NotificationType = "success") => {
-    setNotification({ message, type });
-  };
-  // --------------------------
 
   const renderView = () => {
     switch (currentView) {
       case View.Calendar:
-        return (
-          <CalendarView
-            shifts={shifts}
-            setShifts={setShifts}
-            hourTypes={settings.hourTypes}
-            settings={settings}
-            notify={notify}
-          />
-        );
+        return <CalendarView />;
       case View.Settings:
-        return (
-          <SettingsView
-            settings={settings}
-            setSettings={setSettings}
-            shifts={shifts}
-            setShifts={setShifts}
-            notify={notify}
-          />
-        );
+        return <SettingsView />;
       case View.Clock:
       default:
-        return (
-          <ClockView
-            shifts={shifts}
-            setShifts={setShifts}
-            categories={settings.categories}
-            hourTypes={settings.hourTypes}
-            notify={notify}
-          />
-        );
+        return <ClockView />;
     }
   };
 
   return (
     <div className={APP_STYLES.MODOS.appRoot}>
-      <Header
-        currentView={currentView}
-        setCurrentView={setCurrentView}
-        theme={theme}
-        toggleTheme={toggleTheme}
-      />
-      <main className={APP_STYLES.MODOS.mainContainer}>{renderView()}</main>
+      <Header currentView={currentView} setCurrentView={setCurrentView} />
+      <main className={APP_STYLES.MODOS.mainContainer}>
+        <Suspense fallback={<LoadingSpinner />}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentView}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              {renderView()}
+            </motion.div>
+          </AnimatePresence>
+        </Suspense>
+      </main>
       <Toast
         notification={notification}
         onClose={() => setNotification(null)}
