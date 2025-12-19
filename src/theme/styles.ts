@@ -122,19 +122,18 @@ export const APP_STYLES = {
     controlsInner: "flex items-center justify-between gap-2 py-1",
 
     // BOTONES SELECTORES // AÑO MES SEM DÍA //
-    viewButtonsGroup: "flex flex-1 items-center w-full min-w-0",
-    viewButton:
-      "px-1 flex-1 w-full h-8 rounded-lg border text-gray-900 dark:text-gray-100 text-xs font-medium uppercase transition-all",
-    viewButtonInactive:
-      "px-1 flex-1 w-full h-8 bg-gray-50 dark:bg-[#1a1a1a] border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 hover:border-yellow-500 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 dark:focus:ring-yellow-500/50 dark:focus:border-yellow-500 transition-all cursor-pointer",
+    // View buttons group
+    viewButtonsGroup: "flex grow items-center gap-1 min-w-0",
+    viewButton: "px-1 h-8 uppercase rounded-lg",
     viewButtonActive:
-      "px-1 flex-1 w-full h-8 bg-yellow-500 text-black font-bold border border-yellow-500 rounded shadow-sm",
+      "h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer",
+    viewButtonInactive:
+      "h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer",
 
-    // BOTONES SELECTORES // RANGO FECHAS //
-    dateSelectorsGroup: "flex justify-end items-center min-w-0",
+    // Date range selectors
+    dateSelectorsGroup: "flex grow items-center min-w-0 justify-end gap-1 ",
     dateInput:
-      "px-1 flex w-full h-8 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-600 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:hover:border-yellow-500 dark:[&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)] rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all cursor-pointer",
-
+      "uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]",
     // Print header
     printHeader: "hidden print:block mb-4 border-b pb-2",
     printTitle: "text-xl font-bold",
@@ -447,8 +446,9 @@ export const APP_STYLES = {
     iconMedium: "w-6 h-6",
     // Icono genérico para contenido (no header/nav) que asegura visibilidad en dark mode (amarillo)
     iconContent: "w-4 h-4 text-gray-700 dark:text-yellow-500",
-    // Icono genérico para contenido 
-    iconGreyBlue: "w-4 h-4 text-gray-7 p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors",
+    // Icono con hover interactivo para acciones de edición/eliminación (gris → azul)
+    iconGreyBlue:
+      "w-4 h-4 text-gray-400 hover:text-blue-600/80 rounded transition-colors",
     // Utilities
     animateSpin: "animate-spin",
     textYellow: "text-yellow-500",

@@ -1,6 +1,8 @@
 export const requestNotificationPermission = async (): Promise<boolean> => {
   if (!("Notification" in window)) {
-    console.log("This browser does not support desktop notification");
+    if (import.meta.env.DEV) {
+      console.warn("This browser does not support desktop notification");
+    }
     return false;
   }
 

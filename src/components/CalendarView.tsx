@@ -1,58 +1,40 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { generatePDF } from "../utils/pdfGenerator";
 import { useAnalytics } from "../hooks/useAnalytics";
 import { Shift } from "../types";
 import { Card, Button, Input, Select, ConfirmDialog } from "./UI";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PencilIcon,
-  TrashIcon,
-  XMarkIcon,
-} from "./Icons";
+import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
-import * as ReactWindow from "react-window";
-const FixedSizeList = (ReactWindow as any).FixedSizeList;
-import AutoSizer from "react-virtualized-auto-sizer";
+import { toLocalISOString, calculateDuration } from "../utils/time";
+import { MONTH_NAMES_ES } from "../constants/app";
 import { useAppStore } from "../store/useAppStore";
+import {
+  CalendarYearView,
+  CalendarMonthView,
+  CalendarWeekView,
+  CalendarDayView,
+  CalendarRangeView,
+} from "./calendar";
 
 // --- HELPER FUNCTIONS ---
 
-const toLocalISOString = (date: Date) => {
-  const offset = date.getTimezoneOffset() * 60000;
-  return new Date(date.getTime() - offset).toISOString().split("T")[0];
-};
-
+/**
+ * Gets the number of days in a specific month
+ * @param year - The year
+ * @param month - The month (0-indexed, 0 = January)
+ * @returns Number of days in the month
+ */
 const getDaysInMonth = (year: number, month: number) =>
   new Date(year, month + 1, 0).getDate();
+
+/**
+ * Gets the day of week for the first day of a month
+ * @param year - The year
+ * @param month - The month (0-indexed, 0 = January)
+ * @returns Day of week (0 = Sunday, 6 = Saturday)
+ */
 const getFirstDayOfMonth = (year: number, month: number) =>
   new Date(year, month, 1).getDay();
-
-const monthNamesES = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
-];
-const dayNamesES = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-
-const calculateDuration = (start: string, end: string) => {
-  const s = parseInt(start.split(":")[0]) + parseInt(start.split(":")[1]) / 60;
-  const e = parseInt(end.split(":")[0]) + parseInt(end.split(":")[1]) / 60;
-
-  if (e < s) {
-    return 24 - s + e;
-  }
-  return e - s;
-};
 
 // --- COMPONENT ---
 
@@ -90,37 +72,79 @@ export const CalendarView: React.FC = () => {
     }, {} as Record<string, Shift[]>);
   }, [shifts]);
 
-  const handleViewChange = (type: CalendarViewType) => {
+  // --- RANGE VIEW CALCULATIONS (moved out of renderRangeView to fix hooks error) ---
+  const rangeDays = useMemo(() => {
+    if (!rangeStart || !rangeEnd) return [];
+
+    const start = new Date(rangeStart).getTime();
+    const end = new Date(rangeEnd).getTime();
+    const dayMilliseconds = 24 * 60 * 60 * 1000;
+    const diffDays = Math.ceil(Math.abs((end - start) / dayMilliseconds)) + 1;
+
+    const d_arr = [];
+    for (let i = 0; i < diffDays; i++) {
+      const d = new Date(start);
+      d.setDate(d.getDate() + i);
+      d_arr.push(d);
+    }
+    return d_arr;
+  }, [rangeStart, rangeEnd]);
+
+  const rangeTotals = useMemo(() => {
+    let totalRangeHours = 0;
+    let totalRangeMoney = 0;
+
+    rangeDays.forEach((d) => {
+      const dateStr = toLocalISOString(d);
+      const dayShifts = shiftsByDate[dateStr] || [];
+      dayShifts.forEach((s) => {
+        const duration = calculateDuration(s.startTime, s.endTime);
+        totalRangeHours += duration;
+        if (s.hourTypeId) {
+          const hType = hourTypes.find((h) => h.id === s.hourTypeId);
+          const price = hType ? hType.price : 0;
+          totalRangeMoney += duration * price;
+        }
+      });
+    });
+
+    return { totalRangeHours, totalRangeMoney };
+  }, [rangeDays, shiftsByDate, hourTypes]);
+
+  const handleViewChange = useCallback((type: CalendarViewType) => {
     setViewType(type);
     setRangeStart("");
     setRangeEnd("");
-  };
+  }, []);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     const newDate = new Date(currentDate);
     if (viewType === "year") newDate.setFullYear(year - 1);
     if (viewType === "month") newDate.setMonth(month - 1);
     if (viewType === "week") newDate.setDate(newDate.getDate() - 7);
     if (viewType === "day") newDate.setDate(newDate.getDate() - 1);
     setCurrentDate(newDate);
-  };
+  }, [currentDate, viewType]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     const newDate = new Date(currentDate);
     if (viewType === "year") newDate.setFullYear(year + 1);
     if (viewType === "month") newDate.setMonth(month + 1);
     if (viewType === "week") newDate.setDate(newDate.getDate() + 7);
     if (viewType === "day") newDate.setDate(newDate.getDate() + 1);
     setCurrentDate(newDate);
-  };
+  }, [currentDate, viewType]);
 
-  const handleDayClick = (date: Date) => {
-    setSelectedDate(date);
-    setCurrentDate(date);
-    setRangeStart("");
-    setRangeEnd("");
-    if (viewType !== "day") setViewType("day");
-  };
+  const handleDayClick = useCallback(
+    (date: Date) => {
+      setSelectedDate(date);
+      setCurrentDate(date);
+      setRangeStart("");
+      setRangeEnd("");
+      if (viewType !== "day") setViewType("day");
+    },
+    [viewType]
+  );
 
   const handleRangeStartChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRangeStart(e.target.value);
@@ -132,10 +156,10 @@ export const CalendarView: React.FC = () => {
     if (e.target.value) setSelectedDate(null);
   };
 
-  const confirmDelete = (id: string) => {
+  const confirmDelete = useCallback((id: string) => {
     setShiftToDelete(id);
     setIsConfirmOpen(true);
-  };
+  }, []);
 
   const handleDelete = () => {
     if (shiftToDelete) {
@@ -146,543 +170,24 @@ export const CalendarView: React.FC = () => {
     }
   };
 
-  const openEditModal = (shift: Shift) => {
+  const openEditModal = useCallback((shift: Shift) => {
     setEditingShift(shift);
     setIsEditOpen(true);
-  };
+  }, []);
 
-  const handleUpdateShift = (updatedShift: Shift) => {
-    setShifts((prev) =>
-      prev.map((s) => (s.id === updatedShift.id ? updatedShift : s))
-    );
-    setIsEditOpen(false);
-    setEditingShift(null);
-    notify("Registro actualizado", "success");
-  };
-
-  // --- RENDERERS ---
-  const renderYearView = () => {
-    const statsByMonth = Array(12)
-      .fill(0)
-      .map(() => ({ hours: 0, money: 0 }));
-    shifts.forEach((s) => {
-      const d = new Date(s.date);
-      if (d.getFullYear() === year) {
-        const duration = calculateDuration(s.startTime, s.endTime);
-        statsByMonth[d.getMonth()].hours += duration;
-        if (s.hourTypeId) {
-          const hType = hourTypes.find((h) => h.id === s.hourTypeId);
-          const price = hType ? hType.price : 0;
-          statsByMonth[d.getMonth()].money += duration * price;
-        }
-      }
-    });
-
-    return (
-      <div className={APP_STYLES.CALENDARIO.yearGrid}>
-        {monthNamesES.map((mName, idx) => (
-          <div
-            key={idx}
-            onClick={() => {
-              setCurrentDate(new Date(year, idx, 1));
-              handleViewChange("month");
-            }}
-            className={`${APP_STYLES.CALENDARIO.yearMonthCard} ${
-              idx === month
-                ? APP_STYLES.CALENDARIO.yearMonthCardActive
-                : APP_STYLES.CALENDARIO.yearMonthCardInactive
-            }`}
-          >
-            <h3 className={APP_STYLES.CALENDARIO.yearMonthTitle}>{mName}</h3>
-            <div className={APP_STYLES.CALENDARIO.yearMonthStats}>
-              <p className={APP_STYLES.CALENDARIO.yearMonthHours}>
-                {statsByMonth[idx].hours.toFixed(0)}h
-              </p>
-              {statsByMonth[idx].money > 0 && (
-                <p className={APP_STYLES.CALENDARIO.yearMonthMoney}>
-                  {statsByMonth[idx].money.toFixed(0)}€
-                </p>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  const renderMonthView = () => {
-    const daysInMonth = getDaysInMonth(year, month);
-    const firstDay = getFirstDayOfMonth(year, month);
-    const startDay = firstDay === 0 ? 6 : firstDay - 1;
-
-    const grid = [];
-    for (let i = 0; i < startDay; i++) {
-      grid.push(
-        <div
-          key={`empty-${i}`}
-          className={APP_STYLES.CALENDARIO.emptyCell}
-        ></div>
+  const handleUpdateShift = useCallback(
+    (updatedShift: Shift) => {
+      setShifts((prev) =>
+        prev.map((s) => (s.id === updatedShift.id ? updatedShift : s))
       );
-    }
-
-    let monthlyHours = 0;
-    let monthlyMoney = 0;
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateObj = new Date(year, month, day);
-      const dateStr = toLocalISOString(dateObj);
-
-      const dayShifts = shiftsByDate[dateStr] || [];
-      const isToday = toLocalISOString(new Date()) === dateStr;
-      const isSelected =
-        selectedDate && toLocalISOString(selectedDate) === dateStr;
-
-      let hoursToday = 0;
-      let moneyToday = 0;
-
-      dayShifts.forEach((s) => {
-        const duration = calculateDuration(s.startTime, s.endTime);
-        hoursToday += duration;
-        if (s.hourTypeId) {
-          const hType = hourTypes.find((h) => h.id === s.hourTypeId);
-          const price = hType ? hType.price : 0;
-          moneyToday += duration * price;
-        }
-      });
-      monthlyHours += hoursToday;
-      monthlyMoney += moneyToday;
-
-      grid.push(
-        <div
-          key={day}
-          onClick={() => handleDayClick(new Date(year, month, day))}
-          className={`${APP_STYLES.CALENDARIO.dayCell} ${
-            isSelected ? APP_STYLES.CALENDARIO.dayCellSelected : ""
-          }`}
-        >
-          <div className={APP_STYLES.CALENDARIO.dayCellHeader}>
-            <div
-              className={`${APP_STYLES.CALENDARIO.dayNumber} ${
-                isToday
-                  ? APP_STYLES.CALENDARIO.dayNumberToday
-                  : APP_STYLES.CALENDARIO.dayNumberDefault
-              }`}
-            >
-              {day}
-            </div>
-            {moneyToday > 0 && (
-              <span className={APP_STYLES.CALENDARIO.dayEarnings}>
-                {moneyToday.toFixed(0)}€
-              </span>
-            )}
-          </div>
-
-          {dayShifts.length > 0 && (
-            <div className={APP_STYLES.CALENDARIO.dayShiftsContainer}>
-              <div className={APP_STYLES.CALENDARIO.dayHoursBadge}>
-                {hoursToday.toFixed(1)}h
-              </div>
-              {dayShifts.map((_, i) => (
-                <div
-                  key={i}
-                  className={APP_STYLES.CALENDARIO.dayShiftIndicator}
-                ></div>
-              ))}
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    return (
-      <>
-        <div className={APP_STYLES.CALENDARIO.weekdayHeader}>
-          {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((d) => (
-            <div key={d} className={APP_STYLES.CALENDARIO.weekdayLabel}>
-              {d}
-            </div>
-          ))}
-        </div>
-        <div className={APP_STYLES.CALENDARIO.monthGrid}>{grid}</div>
-        <div className={APP_STYLES.CALENDARIO.monthTotal}>
-          <span className={APP_STYLES.CALENDARIO.monthTotalLabel}>
-            Total Mensual
-          </span>
-          <div className="text-right">
-            <span className={APP_STYLES.CALENDARIO.monthTotalValue}>
-              {monthlyHours.toFixed(2)} h
-            </span>
-            {monthlyMoney > 0 && (
-              <span className={APP_STYLES.CALENDARIO.monthTotalEarnings}>
-                {monthlyMoney.toFixed(2)}€
-              </span>
-            )}
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  const renderWeekView = () => {
-    const startOfWeek = new Date(currentDate);
-    const day = startOfWeek.getDay(); // 0 Sun
-    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
-    startOfWeek.setDate(diff);
-
-    const weekDays = [];
-    let weekTotal = 0;
-    let weekMoney = 0;
-
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(startOfWeek);
-      d.setDate(startOfWeek.getDate() + i);
-      const dateStr = toLocalISOString(d);
-      const dayShifts = shiftsByDate[dateStr] || [];
-
-      let hoursToday = 0;
-      dayShifts.forEach((s) => {
-        const duration = calculateDuration(s.startTime, s.endTime);
-        hoursToday += duration;
-        if (s.hourTypeId) {
-          const hType = hourTypes.find((h) => h.id === s.hourTypeId);
-          const price = hType ? hType.price : 0;
-          weekMoney += duration * price;
-        }
-      });
-      weekTotal += hoursToday;
-      const isToday = toLocalISOString(new Date()) === dateStr;
-
-      weekDays.push(
-        <div
-          key={i}
-          onClick={() => handleDayClick(d)}
-          className={APP_STYLES.CALENDARIO.weekDayColumn}
-        >
-          <div className={APP_STYLES.CALENDARIO.weekDayHeader}>
-            <span className={APP_STYLES.CALENDARIO.weekDayName}>
-              {dayNamesES[d.getDay()]}
-            </span>
-            <span
-              className={`${APP_STYLES.CALENDARIO.weekDayNumber} ${
-                isToday
-                  ? APP_STYLES.CALENDARIO.weekDayNumberToday
-                  : APP_STYLES.CALENDARIO.weekDayNumberDefault
-              }`}
-            >
-              {d.getDate()}
-            </span>
-          </div>
-          <div className={APP_STYLES.CALENDARIO.weekShiftsList}>
-            {dayShifts.map((s) => (
-              <div key={s.id} className={APP_STYLES.CALENDARIO.weekShiftBadge}>
-                <div className={APP_STYLES.CALENDARIO.weekShiftTime}>
-                  {s.startTime}
-                </div>
-                <div className={APP_STYLES.CALENDARIO.weekShiftCategory}>
-                  {s.category}
-                </div>
-              </div>
-            ))}
-          </div>
-          {hoursToday > 0 && (
-            <div className={APP_STYLES.CALENDARIO.weekDayTotal}>
-              {hoursToday.toFixed(1)}h
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    return (
-      <>
-        <div className={APP_STYLES.CALENDARIO.weekContainer}>{weekDays}</div>
-        <div className={APP_STYLES.CALENDARIO.weekTotal}>
-          <span className={APP_STYLES.CALENDARIO.monthTotalLabel}>
-            Total Semanal
-          </span>
-          <div className="text-right">
-            <span className={APP_STYLES.CALENDARIO.monthTotalValue}>
-              {weekTotal.toFixed(2)} h
-            </span>
-            {weekMoney > 0 && (
-              <span className={APP_STYLES.CALENDARIO.monthTotalEarnings}>
-                {weekMoney.toFixed(2)}€
-              </span>
-            )}
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  const renderDayView = () => {
-    const dateStr = toLocalISOString(currentDate);
-    const dayShifts = shiftsByDate[dateStr] || [];
-    let total = 0;
-    let money = 0;
-
-    return (
-      <div className={APP_STYLES.CALENDARIO.dayViewContainer}>
-        <div className={APP_STYLES.CALENDARIO.dayViewTitle}>
-          <h3 className={APP_STYLES.CALENDARIO.dayViewTitleText}>
-            {currentDate.toLocaleDateString("es-ES", { weekday: "long" })}
-          </h3>
-          <span className={APP_STYLES.CALENDARIO.dayViewSubtitle}>
-            {currentDate.toLocaleDateString("es-ES", {
-              day: "numeric",
-              month: "long",
-            })}
-          </span>
-        </div>
-
-        {dayShifts.length > 0 ? (
-          <div className={APP_STYLES.CALENDARIO.dayViewShiftsList}>
-            {dayShifts.map((shift) => {
-              const duration = calculateDuration(
-                shift.startTime,
-                shift.endTime
-              );
-              total += duration;
-
-              let typeName = "Sin tipo";
-              let price = 0;
-              let hasType = false;
-
-              if (shift.hourTypeId) {
-                const hType = hourTypes.find((h) => h.id === shift.hourTypeId);
-                typeName = hType ? hType.name : "Desc.";
-                price = hType ? hType.price : 0;
-                money += duration * price;
-                hasType = true;
-              }
-
-              return (
-                <div
-                  key={shift.id}
-                  className={APP_STYLES.CALENDARIO.dayViewShiftCard}
-                >
-                  <div className={APP_STYLES.CALENDARIO.dayViewShiftContent}>
-                    <div className={APP_STYLES.CALENDARIO.dayViewShiftHeader}>
-                      <span className={APP_STYLES.CALENDARIO.dayViewShiftTime}>
-                        {shift.startTime} - {shift.endTime}
-                      </span>
-                      <span
-                        className={APP_STYLES.CALENDARIO.dayViewShiftDuration}
-                      >
-                        {duration.toFixed(2)}h
-                      </span>
-                      {hasType && price * duration > 0 && (
-                        <span
-                          className={APP_STYLES.CALENDARIO.dayViewShiftEarnings}
-                        >
-                          {(duration * price).toFixed(2)}€
-                        </span>
-                      )}
-                    </div>
-                    <div className={APP_STYLES.CALENDARIO.dayViewShiftMeta}>
-                      <span
-                        className={APP_STYLES.CALENDARIO.dayViewShiftCategory}
-                      >
-                        {shift.category}
-                      </span>
-                      <span
-                        className={APP_STYLES.CALENDARIO.dayViewShiftSeparator}
-                      >
-                        |
-                      </span>
-                      <span className={APP_STYLES.CALENDARIO.dayViewShiftType}>
-                        {typeName}
-                      </span>
-                    </div>
-                    {shift.notes && (
-                      <p className={APP_STYLES.CALENDARIO.dayViewShiftNotes}>
-                        "{shift.notes}"
-                      </p>
-                    )}
-                  </div>
-                  <div className={APP_STYLES.CALENDARIO.dayViewShiftActions}>
-                    <button
-                      onClick={() => openEditModal(shift)}
-                      className={APP_STYLES.CALENDARIO.dayViewEditButton}
-                    >
-                      <PencilIcon className={APP_STYLES.MODOS.iconContent} />
-                    </button>
-                    <button
-                      onClick={() => confirmDelete(shift.id)}
-                      className={APP_STYLES.CALENDARIO.dayViewDeleteButton}
-                    >
-                      <TrashIcon className={APP_STYLES.MODOS.iconContent} />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-            <div className={APP_STYLES.CALENDARIO.dayViewTotal}>
-              <span className={APP_STYLES.CALENDARIO.dayViewTotalLabel}>
-                Total Diario
-              </span>
-              <div className="text-right">
-                <span className={APP_STYLES.CALENDARIO.dayViewTotalValue}>
-                  {total.toFixed(2)} h
-                </span>
-                {money > 0 && (
-                  <span className={APP_STYLES.CALENDARIO.dayViewTotalEarnings}>
-                    {money.toFixed(2)}€
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className={APP_STYLES.CALENDARIO.dayViewNoShifts}>
-            <p className={APP_STYLES.CALENDARIO.dayViewNoShiftsText}>
-              No hay registros.
-            </p>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  // --- RENDER RANGE (GRID MODE) ---
-  const renderRangeView = () => {
-    const start = new Date(rangeStart).getTime();
-    const end = new Date(rangeEnd).getTime();
-    const dayMilliseconds = 24 * 60 * 60 * 1000;
-    const diffDays = Math.ceil(Math.abs((end - start) / dayMilliseconds)) + 1;
-
-    const days = useMemo(() => {
-      const d_arr = [];
-      for (let i = 0; i < diffDays; i++) {
-        const d = new Date(start);
-        d.setDate(d.getDate() + i);
-        d_arr.push(d);
-      }
-      return d_arr;
-    }, [diffDays, start]);
-
-    // Calculate totals upfront
-    const { totalRangeHours, totalRangeMoney } = useMemo(() => {
-      let tHours = 0;
-      let tMoney = 0;
-      days.forEach((d) => {
-        const dateStr = toLocalISOString(d);
-        const dayShifts = shiftsByDate[dateStr] || [];
-        dayShifts.forEach((s) => {
-          const duration = calculateDuration(s.startTime, s.endTime);
-          tHours += duration;
-          if (s.hourTypeId) {
-            const hType = hourTypes.find((h) => h.id === s.hourTypeId);
-            const price = hType ? hType.price : 0;
-            tMoney += duration * price;
-          }
-        });
-      });
-      return { totalRangeHours: tHours, totalRangeMoney: tMoney };
-    }, [days, shiftsByDate, hourTypes]);
-
-    const Row = ({ index, style, data }: any) => {
-      const { days, shiftsByDate, handleDayClick } = data;
-      const startIndex = index * 7;
-      const rowDays = days.slice(
-        startIndex,
-        Math.min(startIndex + 7, days.length)
-      );
-
-      return (
-        <div style={style} className="grid grid-cols-7 gap-1">
-          {rowDays.map((d: Date) => {
-            const dateStr = toLocalISOString(d);
-            const dayShifts = shiftsByDate[dateStr] || [];
-            let dayHours = 0;
-            dayShifts.forEach((s: Shift) => {
-              dayHours += calculateDuration(s.startTime, s.endTime);
-            });
-
-            return (
-              <div
-                key={dateStr}
-                onClick={() => handleDayClick(d)}
-                className={APP_STYLES.CALENDARIO.rangeDayCard}
-              >
-                <div className={APP_STYLES.CALENDARIO.rangeDayHeader}>
-                  <span className={APP_STYLES.CALENDARIO.rangeDayName}>
-                    {dayNamesES[d.getDay()].substring(0, 2)}
-                  </span>
-                  <span className={APP_STYLES.CALENDARIO.rangeDayNumber}>
-                    {d.getDate()}
-                  </span>
-                </div>
-                <div className={APP_STYLES.CALENDARIO.rangeShiftsList}>
-                  {dayShifts.map((s: Shift) => (
-                    <div
-                      key={s.id}
-                      className={APP_STYLES.CALENDARIO.rangeShiftBadge}
-                    >
-                      <span className={APP_STYLES.CALENDARIO.rangeShiftTime}>
-                        {s.startTime}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                {dayHours > 0 && (
-                  <div className={APP_STYLES.CALENDARIO.rangeDayTotal}>
-                    <span className={APP_STYLES.CALENDARIO.rangeDayTotalValue}>
-                      {dayHours.toFixed(1)}h
-                    </span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      );
-    };
-
-    return (
-      <div className={APP_STYLES.CALENDARIO.rangeContainer}>
-        <div className={APP_STYLES.CALENDARIO.rangeHeader}>
-          <div>
-            <h3 className={APP_STYLES.CALENDARIO.rangeTitle}>Resumen Rango</h3>
-            <p className={APP_STYLES.CALENDARIO.rangeSubtitle}>
-              {new Date(rangeStart).toLocaleDateString()} -{" "}
-              {new Date(rangeEnd).toLocaleDateString()}
-            </p>
-          </div>
-          <div className="text-right">
-            <span className={APP_STYLES.CALENDARIO.rangeTotalValue}>
-              {totalRangeHours.toFixed(2)}h
-            </span>
-            {totalRangeMoney > 0 && (
-              <span className={APP_STYLES.CALENDARIO.rangeTotalEarnings}>
-                {totalRangeMoney.toFixed(2)}€
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div style={{ height: 500, width: "100%" }}>
-          <AutoSizer>
-            {({ height, width }) => (
-              <FixedSizeList
-                height={height}
-                itemCount={Math.ceil(days.length / 7)}
-                itemSize={100}
-                width={width}
-                itemData={{ days, shiftsByDate, handleDayClick }}
-              >
-                {Row}
-              </FixedSizeList>
-            )}
-          </AutoSizer>
-        </div>
-      </div>
-    );
-  };
+      setIsEditOpen(false);
+      setEditingShift(null);
+      notify("Registro actualizado", "success");
+    },
+    [setShifts, notify]
+  );
 
   // --- HELPER FUNCTIONS ---
-
-  // ... existing code ...
 
   const getFilteredShiftsAndTitle = () => {
     let filteredShifts = shifts;
@@ -703,7 +208,7 @@ export const CalendarView: React.FC = () => {
         const d = new Date(s.date);
         return d.getFullYear() === year && d.getMonth() === month;
       });
-      title = `Registro Mensual ${monthNamesES[month]} ${year}`;
+      title = `Registro Mensual ${MONTH_NAMES_ES[month]} ${year}`;
     } else if (viewType === "day") {
       filteredShifts = shifts.filter(
         (s) => s.date === toLocalISOString(currentDate)
@@ -829,9 +334,9 @@ export const CalendarView: React.FC = () => {
             </Button>
             <h2 className={APP_STYLES.CALENDARIO.navTitle}>
               {viewType === "year" && year}
-              {viewType === "month" && `${monthNamesES[month]} ${year}`}
+              {viewType === "month" && `${MONTH_NAMES_ES[month]} ${year}`}
               {viewType === "week" &&
-                `Semana ${currentDate.getDate()} - ${monthNamesES[month]}`}
+                `Semana ${currentDate.getDate()} - ${MONTH_NAMES_ES[month]}`}
               {viewType === "day" && currentDate.toLocaleDateString()}
             </h2>
             <Button
@@ -845,13 +350,58 @@ export const CalendarView: React.FC = () => {
         ) : null}
 
         {rangeStart && rangeEnd ? (
-          renderRangeView()
+          <CalendarRangeView
+            rangeStart={rangeStart}
+            rangeEnd={rangeEnd}
+            rangeDays={rangeDays}
+            shiftsByDate={shiftsByDate}
+            totalRangeHours={rangeTotals.totalRangeHours}
+            totalRangeMoney={rangeTotals.totalRangeMoney}
+            onDayClick={handleDayClick}
+          />
         ) : (
           <>
-            {viewType === "year" && renderYearView()}
-            {viewType === "month" && renderMonthView()}
-            {viewType === "week" && renderWeekView()}
-            {viewType === "day" && renderDayView()}
+            {viewType === "year" && (
+              <CalendarYearView
+                year={year}
+                currentMonth={month}
+                shifts={shifts}
+                hourTypes={hourTypes}
+                onMonthClick={(monthIndex: number) => {
+                  setCurrentDate(new Date(year, monthIndex, 1));
+                  handleViewChange("month");
+                }}
+              />
+            )}
+            {viewType === "month" && (
+              <CalendarMonthView
+                year={year}
+                month={month}
+                selectedDate={selectedDate}
+                shiftsByDate={shiftsByDate}
+                hourTypes={hourTypes}
+                onDayClick={handleDayClick}
+                getDaysInMonth={getDaysInMonth}
+                getFirstDayOfMonth={getFirstDayOfMonth}
+              />
+            )}
+            {viewType === "week" && (
+              <CalendarWeekView
+                currentDate={currentDate}
+                shiftsByDate={shiftsByDate}
+                hourTypes={hourTypes}
+                onDayClick={handleDayClick}
+              />
+            )}
+            {viewType === "day" && (
+              <CalendarDayView
+                currentDate={currentDate}
+                shiftsByDate={shiftsByDate}
+                hourTypes={hourTypes}
+                onEdit={openEditModal}
+                onDelete={confirmDelete}
+              />
+            )}
           </>
         )}
       </Card>

@@ -36,7 +36,13 @@ export const useAppStore = create<AppState>()(
       // Initial State
       shifts: [],
       settings: {
-        categories: ["Programado", "DRP", "Traslado", "Guardia"],
+        categories: [
+          "Sin especificar",
+          "Programado",
+          "DRP",
+          "Traslado",
+          "Guardia",
+        ],
         hourTypes: [
           { id: "1", name: "Normal", price: 10 },
           { id: "2", name: "Especial", price: 15 },
@@ -80,6 +86,7 @@ export const useAppStore = create<AppState>()(
       sync: async () => {
         set({ syncStatus: "syncing" });
         const state = get();
+
         try {
           const backup = {
             version: 1,
@@ -87,18 +94,57 @@ export const useAppStore = create<AppState>()(
             shifts: state.shifts,
             settings: state.settings,
           };
+
           const result = await MockSyncService.sync(backup);
 
           if (result.success) {
             set({ syncStatus: "success" });
             state.notify(result.message, "success");
+
+            if (import.meta.env.DEV) {
+              console.log("Sync completed successfully:", {
+                shiftsCount: backup.shifts.length,
+                timestamp: result.timestamp,
+              });
+            }
           } else {
             set({ syncStatus: "error" });
-            state.notify(result.message, "error");
+            const errorMessage =
+              result.message || "Error desconocido en la sincronización";
+            state.notify(errorMessage, "error");
+
+            if (import.meta.env.DEV) {
+              console.error("Sync failed:", result);
+            }
           }
         } catch (error) {
           set({ syncStatus: "error" });
-          state.notify("Error de conexión", "error");
+
+          let errorMessage = "Error de conexión";
+
+          if (error instanceof Error) {
+            if (
+              error.message.includes("network") ||
+              error.message.includes("fetch")
+            ) {
+              errorMessage = "Error de red. Verifica tu conexión a internet.";
+            } else if (error.message.includes("timeout")) {
+              errorMessage =
+                "La sincronización tardó demasiado. Intenta de nuevo.";
+            } else {
+              errorMessage = `Error de sincronización: ${error.message}`;
+            }
+          }
+
+          state.notify(errorMessage, "error");
+
+          if (import.meta.env.DEV) {
+            console.error("Sync error:", {
+              error,
+              message: error instanceof Error ? error.message : "Unknown error",
+              stack: error instanceof Error ? error.stack : undefined,
+            });
+          }
         } finally {
           setTimeout(() => set({ syncStatus: "idle" }), 3000);
         }

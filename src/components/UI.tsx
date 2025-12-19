@@ -1,4 +1,4 @@
-import React, { useEffect, useId } from "react";
+import React, { useEffect, useId, memo } from "react";
 import { Notification } from "../types";
 import { CheckIcon, XMarkIcon, FlagIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
@@ -10,7 +10,7 @@ interface ButtonProps extends HTMLMotionProps<"button"> {
   variant?: "primary" | "secondary" | "danger";
 }
 
-export const Button: React.FC<ButtonProps> = ({
+const ButtonComponent: React.FC<ButtonProps> = ({
   children,
   className,
   variant = "primary",
@@ -37,6 +37,9 @@ export const Button: React.FC<ButtonProps> = ({
   );
 };
 
+export const Button = memo(ButtonComponent);
+Button.displayName = "Button";
+
 // Card
 interface CardProps {
   children: React.ReactNode;
@@ -44,7 +47,7 @@ interface CardProps {
   id?: string;
 }
 
-export const Card: React.FC<CardProps> = ({ children, className, id }) => {
+const CardComponent: React.FC<CardProps> = ({ children, className, id }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -58,12 +61,15 @@ export const Card: React.FC<CardProps> = ({ children, className, id }) => {
   );
 };
 
+export const Card = memo(CardComponent);
+Card.displayName = "Card";
+
 // Input
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
 }
 
-export const Input: React.FC<InputProps> = ({
+const InputComponent: React.FC<InputProps> = ({
   label,
   id,
   className,
@@ -86,13 +92,16 @@ export const Input: React.FC<InputProps> = ({
   );
 };
 
+export const Input = memo(InputComponent);
+Input.displayName = "Input";
+
 // Select
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   children: React.ReactNode;
 }
 
-export const Select: React.FC<SelectProps> = ({
+const SelectComponent: React.FC<SelectProps> = ({
   label,
   id,
   children,
@@ -132,6 +141,9 @@ export const Select: React.FC<SelectProps> = ({
   );
 };
 
+export const Select = memo(SelectComponent);
+Select.displayName = "Select";
+
 // Confirmation Dialog
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -141,7 +153,7 @@ interface ConfirmDialogProps {
   onCancel: () => void;
 }
 
-export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+const ConfirmDialogComponent: React.FC<ConfirmDialogProps> = ({
   isOpen,
   title = "Confirmación",
   message,
@@ -190,6 +202,9 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     </AnimatePresence>
   );
 };
+
+export const ConfirmDialog = memo(ConfirmDialogComponent);
+ConfirmDialog.displayName = "ConfirmDialog";
 
 // Toast Notification
 interface ToastProps {

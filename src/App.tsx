@@ -5,6 +5,7 @@ import { View, Theme } from "./types";
 import Header from "./components/Header";
 import { useAppStore } from "./store/useAppStore";
 import { Toast } from "./components/UI";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { APP_STYLES } from "./theme/styles";
 
 // Lazy load views
@@ -70,28 +71,30 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className={APP_STYLES.MODOS.appRoot}>
-      <Header currentView={currentView} setCurrentView={setCurrentView} />
-      <main className={APP_STYLES.MODOS.mainContainer}>
-        <Suspense fallback={<LoadingSpinner />}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentView}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-            >
-              {renderView()}
-            </motion.div>
-          </AnimatePresence>
-        </Suspense>
-      </main>
-      <Toast
-        notification={notification}
-        onClose={() => setNotification(null)}
-      />
-    </div>
+    <ErrorBoundary>
+      <div className={APP_STYLES.MODOS.appRoot}>
+        <Header currentView={currentView} setCurrentView={setCurrentView} />
+        <main className={APP_STYLES.MODOS.mainContainer}>
+          <Suspense fallback={<LoadingSpinner />}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentView}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                {renderView()}
+              </motion.div>
+            </AnimatePresence>
+          </Suspense>
+        </main>
+        <Toast
+          notification={notification}
+          onClose={() => setNotification(null)}
+        />
+      </div>
+    </ErrorBoundary>
   );
 };
 

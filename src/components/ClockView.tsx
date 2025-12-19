@@ -32,6 +32,11 @@ const calculateDuration = (start: string, end: string) => {
   const s = parseInt(start.split(":")[0]) + parseInt(start.split(":")[1]) / 60;
   const e = parseInt(end.split(":")[0]) + parseInt(end.split(":")[1]) / 60;
 
+  // 24-hour shift: start time equals end time
+  if (s === e) {
+    return 24;
+  }
+
   // Handle overnight shifts
   if (e < s) {
     return 24 - s + e;
@@ -132,10 +137,22 @@ export const ClockView: React.FC = () => {
 
     const startMins = parseTime(startTime);
     let endMins = parseTime(endTime);
-    // Handle overnight shift: if end is before start, assume it ends next day (+24h)
-    // NOTE: This simple logic assumes shifts don't span more than 24h.
-    if (endMins < startMins) {
+
+    // Handle 24-hour shift: if end equals start, it's a full 24-hour shift
+    if (endMins === startMins) {
+      endMins += 24 * 60; // Add 24 hours
+    }
+    // Handle overnight shift: if end is before start, it goes to next day
+    else if (endMins < startMins) {
       endMins += 24 * 60;
+    }
+
+    // Validate: shift can't exceed 24 hours
+    const durationMins = endMins - startMins;
+    if (durationMins > 24 * 60) {
+      setError("Un turno no puede exceder 24 horas.");
+      notify("Un turno no puede exceder 24 horas", "error");
+      return;
     }
 
     // Check overlaps
@@ -144,7 +161,13 @@ export const ClockView: React.FC = () => {
 
       const existingStart = parseTime(shift.startTime);
       let existingEnd = parseTime(shift.endTime);
-      if (existingEnd < existingStart) {
+
+      // Handle 24-hour shift
+      if (existingEnd === existingStart) {
+        existingEnd += 24 * 60;
+      }
+      // Handle overnight shift
+      else if (existingEnd < existingStart) {
         existingEnd += 24 * 60;
       }
 

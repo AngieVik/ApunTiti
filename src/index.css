@@ -12,7 +12,7 @@
 
 /* Global styles */
 body {
-  @apply bg-gray-100 dark:bg-black text-gray-900 dark:text-gray-100 transition-colors duration-300;
+  @apply bg-gray-200 dark:bg-black text-gray-900 dark:text-gray-100 transition-colors duration-300;
 }
 
 ::selection {

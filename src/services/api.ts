@@ -10,13 +10,17 @@ export const MockSyncService = {
   sync: async (data: BackupData): Promise<SyncResult> => {
     // Simulate network delay
     return new Promise((resolve) => {
-      console.log("Initiating sync...", data);
+      if (import.meta.env.DEV) {
+        console.log("Initiating sync...", data);
+      }
 
       setTimeout(() => {
         const success = Math.random() > 0.1; // 90% success rate
 
         if (success) {
-          console.log("Sync successful");
+          if (import.meta.env.DEV) {
+            console.log("Sync successful");
+          }
           resolve({
             success: true,
             message: "Sincronización completada correctamente",

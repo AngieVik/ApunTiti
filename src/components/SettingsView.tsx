@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { HourType, BackupData } from "../types";
-import { Card, Button, Input, Select } from "./UI";
+import { Card, Button, Input, Select, ConfirmDialog } from "./UI";
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -13,13 +13,14 @@ import {
   requestNotificationPermission,
   sendLocalNotification,
 } from "../utils/notifications";
+import { HourTypeSchema, BackupDataSchema } from "../utils/validationSchemas";
 
 import { useAppStore } from "../store/useAppStore";
 
 export const SettingsView: React.FC = () => {
   // Store
   const settings = useAppStore((state) => state.settings);
-  const { updateSettings, notify, sync, syncStatus } = useAppStore(); // mapped to setSettings name
+  const { updateSettings, notify, sync, syncStatus } = useAppStore();
   const shifts = useAppStore((state) => state.shifts);
   const setShifts = useAppStore((state) => state.setShifts);
 
@@ -36,25 +37,58 @@ export const SettingsView: React.FC = () => {
   const [tempHourName, setTempHourName] = useState("");
   const [tempHourPrice, setTempHourPrice] = useState("");
 
+  // Confirmation dialogs
+  const [confirmCategoryDelete, setConfirmCategoryDelete] = useState<
+    string | null
+  >(null);
+  const [confirmHourDelete, setConfirmHourDelete] = useState<string | null>(
+    null
+  );
+  const [confirmClearAll, setConfirmClearAll] = useState<1 | 2 | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Constants
+  const MAX_CATEGORIES = 10;
+  const MAX_HOUR_TYPES = 10;
+  const SPECIAL_CATEGORY = "Sin especificar";
 
   // --- CATEGORY HANDLERS ---
   const handleAddCategory = () => {
-    if (newCategory && !settings.categories.includes(newCategory)) {
-      setSettings((prev) => ({
-        ...prev,
-        categories: [...prev.categories, newCategory],
-      }));
-      setNewCategory("");
-      notify("Categoría añadida", "success");
+    if (!newCategory.trim()) return;
+
+    if (settings.categories.includes(newCategory)) {
+      notify("Esta categoría ya existe", "error");
+      return;
     }
+
+    if (settings.categories.length >= MAX_CATEGORIES) {
+      notify(`Máximo ${MAX_CATEGORIES} categorías permitidas`, "error");
+      return;
+    }
+
+    setSettings((prev) => ({
+      ...prev,
+      categories: [...prev.categories, newCategory],
+    }));
+    setNewCategory("");
+    notify("Categoría añadida", "success");
   };
 
-  const handleRemoveCategory = (catToRemove: string) => {
+  const confirmRemoveCategory = (cat: string) => {
+    setConfirmCategoryDelete(cat);
+  };
+
+  const handleRemoveCategory = () => {
+    if (!confirmCategoryDelete) return;
+
+    const catToRemove = confirmCategoryDelete;
     setSettings((prev) => ({
       ...prev,
       categories: prev.categories.filter((c) => c !== catToRemove),
     }));
+
+    setConfirmCategoryDelete(null);
     notify("Categoría eliminada", "info");
   };
 
@@ -82,35 +116,57 @@ export const SettingsView: React.FC = () => {
 
   // --- HOUR TYPE HANDLERS ---
   const handleAddHourType = () => {
-    if (newHourName && newHourPrice) {
-      const price = parseFloat(newHourPrice);
-      if (isNaN(price)) return;
-
-      const newType: HourType = {
-        id: crypto.randomUUID(),
-        name: newHourName,
-        price: price,
-      };
-
-      setSettings((prev) => ({
-        ...prev,
-        hourTypes: [...(prev.hourTypes || []), newType],
-      }));
-      setNewHourName("");
-      setNewHourPrice("");
-      notify("Tipo de hora añadido", "success");
+    if (!newHourName.trim() || newHourPrice === "") {
+      notify("Por favor completa nombre y precio", "error");
+      return;
     }
+
+    if (settings.hourTypes.length >= MAX_HOUR_TYPES) {
+      notify(`Máximo ${MAX_HOUR_TYPES} tipos de hora permitidos`, "error");
+      return;
+    }
+
+    const price = parseFloat(newHourPrice);
+
+    // Validar con Zod
+    const hourTypeData = {
+      id: crypto.randomUUID(),
+      name: newHourName.trim(),
+      price: price,
+    };
+
+    const validation = HourTypeSchema.safeParse(hourTypeData);
+
+    if (!validation.success) {
+      const firstError = validation.error.issues[0];
+      notify(firstError.message, "error");
+
+      if (import.meta.env.DEV) {
+        console.error("HourType validation errors:", validation.error.issues);
+      }
+      return;
+    }
+
+    const newTypes = [...(settings.hourTypes || []), validation.data];
+    setSettings((prev) => ({ ...prev, hourTypes: newTypes }));
+    setNewHourName("");
+    setNewHourPrice("");
+    notify("Tipo de hora añadido correctamente", "success");
+  };
+  const confirmRemoveHourType = (id: string) => {
+    setConfirmHourDelete(id);
   };
 
-  const handleRemoveHourType = (id: string) => {
-    // if (settings.hourTypes.length <= 1) {
-    //   alert("Debe haber al menos un tipo de hora.");
-    //   return;
-    // }
+  const handleRemoveHourType = () => {
+    if (!confirmHourDelete) return;
+
+    const idToRemove = confirmHourDelete;
     setSettings((prev) => ({
       ...prev,
-      hourTypes: prev.hourTypes.filter((h) => h.id !== id),
+      hourTypes: prev.hourTypes.filter((h) => h.id !== idToRemove),
     }));
+
+    setConfirmHourDelete(null);
     notify("Tipo de hora eliminado", "info");
   };
 
@@ -172,27 +228,103 @@ export const SettingsView: React.FC = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Validar extensión
+    if (!file.name.endsWith(".json")) {
+      notify("El archivo debe tener extensión .json", "error");
+      event.target.value = "";
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
         const content = e.target?.result as string;
+
+        // Validar contenido no vacío
+        if (!content || content.trim() === "") {
+          notify("El archivo está vacío", "error");
+          return;
+        }
+
         const data = JSON.parse(content) as BackupData;
 
-        if (data.shifts && Array.isArray(data.shifts)) {
-          setShifts(data.shifts);
+        // Validar con Zod
+        const validation = BackupDataSchema.safeParse(data);
+
+        if (!validation.success) {
+          const firstError = validation.error.issues[0];
+          notify(`Formato inválido: ${firstError.message}`, "error");
+
+          if (import.meta.env.DEV) {
+            console.error("Backup validation errors:", validation.error.issues);
+          }
+          return;
         }
-        if (data.settings && data.settings.categories) {
+
+        const validData = validation.data;
+        let hasChanges = false;
+
+        if (
+          validData.shifts &&
+          Array.isArray(validData.shifts) &&
+          validData.shifts.length > 0
+        ) {
+          // Type assertion porque Zod validó la estructura
+          setShifts(validData.shifts as any);
+          hasChanges = true;
+        }
+
+        if (validData.settings) {
           setSettings(data.settings);
+          hasChanges = true;
         }
-        notify("Datos restaurados correctamente", "success");
+
+        if (hasChanges) {
+          notify("Datos restaurados correctamente", "success");
+        } else {
+          notify("No se encontraron datos válidos para restaurar", "error");
+        }
       } catch (error) {
-        console.error(error);
-        notify("Error al leer el archivo de copia de seguridad", "error");
+        if (import.meta.env.DEV) {
+          console.error("Import error:", error);
+        }
+
+        let errorMessage = "Error al leer el archivo de copia de seguridad";
+
+        if (error instanceof SyntaxError) {
+          errorMessage = "El archivo JSON está corrupto o mal formado";
+        } else if (error instanceof Error) {
+          errorMessage = `Error al procesar: ${error.message}`;
+        }
+
+        notify(errorMessage, "error");
       }
     };
+
+    reader.onerror = () => {
+      if (import.meta.env.DEV) {
+        console.error("File read error:", reader.error);
+      }
+      notify("Error al leer el archivo. Intenta de nuevo.", "error");
+    };
+
     reader.readAsText(file);
     // Reset input
     event.target.value = "";
+  };
+
+  // --- DELETE ALL DATA ---
+  const handleClearAllData = () => {
+    // Clear all data
+    setShifts([]);
+    setSettings({
+      categories: [SPECIAL_CATEGORY],
+      hourTypes: [],
+      downloadFormat: "txt",
+      pushEnabled: false,
+    });
+    setConfirmClearAll(null);
+    notify("Todos los datos han sido eliminados", "info");
   };
 
   return (
@@ -260,52 +392,67 @@ export const SettingsView: React.FC = () => {
         </div>
 
         <ul className={APP_STYLES.CONFIGURACIÓN.categoriesList}>
-          {settings.categories.map((cat) => (
-            <li key={cat} className={APP_STYLES.CONFIGURACIÓN.categoryItem}>
-              {editingCategory === cat ? (
-                <div className={APP_STYLES.CONFIGURACIÓN.categoryEditContainer}>
-                  <input
-                    className={APP_STYLES.CONFIGURACIÓN.categoryEditInput}
-                    value={tempCategoryName}
-                    onChange={(e) => setTempCategoryName(e.target.value)}
-                    autoFocus
-                  />
-                  <button
-                    onClick={saveEditCategory}
-                    className={APP_STYLES.CONFIGURACIÓN.categoryEditSave}
+          {settings.categories
+            .filter((cat) => cat !== SPECIAL_CATEGORY)
+            .map((cat) => (
+              <li key={cat} className={APP_STYLES.CONFIGURACIÓN.categoryItem}>
+                {editingCategory === cat ? (
+                  <div
+                    className={APP_STYLES.CONFIGURACIÓN.categoryEditContainer}
                   >
-                    <CheckIcon className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={cancelEditCategory}
-                    className={APP_STYLES.CONFIGURACIÓN.categoryEditCancel}
-                  >
-                    <XMarkIcon className={APP_STYLES.MODOS.iconSmall} />
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <span className={APP_STYLES.CONFIGURACIÓN.categoryName}>
-                    {cat}
-                  </span>
-                  <div className={APP_STYLES.CONFIGURACIÓN.categoryActions}>
+                    <input
+                      className={APP_STYLES.CONFIGURACIÓN.categoryEditInput}
+                      value={tempCategoryName}
+                      onChange={(e) => setTempCategoryName(e.target.value)}
+                      autoFocus
+                    />
                     <button
-                      onClick={() => startEditCategory(cat)}
-                      className={APP_STYLES.CONFIGURACIÓN.categoryEditButton}
+                      onClick={saveEditCategory}
+                      className={APP_STYLES.CONFIGURACIÓN.categoryEditSave}
                     >
-                      <PencilIcon className="w-4 h-4" />
+                      <CheckIcon className={APP_STYLES.MODOS.iconSmall} />
                     </button>
                     <button
-                      onClick={() => handleRemoveCategory(cat)}
-                      className={APP_STYLES.CONFIGURACIÓN.categoryDeleteButton}
+                      onClick={cancelEditCategory}
+                      className={APP_STYLES.CONFIGURACIÓN.categoryEditCancel}
                     >
-                      <TrashIcon className={APP_STYLES.MODOS.iconContent} />
+                      <XMarkIcon className={APP_STYLES.MODOS.iconSmall} />
                     </button>
                   </div>
-                </>
-              )}
+                ) : (
+                  <>
+                    <span className={APP_STYLES.CONFIGURACIÓN.categoryName}>
+                      {cat}
+                    </span>
+                    <div className={APP_STYLES.CONFIGURACIÓN.categoryActions}>
+                      <button
+                        onClick={() => startEditCategory(cat)}
+                        className={APP_STYLES.CONFIGURACIÓN.categoryEditButton}
+                      >
+                        <PencilIcon className={APP_STYLES.MODOS.iconGreyBlue} />
+                      </button>
+                      <button
+                        onClick={() => confirmRemoveCategory(cat)}
+                        className={
+                          APP_STYLES.CONFIGURACIÓN.categoryDeleteButton
+                        }
+                      >
+                        <TrashIcon className={APP_STYLES.MODOS.iconGreyBlue} />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </li>
+            ))}
+          {settings.categories.length === 0 ||
+          (settings.categories.length === 1 &&
+            settings.categories[0] === SPECIAL_CATEGORY) ? (
+            <li className={APP_STYLES.CONFIGURACIÓN.categoryItem}>
+              <span className="text-gray-500 dark:text-gray-400 text-sm">
+                No hay categorías personalizadas
+              </span>
             </li>
-          ))}
+          ) : null}
         </ul>
       </Card>
 
@@ -355,7 +502,7 @@ export const SettingsView: React.FC = () => {
                     onClick={saveEditHour}
                     className={APP_STYLES.CONFIGURACIÓN.hourTypeEditSave}
                   >
-                    <CheckIcon className="w-4 h-4" />
+                    <CheckIcon className={APP_STYLES.MODOS.iconSmall} />
                   </button>
                   <button
                     onClick={cancelEditHour}
@@ -379,13 +526,13 @@ export const SettingsView: React.FC = () => {
                       onClick={() => startEditHour(type)}
                       className={APP_STYLES.CONFIGURACIÓN.hourTypeEditButton}
                     >
-                      <PencilIcon className={APP_STYLES.MODOS.iconContent} />
+                      <PencilIcon className={APP_STYLES.MODOS.iconGreyBlue} />
                     </button>
                     <button
-                      onClick={() => handleRemoveHourType(type.id)}
+                      onClick={() => confirmRemoveHourType(type.id)}
                       className={APP_STYLES.CONFIGURACIÓN.hourTypeDeleteButton}
                     >
-                      <TrashIcon className={APP_STYLES.MODOS.iconContent} />
+                      <TrashIcon className={APP_STYLES.MODOS.iconGreyBlue} />
                     </button>
                   </div>
                 </>
@@ -479,6 +626,61 @@ export const SettingsView: React.FC = () => {
           </Button>
         </div>
       </Card>
+
+      {/* DELETE ALL DATA CARD */}
+      <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
+        <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
+          Zona de Peligro
+        </h2>
+        <p className={APP_STYLES.CONFIGURACIÓN.sectionDesc}>
+          Elimina permanentemente todos los registros y configuración.
+        </p>
+        <div className={APP_STYLES.CONFIGURACIÓN.backupGrid}>
+          <Button
+            variant="danger"
+            onClick={() => setConfirmClearAll(1)}
+            className={APP_STYLES.CONFIGURACIÓN.backupButtonContainer}
+          >
+            <TrashIcon className={APP_STYLES.MODOS.iconSmall} />
+            <span className={APP_STYLES.CONFIGURACIÓN.backupButtonText}>
+              Borrar Todos los Datos
+            </span>
+          </Button>
+        </div>
+      </Card>
+
+      {/* CONFIRMATION DIALOGS */}
+      <ConfirmDialog
+        isOpen={confirmCategoryDelete !== null}
+        title="¿Eliminar Categoría?"
+        message="Esta acción eliminará permanentemente esta categoría. ¿Deseas continuar?"
+        onConfirm={handleRemoveCategory}
+        onCancel={() => setConfirmCategoryDelete(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={confirmHourDelete !== null}
+        title="¿Eliminar Tipo de Hora?"
+        message="Esta acción eliminará permanentemente este tipo de hora. ¿Deseas continuar?"
+        onConfirm={handleRemoveHourType}
+        onCancel={() => setConfirmHourDelete(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={confirmClearAll === 1}
+        title="⚠️ Borrar Todos los Datos"
+        message="Esta acción eliminará permanentemente todos los registros y configuración. Recomendamos hacer una copia de seguridad primero. ¿Continuar?"
+        onConfirm={() => setConfirmClearAll(2)}
+        onCancel={() => setConfirmClearAll(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={confirmClearAll === 2}
+        title="⚠️ Última Advertencia"
+        message="Esta es la última advertencia. ¿Confirmas que deseas borrar TODOS los datos de la aplicación?"
+        onConfirm={handleClearAllData}
+        onCancel={() => setConfirmClearAll(null)}
+      />
     </div>
   );
 };
