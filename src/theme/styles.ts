@@ -291,6 +291,40 @@ export const APP_STYLES = {
     rangeDayTotalValue:
       "block font-mono font-bold text-[8px] text-gray-900 dark:text-white leading-none",
 
+    // Summary cards (for totals display)
+    summaryCardsContainer: "flex gap-2 items-center print:hidden",
+    summaryCard:
+      "bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/5 rounded-lg p-2 min-w-[100px]",
+    summaryCardTitle:
+      "text-[9px] font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wide mb-1",
+    summaryCardValue:
+      "text-sm font-mono font-black text-gray-900 dark:text-white",
+    summaryCardEarnings: "text-xs font-bold text-green-600 dark:text-green-400",
+
+    // Filter dropdowns
+    filtersContainer: "flex gap-2 items-center print:hidden",
+    filterDropdown: "min-w-[120px]",
+
+    // Controls bar layout
+    controlsBarContainer: "flex items-center gap-3 print:hidden mb-2",
+    controlsBarLeft: "flex gap-2", // Filters
+    controlsBarCenter: "flex-1", // Flexible space
+    controlsBarRight: "flex gap-2 items-center", // Summary cards + Download
+
+    // Day grid for range mode
+    dayGridContainer: "grid grid-cols-7 gap-2",
+    dayGridCard:
+      "border border-gray-200 dark:border-white/5 rounded-lg p-2 cursor-pointer hover:border-yellow-500 transition-colors bg-white dark:bg-[#1a1a1a]",
+    dayGridDate: "text-xs font-bold text-gray-900 dark:text-white mb-1",
+    dayGridHours: "text-[10px] font-mono text-gray-600 dark:text-gray-300",
+    dayGridEarnings: "text-[10px] font-bold text-green-600 dark:text-green-400",
+
+    // Month carousel for range mode
+    monthCarouselContainer: "space-y-2 mt-4",
+    monthCarouselItem:
+      "border border-gray-200 dark:border-white/5 rounded-lg p-2 bg-gray-50 dark:bg-[#1a1a1a]/50",
+    monthCarouselTitle: "text-xs font-bold text-gray-900 dark:text-white mb-2",
+
     // Download button
     downloadContainer: "flex justify-end print:hidden",
     downloadButton: "flex items-center gap-1",

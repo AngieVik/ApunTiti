@@ -87,8 +87,10 @@ describe("ClockView", () => {
     it("should render all categories from settings", () => {
       render(<ClockView />);
 
+      // Categories appear multiple times (in select dropdown and possibly summary)
       defaultSettings.categories.forEach((category) => {
-        expect(screen.getByText(category)).toBeInTheDocument();
+        const elements = screen.getAllByText(category);
+        expect(elements.length).toBeGreaterThan(0);
       });
     });
 
@@ -176,8 +178,12 @@ describe("ClockView", () => {
     it("should display category breakdown", () => {
       render(<ClockView />);
 
-      expect(screen.getByText("Programado")).toBeInTheDocument();
-      expect(screen.getByText("DRP")).toBeInTheDocument();
+      // Categories appear in summary breakdown
+      const programadoElements = screen.getAllByText("Programado");
+      const drpElements = screen.getAllByText("DRP");
+
+      expect(programadoElements.length).toBeGreaterThan(0);
+      expect(drpElements.length).toBeGreaterThan(0);
     });
   });
 

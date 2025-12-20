@@ -1,0 +1,1088 @@
+
+> apuntiti@1.0.0 test
+> vitest run --run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90mD:/Proyectos/ApunTiti[39m
+
+ [32mÔ£ô[39m src/hooks/useLocalStorage.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould set syncStatus to success on successful sync
+[22m[39mSync completed successfully: { shiftsCount: [33m0[39m, timestamp: [32m'2025-12-20T20:57:04.874Z'[39m }
+
+stderr | src/__tests__/useAppStore.test.ts > useAppStore > Sync Functionality > should set syncStatus to error on failed sync
+Sync failed: { success: false, message: 'Sync failed' }
+
+stderr | src/__tests__/useAppStore.test.ts > useAppStore > Sync Functionality > should handle sync exception
+Sync error: {
+  error: Error: Network error
+      at D:/Proyectos/ApunTiti/src/__tests__/useAppStore.test.ts:484:34
+      at file:///D:/Proyectos/ApunTiti/node_modules/@vitest/runner/dist/index.js:915:20,
+  message: 'Network error',
+  stack: 'Error: Network error\n' +
+    '    at D:/Proyectos/ApunTiti/src/__tests__/useAppStore.test.ts:484:34\n' +
+    '    at file:///D:/Proyectos/ApunTiti/node_modules/@vitest/runner/dist/index.js:915:20'
+}
+
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould reset syncStatus to idle after timeout
+[22m[39mSync completed successfully: { shiftsCount: [33m0[39m, timestamp: [32m'2025-12-20T20:57:04.924Z'[39m }
+
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould call sync with current state data
+[22m[39mSync completed successfully: { shiftsCount: [33m1[39m, timestamp: [32m'2025-12-20T20:57:04.942Z'[39m }
+
+ [32mÔ£ô[39m src/__tests__/useAppStore.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 191[2mms[22m[39m
+ [32mÔ£ô[39m src/components/UI.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [31mÔØ»[39m src/__tests__/CalendarView.test.tsx [2m([22m[2m29 tests[22m[2m | [22m[31m9 failed[39m[2m)[22m[33m 1113[2mms[22m[39m
+       [32mÔ£ô[39m should render calendar view[32m 156[2mms[22m[39m
+       [32mÔ£ô[39m should render view mode selector[32m 187[2mms[22m[39m
+[31m       [31m├ù[31m should render current month and year[39m[32m 51[2mms[22m[39m
+       [32mÔ£ô[39m should have year view option[32m 28[2mms[22m[39m
+       [32mÔ£ô[39m should have month view option[32m 24[2mms[22m[39m
+       [32mÔ£ô[39m should have week view option[32m 24[2mms[22m[39m
+       [32mÔ£ô[39m should have day view option[32m 22[2mms[22m[39m
+       [32mÔ£ô[39m should display total hours for the month[32m 22[2mms[22m[39m
+[31m       [31m├ù[31m should display total earnings[39m[32m 36[2mms[22m[39m
+       [32mÔ£ô[39m should display shift count[32m 20[2mms[22m[39m
+       [32mÔ£ô[39m should render previous month button[32m 65[2mms[22m[39m
+       [32mÔ£ô[39m should render next month button[32m 59[2mms[22m[39m
+[31m       [31m├ù[31m should allow navigation between months[39m[32m 37[2mms[22m[39m
+       [32mÔ£ô[39m should display shifts for current month[32m 21[2mms[22m[39m
+       [32mÔ£ô[39m should group shifts by date[32m 23[2mms[22m[39m
+       [32mÔ£ô[39m should display weekday headers[32m 19[2mms[22m[39m
+       [32mÔ£ô[39m should display days of the month[32m 24[2mms[22m[39m
+       [32mÔ£ô[39m should calculate duration correctly[32m 22[2mms[22m[39m
+[31m       [31m├ù[31m should calculate earnings correctly[39m[32m 28[2mms[22m[39m
+[31m       [31m├ù[31m should handle shifts without price[39m[32m 1[2mms[22m[39m
+       [32mÔ£ô[39m should have export button[32m 50[2mms[22m[39m
+[31m       [31m├ù[31m should handle month with no shifts[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should handle overnight shifts[39m[32m 0[2mms[22m[39m
+[31m       [31m├ù[31m should display correct data for leap year[39m[32m 0[2mms[22m[39m
+       [32mÔ£ô[39m should render without errors on small screens[32m 34[2mms[22m[39m
+       [32mÔ£ô[39m should render without errors on large screens[32m 31[2mms[22m[39m
+[31m       [31m├ù[31m should handle large number of shifts[39m[32m 1[2mms[22m[39m
+       [32mÔ£ô[39m should have proper structure for screen readers[32m 64[2mms[22m[39m
+       [32mÔ£ô[39m should have navigation buttons accessible[32m 60[2mms[22m[39m
+ [31mÔØ»[39m src/__tests__/ClockView.test.tsx [2m([22m[2m19 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1256[2mms[22m[39m
+       [32mÔ£ô[39m should render registration form with all fields[32m 88[2mms[22m[39m
+       [32mÔ£ô[39m should render save button[32m 171[2mms[22m[39m
+[31m       [31m├ù[31m should render all categories from settings[39m[32m 32[2mms[22m[39m
+       [32mÔ£ô[39m should render all hour types from settings[32m 25[2mms[22m[39m
+       [32mÔ£ô[39m should render monthly summary section[32m 17[2mms[22m[39m
+       [32mÔ£ô[39m should allow user to input date[32m 277[2mms[22m[39m
+       [32mÔ£ô[39m should allow user to select category[32m 92[2mms[22m[39m
+       [33m[2mÔ£ô[22m[39m should allow user to input notes [33m 338[2mms[22m[39m
+       [32mÔ£ô[39m should display total hours for current month[32m 11[2mms[22m[39m
+       [32mÔ£ô[39m should display total earnings for current month[32m 12[2mms[22m[39m
+       [32mÔ£ô[39m should display shift count[32m 12[2mms[22m[39m
+[31m       [31m├ù[31m should display category breakdown[39m[32m 16[2mms[22m[39m
+       [32mÔ£ô[39m should render month navigation buttons[32m 53[2mms[22m[39m
+       [32mÔ£ô[39m should display current month name[32m 13[2mms[22m[39m
+       [32mÔ£ô[39m should display year[32m 13[2mms[22m[39m
+       [32mÔ£ô[39m should calculate duration correctly for normal shifts[32m 11[2mms[22m[39m
+       [32mÔ£ô[39m should calculate earnings correctly[32m 12[2mms[22m[39m
+       [32mÔ£ô[39m should have labels for all inputs[32m 16[2mms[22m[39m
+       [32mÔ£ô[39m should have accessible save button[32m 44[2mms[22m[39m
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Suites 2 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  tests/e2e/basic.spec.ts [ tests/e2e/basic.spec.ts ]
+Error: Playwright Test did not expect test() to be called here.
+Most common reasons include:
+- You are calling test() in a configuration file.
+- You are calling test() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ÔØ» TestTypeImpl._currentSuite node_modules/playwright/lib/common/testType.js:75:13
+ ÔØ» TestTypeImpl._createTest node_modules/playwright/lib/common/testType.js:88:24
+ ÔØ» node_modules/playwright/lib/transform/transform.js:275:12
+ ÔØ» tests/e2e/basic.spec.ts:3:1
+      1| import { test, expect } from "@playwright/test";
+      2| 
+      3| test("has title", async ({ page }) => {
+       | ^
+      4|   await page.goto("/");
+      5| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/13]ÔÄ»
+
+ FAIL  tests/e2e/flow.spec.ts [ tests/e2e/flow.spec.ts ]
+Error: Playwright Test did not expect test() to be called here.
+Most common reasons include:
+- You are calling test() in a configuration file.
+- You are calling test() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ÔØ» TestTypeImpl._currentSuite node_modules/playwright/lib/common/testType.js:75:13
+ ÔØ» TestTypeImpl._createTest node_modules/playwright/lib/common/testType.js:88:24
+ ÔØ» node_modules/playwright/lib/transform/transform.js:275:12
+ ÔØ» tests/e2e/flow.spec.ts:3:1
+      1| import { test, expect } from "@playwright/test";
+      2| 
+      3| test("add shift and verify in calendar", async ({ page }) => {
+       | ^
+      4|   await page.goto("/");
+      5| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/13]ÔÄ»
+
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Tests 11 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Component Rendering > should render current month and year
+TestingLibraryElementError: Found multiple elements with the text: /diciembre/i
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xs font-black text-center text-gray-900 dark:text-white uppercase tracking-wide"
+>
+  Diciembre 2025
+</h2>
+
+Ignored nodes: comments, script, style
+<div
+  class="text-[9px] font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wide mb-1"
+>
+  Total Diciembre
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+      id="calendar-container"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 print:hidden bg-white dark:bg-[#111]"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between gap-2 py-1"
+        >
+          <div
+            class="flex grow items-center gap-1 min-w-0"
+          >
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              A├▒o
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Mes
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Sem
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              D├¡a
+            </button>
+          </div>
+          <div
+            class="flex grow items-center min-w-0 justify-end gap-1 "
+          >
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="hidden print:block mb-4 border-b pb-2"
+      >
+        <h1
+          class="text-xl font-bold"
+        >
+          Reporte de Turnos
+        </h1>
+        <p
+          class="text-sm text-gray-500"
+        >
+          Generado el 
+          20/12/2025
+        </p>
+      </div>
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 min-h-[300px] print:shadow-none print:border-none print:p-0"
+        id="printable-area"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <button
+            class="relative h-8 px-4 rounded flex items-center justify-center font-bold uppercase tracking-wider text-[10px] transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-[#222] hover:bg-gray-50 dark:hover:bg-[#333] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm active:translate-y-0.5 !px-2 !w-8 h-7"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-4 h-4 w-4 h-4 text-gray-700 dark:text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h2
+            class="text-xs font-black text-center text-gray-900 ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/CalendarView.test.tsx:97:21
+     95| 
+     96|       // Deber├¡a mostrar el mes actual
+     97|       expect(screen.getByText(/diciembre/i)).toBeInTheDocument();
+       |                     ^
+     98|       expect(screen.getByText(/2025/)).toBeInTheDocument();
+     99|     });
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[3/13]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Monthly Statistics > should display total earnings
+TestingLibraryElementError: Found multiple elements with the text: /180/
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<span
+  class="text-xs font-bold text-green-600 dark:text-green-400"
+>
+  180.00
+  Ôé¼
+</span>
+
+Ignored nodes: comments, script, style
+<div
+  class="text-xs font-bold text-green-600 dark:text-green-400"
+>
+  180.00
+  Ôé¼
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+      id="calendar-container"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 print:hidden bg-white dark:bg-[#111]"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between gap-2 py-1"
+        >
+          <div
+            class="flex grow items-center gap-1 min-w-0"
+          >
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              A├▒o
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Mes
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Sem
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              D├¡a
+            </button>
+          </div>
+          <div
+            class="flex grow items-center min-w-0 justify-end gap-1 "
+          >
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="hidden print:block mb-4 border-b pb-2"
+      >
+        <h1
+          class="text-xl font-bold"
+        >
+          Reporte de Turnos
+        </h1>
+        <p
+          class="text-sm text-gray-500"
+        >
+          Generado el 
+          20/12/2025
+        </p>
+      </div>
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 min-h-[300px] print:shadow-none print:border-none print:p-0"
+        id="printable-area"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <button
+            class="relative h-8 px-4 rounded flex items-center justify-center font-bold uppercase tracking-wider text-[10px] transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-[#222] hover:bg-gray-50 dark:hover:bg-[#333] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm active:translate-y-0.5 !px-2 !w-8 h-7"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-4 h-4 w-4 h-4 text-gray-700 dark:text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h2
+            class="text-xs font-black text-center text-gray-900 ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/CalendarView.test.tsx:145:32
+    143|       // (8h * 10Ôé¼) + (4h * 15Ôé¼) + (4h * 10Ôé¼) = 180Ôé¼
+    144|       // May be in "Total Diciembre" card
+    145|       const totalText = screen.queryByText(/180/);
+       |                                ^
+    146|       expect(totalText).toBeTruthy();
+    147|     });
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[4/13]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Navigation > should allow navigation between months
+TestingLibraryElementError: Found multiple elements with the text: /diciembre/i
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xs font-black text-center text-gray-900 dark:text-white uppercase tracking-wide"
+>
+  Diciembre 2025
+</h2>
+
+Ignored nodes: comments, script, style
+<div
+  class="text-[9px] font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wide mb-1"
+>
+  Total Diciembre
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+      id="calendar-container"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 print:hidden bg-white dark:bg-[#111]"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between gap-2 py-1"
+        >
+          <div
+            class="flex grow items-center gap-1 min-w-0"
+          >
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              A├▒o
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Mes
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Sem
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              D├¡a
+            </button>
+          </div>
+          <div
+            class="flex grow items-center min-w-0 justify-end gap-1 "
+          >
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="hidden print:block mb-4 border-b pb-2"
+      >
+        <h1
+          class="text-xl font-bold"
+        >
+          Reporte de Turnos
+        </h1>
+        <p
+          class="text-sm text-gray-500"
+        >
+          Generado el 
+          20/12/2025
+        </p>
+      </div>
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 min-h-[300px] print:shadow-none print:border-none print:p-0"
+        id="printable-area"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <button
+            class="relative h-8 px-4 rounded flex items-center justify-center font-bold uppercase tracking-wider text-[10px] transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-[#222] hover:bg-gray-50 dark:hover:bg-[#333] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm active:translate-y-0.5 !px-2 !w-8 h-7"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-4 h-4 w-4 h-4 text-gray-700 dark:text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h2
+            class="text-xs font-black text-center text-gray-900 ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/CalendarView.test.tsx:178:35
+    176|       render(<CalendarView />);
+    177| 
+    178|       const currentMonth = screen.getByText(/diciembre/i);
+       |                                   ^
+    179|       expect(currentMonth).toBeInTheDocument();
+    180| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[5/13]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Calculations > should calculate earnings correctly
+TestingLibraryElementError: Found multiple elements with the text: /180/
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<span
+  class="text-xs font-bold text-green-600 dark:text-green-400"
+>
+  180.00
+  Ôé¼
+</span>
+
+Ignored nodes: comments, script, style
+<div
+  class="text-xs font-bold text-green-600 dark:text-green-400"
+>
+  180.00
+  Ôé¼
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+      id="calendar-container"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 print:hidden bg-white dark:bg-[#111]"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between gap-2 py-1"
+        >
+          <div
+            class="flex grow items-center gap-1 min-w-0"
+          >
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              A├▒o
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Mes
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Sem
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              D├¡a
+            </button>
+          </div>
+          <div
+            class="flex grow items-center min-w-0 justify-end gap-1 "
+          >
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="hidden print:block mb-4 border-b pb-2"
+      >
+        <h1
+          class="text-xl font-bold"
+        >
+          Reporte de Turnos
+        </h1>
+        <p
+          class="text-sm text-gray-500"
+        >
+          Generado el 
+          20/12/2025
+        </p>
+      </div>
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 min-h-[300px] print:shadow-none print:border-none print:p-0"
+        id="printable-area"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <button
+            class="relative h-8 px-4 rounded flex items-center justify-center font-bold uppercase tracking-wider text-[10px] transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-[#222] hover:bg-gray-50 dark:hover:bg-[#333] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm active:translate-y-0.5 !px-2 !w-8 h-7"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-4 h-4 w-4 h-4 text-gray-700 dark:text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h2
+            class="text-xs font-black text-center text-gray-900 ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/CalendarView.test.tsx:240:35
+    238|       // (8 * 10) + (4 * 15) + (4 * 10) = 180Ôé¼
+    239|       // Should appear in summary card
+    240|       const earningsText = screen.queryByText(/180/);
+       |                                   ^
+    241|       expect(earningsText).toBeTruthy();
+    242|     });
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[6/13]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Calculations > should handle shifts without price
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:257:30
+    255|       ];
+    256| 
+    257|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    258|         const state = {
+    259|           shifts: shiftsWithoutPrice,
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[7/13]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Edge Cases > should handle month with no shifts
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:295:30
+    293|   describe("Edge Cases", () => {
+    294|     it("should handle month with no shifts", () => {
+    295|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    296|         const state = {
+    297|           shifts: [],
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[8/13]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Edge Cases > should handle overnight shifts
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:326:30
+    324|       ];
+    325| 
+    326|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    327|         const state = {
+    328|           shifts: overnightShifts,
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[9/13]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Edge Cases > should display correct data for leap year
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:355:30
+    353|       ];
+    354| 
+    355|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    356|         const state = {
+    357|           shifts: leapYearShifts,
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[10/13]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Performance > should handle large number of shifts
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:422:30
+    420|       }));
+    421| 
+    422|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    423|         const state = {
+    424|           shifts: manyShifts,
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[11/13]ÔÄ»
+
+ FAIL  src/__tests__/ClockView.test.tsx > ClockView > Component Rendering > should render all categories from settings
+TestingLibraryElementError: Found multiple elements with the text: Programado
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<option
+  value="Programado"
+>
+  Programado
+</option>
+
+Ignored nodes: comments, script, style
+<span
+  class="text-gray-900 dark:text-gray-200"
+>
+  Programado
+</span>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 border-t-2 border-t-yellow-500"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-2"
+        >
+          <h2
+            class="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest leading-none"
+          >
+            Registrar
+             
+            <span
+              class="text-yellow-600 dark:text-yellow-500"
+            >
+              Turno
+            </span>
+          </h2>
+        </div>
+        <div
+          class="grid grid-cols-2 gap-2"
+        >
+          <div
+            class="col-span-1"
+          >
+            <div
+              class="w-full group"
+            >
+              <label
+                class="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider group-focus-within:text-yellow-600 dark:group-focus-within:text-yellow-500 transition-colors"
+                for="_r_c_"
+              >
+                Fecha
+              </label>
+              <input
+                class="w-full px-2 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer dark:[&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+                id="_r_c_"
+                type="date"
+                value="2025-12-20"
+              />
+            </div>
+          </div>
+          <div
+            class="col-span-1"
+          >
+            <div
+              class="w-full group"
+            >
+              <label
+                class="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider group-focus-within:text-yellow-600 dark:group-focus-within:text-yellow-500 transition-colors"
+                for="_r_d_"
+              >
+                Categor├¡a
+              </label>
+              <div
+                class="relative"
+              >
+                <select
+                  class="w-full pl-2 pr-6 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all appearance-none cursor-pointer "
+                  id="_r_d_"
+                >
+                  <option
+                    value="Programado"
+                  >
+                    Programado
+                  </option>
+                  <option
+                    value="DRP"
+                  >
+                    DRP
+                  </option>
+                  <option
+                    value="Traslado"
+                  >
+                    Traslado
+                  </option>
+                  <option
+                    value="Guardia"
+                  >
+                    Guardia
+                  </option>
+                </select>
+                <div
+                  aria-hidden="true"
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400"
+                >
+                  <svg
+                    class="fill-current h-3 w-3"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              class="w-full group"
+            >
+              <label
+                class="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider group-focus-within:text-yellow-600 dark:group-focus-within:text-yellow-500 transition-colors"
+                for="_r_e_"
+              >
+                Tipo de Hora
+              </label>
+              <div
+                class="relative"
+              >
+                <select
+                  class="w-full pl-2 pr-6 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all appearance-none cursor-pointer "
+                  id="_r_e_"
+                >
+                  <option
+                    value=""
+                  >
+                    Sin tipo
+                  </option>
+                  <option
+                    value="1"
+                  >
+                    Normal
+                     (
+                    10
+                    Ôé¼)
+                  </option>
+                  <option
+                    value="2"
+                  ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/ClockView.test.tsx:91:23
+     89| 
+     90|       defaultSettings.categories.forEach((category) => {
+     91|         expect(screen.getByText(category)).toBeInTheDocument();
+       |                       ^
+     92|       });
+     93|     });
+ ÔØ» src/__tests__/ClockView.test.tsx:90:34
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[12/13]ÔÄ»
+
+ FAIL  src/__tests__/ClockView.test.tsx > ClockView > Monthly Summary > should display category breakdown
+TestingLibraryElementError: Found multiple elements with the text: Programado
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<option
+  value="Programado"
+>
+  Programado
+</option>
+
+Ignored nodes: comments, script, style
+<span
+  class="text-gray-900 dark:text-gray-200"
+>
+  Programado
+</span>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 border-t-2 border-t-yellow-500"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-2"
+        >
+          <h2
+            class="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest leading-none"
+          >
+            Registrar
+             
+            <span
+              class="text-yellow-600 dark:text-yellow-500"
+            >
+              Turno
+            </span>
+          </h2>
+        </div>
+        <div
+          class="grid grid-cols-2 gap-2"
+        >
+          <div
+            class="col-span-1"
+          >
+            <div
+              class="w-full group"
+            >
+              <label
+                class="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider group-focus-within:text-yellow-600 dark:group-focus-within:text-yellow-500 transition-colors"
+                for="_r_22_"
+              >
+                Fecha
+              </label>
+              <input
+                class="w-full px-2 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:cursor-pointer dark:[&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+                id="_r_22_"
+                type="date"
+                value="2025-12-20"
+              />
+            </div>
+          </div>
+          <div
+            class="col-span-1"
+          >
+            <div
+              class="w-full group"
+            >
+              <label
+                class="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider group-focus-within:text-yellow-600 dark:group-focus-within:text-yellow-500 transition-colors"
+                for="_r_23_"
+              >
+                Categor├¡a
+              </label>
+              <div
+                class="relative"
+              >
+                <select
+                  class="w-full pl-2 pr-6 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all appearance-none cursor-pointer "
+                  id="_r_23_"
+                >
+                  <option
+                    value="Programado"
+                  >
+                    Programado
+                  </option>
+                  <option
+                    value="DRP"
+                  >
+                    DRP
+                  </option>
+                  <option
+                    value="Traslado"
+                  >
+                    Traslado
+                  </option>
+                  <option
+                    value="Guardia"
+                  >
+                    Guardia
+                  </option>
+                </select>
+                <div
+                  aria-hidden="true"
+                  class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400"
+                >
+                  <svg
+                    class="fill-current h-3 w-3"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div
+              class="w-full group"
+            >
+              <label
+                class="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-0.5 uppercase tracking-wider group-focus-within:text-yellow-600 dark:group-focus-within:text-yellow-500 transition-colors"
+                for="_r_24_"
+              >
+                Tipo de Hora
+              </label>
+              <div
+                class="relative"
+              >
+                <select
+                  class="w-full pl-2 pr-6 h-8 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 text-gray-900 dark:text-gray-100 text-xs font-medium transition-all appearance-none cursor-pointer "
+                  id="_r_24_"
+                >
+                  <option
+                    value=""
+                  >
+                    Sin tipo
+                  </option>
+                  <option
+                    value="1"
+                  >
+                    Normal
+                     (
+                    10
+                    Ôé¼)
+                  </option>
+                  <option
+                    value="2"
+             ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/ClockView.test.tsx:179:21
+    177|       render(<ClockView />);
+    178| 
+    179|       expect(screen.getByText("Programado")).toBeInTheDocument();
+       |                     ^
+    180|       expect(screen.getByText("DRP")).toBeInTheDocument();
+    181|     });
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[13/13]ÔÄ»
+
+
+[2m Test Files [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[31m11 failed[39m[22m[2m | [22m[1m[32m83 passed[39m[22m[90m (94)[39m
+[2m   Start at [22m 21:57:02
+[2m   Duration [22m 5.19s[2m (transform 961ms, setup 1.37s, import 4.24s, tests 2.66s, environment 10.71s)[22m
+

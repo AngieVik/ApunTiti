@@ -10,6 +10,7 @@ export interface CalendarYearViewProps {
   shifts: Shift[];
   hourTypes: HourType[];
   onMonthClick: (month: number) => void;
+  workedMonthsInRange?: number[]; // Optional - only months with worked days in range
 }
 
 export const CalendarYearView: React.FC<CalendarYearViewProps> = ({
@@ -18,6 +19,7 @@ export const CalendarYearView: React.FC<CalendarYearViewProps> = ({
   shifts,
   hourTypes,
   onMonthClick,
+  workedMonthsInRange,
 }) => {
   const statsByMonth = useMemo(() => {
     const stats = Array.from({ length: 12 }, () => ({ hours: 0, money: 0 }));
@@ -38,26 +40,34 @@ export const CalendarYearView: React.FC<CalendarYearViewProps> = ({
     return stats;
   }, [year, shifts, hourTypes]);
 
+  // Filter to show only worked months if in range mode
+  const monthsToDisplay =
+    workedMonthsInRange && workedMonthsInRange.length > 0
+      ? workedMonthsInRange
+      : Array.from({ length: 12 }, (_, i) => i);
+
   return (
     <div className={APP_STYLES.CALENDARIO.yearGrid}>
-      {MONTH_NAMES_ES.map((mName, idx) => (
+      {monthsToDisplay.map((monthIdx) => (
         <div
-          key={idx}
-          onClick={() => onMonthClick(idx)}
+          key={monthIdx}
+          onClick={() => onMonthClick(monthIdx)}
           className={`${APP_STYLES.CALENDARIO.yearMonthCard} ${
-            idx === currentMonth
+            monthIdx === currentMonth
               ? APP_STYLES.CALENDARIO.yearMonthCardActive
               : APP_STYLES.CALENDARIO.yearMonthCardInactive
           }`}
         >
-          <h3 className={APP_STYLES.CALENDARIO.yearMonthTitle}>{mName}</h3>
+          <h3 className={APP_STYLES.CALENDARIO.yearMonthTitle}>
+            {MONTH_NAMES_ES[monthIdx]}
+          </h3>
           <div className={APP_STYLES.CALENDARIO.yearMonthStats}>
             <p className={APP_STYLES.CALENDARIO.yearMonthHours}>
-              {statsByMonth[idx].hours.toFixed(0)}h
+              {statsByMonth[monthIdx].hours.toFixed(0)}h
             </p>
-            {statsByMonth[idx].money > 0 && (
+            {statsByMonth[monthIdx].money > 0 && (
               <p className={APP_STYLES.CALENDARIO.yearMonthMoney}>
-                {statsByMonth[idx].money.toFixed(0)}€
+                {statsByMonth[monthIdx].money.toFixed(0)}€
               </p>
             )}
           </div>

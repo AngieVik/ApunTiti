@@ -13,7 +13,8 @@ import {
   CalendarMonthView,
   CalendarWeekView,
   CalendarDayView,
-  CalendarRangeView,
+  SummaryCard,
+  FilterDropdown,
 } from "./calendar";
 
 // --- HELPER FUNCTIONS ---
@@ -57,6 +58,10 @@ export const CalendarView: React.FC = () => {
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
 
+  // Filter state
+  const [filterCategory, setFilterCategory] = useState<string>("");
+  const [filterHourType, setFilterHourType] = useState<string>("");
+
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [shiftToDelete, setShiftToDelete] = useState<string | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -71,6 +76,66 @@ export const CalendarView: React.FC = () => {
       return acc;
     }, {} as Record<string, Shift[]>);
   }, [shifts]);
+
+  // Get worked dates in range (sorted most recent first)
+  const workedDatesInRange = useMemo(() => {
+    if (!rangeStart || !rangeEnd) return [];
+
+    const start = new Date(rangeStart);
+    const end = new Date(rangeEnd);
+    const worked: Date[] = [];
+
+    Object.keys(shiftsByDate).forEach((dateStr) => {
+      const date = new Date(dateStr);
+      if (date >= start && date <= end) {
+        // Apply filters
+        const dayShifts = shiftsByDate[dateStr];
+        const hasMatchingShift = dayShifts.some((shift) => {
+          const categoryMatch =
+            !filterCategory || shift.category === filterCategory;
+          const hourTypeMatch =
+            !filterHourType || shift.hourTypeId === filterHourType;
+          return categoryMatch && hourTypeMatch;
+        });
+
+        if (hasMatchingShift) {
+          worked.push(date);
+        }
+      }
+    });
+
+    return worked.sort((a, b) => b.getTime() - a.getTime());
+  }, [rangeStart, rangeEnd, shiftsByDate, filterCategory, filterHourType]);
+
+  // Get unique worked months in range
+  const workedMonthsInRange = useMemo(() => {
+    const monthsSet = new Set<number>();
+    workedDatesInRange.forEach((date) => {
+      if (date.getFullYear() === year) {
+        monthsSet.add(date.getMonth());
+      }
+    });
+    return Array.from(monthsSet).sort((a, b) => a - b);
+  }, [workedDatesInRange, year]);
+
+  // Get unique worked weeks in range
+  const workedWeeksInRange = useMemo(() => {
+    const weeksMap = new Map<string, Date>();
+    workedDatesInRange.forEach((date) => {
+      const startOfWeek = new Date(date);
+      const day = startOfWeek.getDay();
+      const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
+      startOfWeek.setDate(diff);
+      startOfWeek.setHours(0, 0, 0, 0);
+      const key = toLocalISOString(startOfWeek);
+      if (!weeksMap.has(key)) {
+        weeksMap.set(key, new Date(startOfWeek));
+      }
+    });
+    return Array.from(weeksMap.values()).sort(
+      (a, b) => b.getTime() - a.getTime()
+    );
+  }, [workedDatesInRange]);
 
   // --- RANGE VIEW CALCULATIONS (moved out of renderRangeView to fix hooks error) ---
   const rangeDays = useMemo(() => {
@@ -111,29 +176,218 @@ export const CalendarView: React.FC = () => {
     return { totalRangeHours, totalRangeMoney };
   }, [rangeDays, shiftsByDate, hourTypes]);
 
+  // Calculate current view totals (with filters applied)
+  const currentViewTotals = useMemo(() => {
+    let totalHours = 0;
+    let totalMoney = 0;
+    let scopeName = "";
+
+    // Apply filters to shifts
+    const filteredShifts = shifts.filter((s) => {
+      const categoryMatch = !filterCategory || s.category === filterCategory;
+      const hourTypeMatch = !filterHourType || s.hourTypeId === filterHourType;
+      return categoryMatch && hourTypeMatch;
+    });
+
+    if (viewType === "year") {
+      scopeName = `Total ${year}`;
+      filteredShifts.forEach((s) => {
+        const d = new Date(s.date);
+        if (d.getFullYear() === year) {
+          const duration = calculateDuration(s.startTime, s.endTime);
+          totalHours += duration;
+          if (s.hourTypeId) {
+            const hType = hourTypes.find((h) => h.id === s.hourTypeId);
+            const price = hType ? hType.price : 0;
+            totalMoney += duration * price;
+          }
+        }
+      });
+    } else if (viewType === "month") {
+      scopeName = `Total ${MONTH_NAMES_ES[month]}`;
+      filteredShifts.forEach((s) => {
+        const d = new Date(s.date);
+        if (d.getFullYear() === year && d.getMonth() === month) {
+          const duration = calculateDuration(s.startTime, s.endTime);
+          totalHours += duration;
+          if (s.hourTypeId) {
+            const hType = hourTypes.find((h) => h.id === s.hourTypeId);
+            const price = hType ? hType.price : 0;
+            totalMoney += duration * price;
+          }
+        }
+      });
+    } else if (viewType === "week") {
+      scopeName = "Total Semana";
+      const startOfWeek = new Date(currentDate);
+      const day = startOfWeek.getDay();
+      const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
+      startOfWeek.setDate(diff);
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(endOfWeek.getDate() + 6);
+
+      filteredShifts.forEach((s) => {
+        const d = new Date(s.date);
+        if (d >= startOfWeek && d <= endOfWeek) {
+          const duration = calculateDuration(s.startTime, s.endTime);
+          totalHours += duration;
+          if (s.hourTypeId) {
+            const hType = hourTypes.find((h) => h.id === s.hourTypeId);
+            const price = hType ? hType.price : 0;
+            totalMoney += duration * price;
+          }
+        }
+      });
+    } else if (viewType === "day") {
+      scopeName = "Total Día";
+      const dateStr = toLocalISOString(currentDate);
+      const dayShifts = filteredShifts.filter((s) => s.date === dateStr);
+      dayShifts.forEach((s) => {
+        const duration = calculateDuration(s.startTime, s.endTime);
+        totalHours += duration;
+        if (s.hourTypeId) {
+          const hType = hourTypes.find((h) => h.id === s.hourTypeId);
+          const price = hType ? hType.price : 0;
+          totalMoney += duration * price;
+        }
+      });
+    }
+
+    return { totalHours, totalMoney, scopeName };
+  }, [
+    viewType,
+    year,
+    month,
+    currentDate,
+    shifts,
+    hourTypes,
+    filterCategory,
+    filterHourType,
+  ]);
+
   const handleViewChange = useCallback((type: CalendarViewType) => {
     setViewType(type);
+    // No borrar rango al cambiar vista
+  }, []);
+
+  const handleClearRange = useCallback(() => {
     setRangeStart("");
     setRangeEnd("");
+    setFilterCategory("");
+    setFilterHourType("");
   }, []);
 
   const handlePrev = useCallback(() => {
     const newDate = new Date(currentDate);
-    if (viewType === "year") newDate.setFullYear(year - 1);
-    if (viewType === "month") newDate.setMonth(month - 1);
-    if (viewType === "week") newDate.setDate(newDate.getDate() - 7);
-    if (viewType === "day") newDate.setDate(newDate.getDate() - 1);
+
+    // If range is active, navigate only through worked dates
+    if (rangeStart && rangeEnd) {
+      if (viewType === "year") {
+        newDate.setFullYear(year - 1);
+      } else if (viewType === "month") {
+        // Navigate to previous worked month
+        const currentMonthIndex = workedMonthsInRange.indexOf(month);
+        if (currentMonthIndex > 0) {
+          const prevMonth = workedMonthsInRange[currentMonthIndex - 1];
+          newDate.setMonth(prevMonth);
+        }
+      } else if (viewType === "week") {
+        // Navigate to previous worked week
+        const currentWeekStr = toLocalISOString(currentDate);
+        const currentWeekIndex = workedWeeksInRange.findIndex(
+          (w) => toLocalISOString(w) === currentWeekStr
+        );
+        if (currentWeekIndex < workedWeeksInRange.length - 1) {
+          setCurrentDate(new Date(workedWeeksInRange[currentWeekIndex + 1]));
+          return;
+        }
+      } else if (viewType === "day") {
+        // Navigate to previous worked day
+        const currentDateStr = toLocalISOString(currentDate);
+        const currentDayIndex = workedDatesInRange.findIndex(
+          (d) => toLocalISOString(d) === currentDateStr
+        );
+        if (currentDayIndex < workedDatesInRange.length - 1) {
+          setCurrentDate(new Date(workedDatesInRange[currentDayIndex + 1]));
+          return;
+        }
+      }
+    } else {
+      // Normal navigation without range
+      if (viewType === "year") newDate.setFullYear(year - 1);
+      if (viewType === "month") newDate.setMonth(month - 1);
+      if (viewType === "week") newDate.setDate(newDate.getDate() - 7);
+      if (viewType === "day") newDate.setDate(newDate.getDate() - 1);
+    }
+
     setCurrentDate(newDate);
-  }, [currentDate, viewType]);
+  }, [
+    currentDate,
+    viewType,
+    rangeStart,
+    rangeEnd,
+    workedMonthsInRange,
+    workedWeeksInRange,
+    workedDatesInRange,
+    year,
+    month,
+  ]);
 
   const handleNext = useCallback(() => {
     const newDate = new Date(currentDate);
-    if (viewType === "year") newDate.setFullYear(year + 1);
-    if (viewType === "month") newDate.setMonth(month + 1);
-    if (viewType === "week") newDate.setDate(newDate.getDate() + 7);
-    if (viewType === "day") newDate.setDate(newDate.getDate() + 1);
+
+    // If range is active, navigate only through worked dates
+    if (rangeStart && rangeEnd) {
+      if (viewType === "year") {
+        newDate.setFullYear(year + 1);
+      } else if (viewType === "month") {
+        // Navigate to next worked month
+        const currentMonthIndex = workedMonthsInRange.indexOf(month);
+        if (currentMonthIndex < workedMonthsInRange.length - 1) {
+          const nextMonth = workedMonthsInRange[currentMonthIndex + 1];
+          newDate.setMonth(nextMonth);
+        }
+      } else if (viewType === "week") {
+        // Navigate to next worked week
+        const currentWeekStr = toLocalISOString(currentDate);
+        const currentWeekIndex = workedWeeksInRange.findIndex(
+          (w) => toLocalISOString(w) === currentWeekStr
+        );
+        if (currentWeekIndex > 0) {
+          setCurrentDate(new Date(workedWeeksInRange[currentWeekIndex - 1]));
+          return;
+        }
+      } else if (viewType === "day") {
+        // Navigate to next worked day
+        const currentDateStr = toLocalISOString(currentDate);
+        const currentDayIndex = workedDatesInRange.findIndex(
+          (d) => toLocalISOString(d) === currentDateStr
+        );
+        if (currentDayIndex > 0) {
+          setCurrentDate(new Date(workedDatesInRange[currentDayIndex - 1]));
+          return;
+        }
+      }
+    } else {
+      // Normal navigation without range
+      if (viewType === "year") newDate.setFullYear(year + 1);
+      if (viewType === "month") newDate.setMonth(month + 1);
+      if (viewType === "week") newDate.setDate(newDate.getDate() + 7);
+      if (viewType === "day") newDate.setDate(newDate.getDate() + 1);
+    }
+
     setCurrentDate(newDate);
-  }, [currentDate, viewType]);
+  }, [
+    currentDate,
+    viewType,
+    rangeStart,
+    rangeEnd,
+    workedMonthsInRange,
+    workedWeeksInRange,
+    workedDatesInRange,
+    year,
+    month,
+  ]);
 
   const handleDayClick = useCallback(
     (date: Date) => {
@@ -349,70 +603,119 @@ export const CalendarView: React.FC = () => {
           </div>
         ) : null}
 
-        {rangeStart && rangeEnd ? (
-          <CalendarRangeView
-            rangeStart={rangeStart}
-            rangeEnd={rangeEnd}
-            rangeDays={rangeDays}
+        {viewType === "year" && (
+          <CalendarYearView
+            year={year}
+            currentMonth={month}
+            shifts={shifts}
+            hourTypes={hourTypes}
+            workedMonthsInRange={
+              rangeStart && rangeEnd ? workedMonthsInRange : undefined
+            }
+            onMonthClick={(monthIndex: number) => {
+              setCurrentDate(new Date(year, monthIndex, 1));
+              handleViewChange("month");
+            }}
+          />
+        )}
+        {viewType === "month" && (
+          <CalendarMonthView
+            year={year}
+            month={month}
+            selectedDate={selectedDate}
             shiftsByDate={shiftsByDate}
-            totalRangeHours={rangeTotals.totalRangeHours}
-            totalRangeMoney={rangeTotals.totalRangeMoney}
+            hourTypes={hourTypes}
+            onDayClick={handleDayClick}
+            getDaysInMonth={getDaysInMonth}
+            getFirstDayOfMonth={getFirstDayOfMonth}
+          />
+        )}
+        {viewType === "week" && (
+          <CalendarWeekView
+            currentDate={currentDate}
+            shiftsByDate={shiftsByDate}
+            hourTypes={hourTypes}
             onDayClick={handleDayClick}
           />
-        ) : (
-          <>
-            {viewType === "year" && (
-              <CalendarYearView
-                year={year}
-                currentMonth={month}
-                shifts={shifts}
-                hourTypes={hourTypes}
-                onMonthClick={(monthIndex: number) => {
-                  setCurrentDate(new Date(year, monthIndex, 1));
-                  handleViewChange("month");
-                }}
-              />
-            )}
-            {viewType === "month" && (
-              <CalendarMonthView
-                year={year}
-                month={month}
-                selectedDate={selectedDate}
-                shiftsByDate={shiftsByDate}
-                hourTypes={hourTypes}
-                onDayClick={handleDayClick}
-                getDaysInMonth={getDaysInMonth}
-                getFirstDayOfMonth={getFirstDayOfMonth}
-              />
-            )}
-            {viewType === "week" && (
-              <CalendarWeekView
-                currentDate={currentDate}
-                shiftsByDate={shiftsByDate}
-                hourTypes={hourTypes}
-                onDayClick={handleDayClick}
-              />
-            )}
-            {viewType === "day" && (
-              <CalendarDayView
-                currentDate={currentDate}
-                shiftsByDate={shiftsByDate}
-                hourTypes={hourTypes}
-                onEdit={openEditModal}
-                onDelete={confirmDelete}
-              />
-            )}
-          </>
+        )}
+        {viewType === "day" && (
+          <CalendarDayView
+            currentDate={currentDate}
+            shiftsByDate={shiftsByDate}
+            hourTypes={hourTypes}
+            onEdit={openEditModal}
+            onDelete={confirmDelete}
+            rangeMode={!!(rangeStart && rangeEnd)}
+            workedDays={rangeStart && rangeEnd ? workedDatesInRange : []}
+            onDayClick={handleDayClick}
+          />
         )}
       </Card>
 
-      <div className={APP_STYLES.CALENDARIO.downloadContainer}>
-        <Button
-          onClick={handleSave}
-          className={APP_STYLES.CALENDARIO.downloadButton}
-        >
-          Descargar
-        </Button>
+      {/* CONTROLS BAR: Filters | Space | Summary Cards + Download */}
+      <div className={APP_STYLES.CALENDARIO.controlsBarContainer}>
+        {/* Left: Filters */}
+        <div className={APP_STYLES.CALENDARIO.controlsBarLeft}>
+          <FilterDropdown
+            label="Categoría"
+            value={filterCategory}
+            options={settings.categories.map((cat) => ({
+              value: cat,
+              label: cat,
+            }))}
+            onChange={setFilterCategory}
+          />
+          <FilterDropdown
+            label="Tipo de Hora"
+            value={filterHourType}
+            options={hourTypes.map((ht) => ({
+              value: ht.id,
+              label: `${ht.name} (${ht.price}€)`,
+            }))}
+            onChange={setFilterHourType}
+          />
+        </div>
+
+        {/* Center: Flexible space */}
+        <div className={APP_STYLES.CALENDARIO.controlsBarCenter} />
+
+        {/* Right: Summary Cards + Download */}
+        <div className={APP_STYLES.CALENDARIO.controlsBarRight}>
+          {/* Current view total */}
+          <SummaryCard
+            title={currentViewTotals.scopeName}
+            hours={currentViewTotals.totalHours}
+            earnings={currentViewTotals.totalMoney}
+          />
+
+          {/* Range total (if range is active) */}
+          {rangeStart && rangeEnd && (
+            <SummaryCard
+              title="Total Rango"
+              hours={rangeTotals.totalRangeHours}
+              earnings={rangeTotals.totalRangeMoney}
+            />
+          )}
+
+          {/* Clear range button (if range is active) */}
+          {rangeStart && rangeEnd && (
+            <Button
+              onClick={handleClearRange}
+              variant="secondary"
+              className={APP_STYLES.CALENDARIO.downloadButton}
+            >
+              Limpiar
+            </Button>
+          )}
+
+          {/* Download button */}
+          <Button
+            onClick={handleSave}
+            className={APP_STYLES.CALENDARIO.downloadButton}
+          >
+            Descargar
+          </Button>
+        </div>
       </div>
 
       <ConfirmDialog

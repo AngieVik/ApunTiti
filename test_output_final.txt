@@ -1,0 +1,721 @@
+
+> apuntiti@1.0.0 test
+> vitest run --run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90mD:/Proyectos/ApunTiti[39m
+
+ [32mÔ£ô[39m src/hooks/useLocalStorage.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould set syncStatus to success on successful sync
+[22m[39mSync completed successfully: { shiftsCount: [33m0[39m, timestamp: [32m'2025-12-20T21:00:47.889Z'[39m }
+
+stderr | src/__tests__/useAppStore.test.ts > useAppStore > Sync Functionality > should set syncStatus to error on failed sync
+Sync failed: { success: false, message: 'Sync failed' }
+
+stderr | src/__tests__/useAppStore.test.ts > useAppStore > Sync Functionality > should handle sync exception
+Sync error: {
+  error: Error: Network error
+      at D:/Proyectos/ApunTiti/src/__tests__/useAppStore.test.ts:484:34
+      at file:///D:/Proyectos/ApunTiti/node_modules/@vitest/runner/dist/index.js:915:20,
+  message: 'Network error',
+  stack: 'Error: Network error\n' +
+    '    at D:/Proyectos/ApunTiti/src/__tests__/useAppStore.test.ts:484:34\n' +
+    '    at file:///D:/Proyectos/ApunTiti/node_modules/@vitest/runner/dist/index.js:915:20'
+}
+
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould reset syncStatus to idle after timeout
+[22m[39mSync completed successfully: { shiftsCount: [33m0[39m, timestamp: [32m'2025-12-20T21:00:47.911Z'[39m }
+
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould call sync with current state data
+[22m[39mSync completed successfully: { shiftsCount: [33m1[39m, timestamp: [32m'2025-12-20T21:00:47.915Z'[39m }
+
+ [32mÔ£ô[39m src/__tests__/useAppStore.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32mÔ£ô[39m src/components/UI.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+ [31mÔØ»[39m src/__tests__/CalendarView.test.tsx [2m([22m[2m29 tests[22m[2m | [22m[31m9 failed[39m[2m)[22m[33m 1124[2mms[22m[39m
+       [32mÔ£ô[39m should render calendar view[32m 148[2mms[22m[39m
+       [32mÔ£ô[39m should render view mode selector[32m 184[2mms[22m[39m
+[31m       [31m├ù[31m should render current month and year[39m[32m 43[2mms[22m[39m
+       [32mÔ£ô[39m should have year view option[32m 27[2mms[22m[39m
+       [32mÔ£ô[39m should have month view option[32m 25[2mms[22m[39m
+       [32mÔ£ô[39m should have week view option[32m 23[2mms[22m[39m
+       [32mÔ£ô[39m should have day view option[32m 21[2mms[22m[39m
+       [32mÔ£ô[39m should display total hours for the month[32m 24[2mms[22m[39m
+[31m       [31m├ù[31m should display total earnings[39m[32m 38[2mms[22m[39m
+       [32mÔ£ô[39m should display shift count[32m 21[2mms[22m[39m
+       [32mÔ£ô[39m should render previous month button[32m 63[2mms[22m[39m
+       [32mÔ£ô[39m should render next month button[32m 61[2mms[22m[39m
+[31m       [31m├ù[31m should allow navigation between months[39m[32m 42[2mms[22m[39m
+       [32mÔ£ô[39m should display shifts for current month[32m 21[2mms[22m[39m
+       [32mÔ£ô[39m should group shifts by date[32m 21[2mms[22m[39m
+       [32mÔ£ô[39m should display weekday headers[32m 25[2mms[22m[39m
+       [32mÔ£ô[39m should display days of the month[32m 24[2mms[22m[39m
+       [32mÔ£ô[39m should calculate duration correctly[32m 26[2mms[22m[39m
+[31m       [31m├ù[31m should calculate earnings correctly[39m[32m 26[2mms[22m[39m
+[31m       [31m├ù[31m should handle shifts without price[39m[32m 1[2mms[22m[39m
+       [32mÔ£ô[39m should have export button[32m 55[2mms[22m[39m
+[31m       [31m├ù[31m should handle month with no shifts[39m[32m 0[2mms[22m[39m
+[31m       [31m├ù[31m should handle overnight shifts[39m[32m 0[2mms[22m[39m
+[31m       [31m├ù[31m should display correct data for leap year[39m[32m 0[2mms[22m[39m
+       [32mÔ£ô[39m should render without errors on small screens[32m 47[2mms[22m[39m
+       [32mÔ£ô[39m should render without errors on large screens[32m 24[2mms[22m[39m
+[31m       [31m├ù[31m should handle large number of shifts[39m[32m 1[2mms[22m[39m
+       [32mÔ£ô[39m should have proper structure for screen readers[32m 62[2mms[22m[39m
+       [32mÔ£ô[39m should have navigation buttons accessible[32m 67[2mms[22m[39m
+ [32mÔ£ô[39m src/__tests__/ClockView.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 1252[2mms[22m[39m
+       [33m[2mÔ£ô[22m[39m should allow user to input notes [33m 329[2mms[22m[39m
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Suites 2 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  tests/e2e/basic.spec.ts [ tests/e2e/basic.spec.ts ]
+Error: Playwright Test did not expect test() to be called here.
+Most common reasons include:
+- You are calling test() in a configuration file.
+- You are calling test() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ÔØ» TestTypeImpl._currentSuite node_modules/playwright/lib/common/testType.js:75:13
+ ÔØ» TestTypeImpl._createTest node_modules/playwright/lib/common/testType.js:88:24
+ ÔØ» node_modules/playwright/lib/transform/transform.js:275:12
+ ÔØ» tests/e2e/basic.spec.ts:3:1
+      1| import { test, expect } from "@playwright/test";
+      2| 
+      3| test("has title", async ({ page }) => {
+       | ^
+      4|   await page.goto("/");
+      5| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/11]ÔÄ»
+
+ FAIL  tests/e2e/flow.spec.ts [ tests/e2e/flow.spec.ts ]
+Error: Playwright Test did not expect test() to be called here.
+Most common reasons include:
+- You are calling test() in a configuration file.
+- You are calling test() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ÔØ» TestTypeImpl._currentSuite node_modules/playwright/lib/common/testType.js:75:13
+ ÔØ» TestTypeImpl._createTest node_modules/playwright/lib/common/testType.js:88:24
+ ÔØ» node_modules/playwright/lib/transform/transform.js:275:12
+ ÔØ» tests/e2e/flow.spec.ts:3:1
+      1| import { test, expect } from "@playwright/test";
+      2| 
+      3| test("add shift and verify in calendar", async ({ page }) => {
+       | ^
+      4|   await page.goto("/");
+      5| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/11]ÔÄ»
+
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Tests 9 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Component Rendering > should render current month and year
+TestingLibraryElementError: Found multiple elements with the text: /diciembre/i
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xs font-black text-center text-gray-900 dark:text-white uppercase tracking-wide"
+>
+  Diciembre 2025
+</h2>
+
+Ignored nodes: comments, script, style
+<div
+  class="text-[9px] font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wide mb-1"
+>
+  Total Diciembre
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+      id="calendar-container"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 print:hidden bg-white dark:bg-[#111]"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between gap-2 py-1"
+        >
+          <div
+            class="flex grow items-center gap-1 min-w-0"
+          >
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              A├▒o
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Mes
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Sem
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              D├¡a
+            </button>
+          </div>
+          <div
+            class="flex grow items-center min-w-0 justify-end gap-1 "
+          >
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="hidden print:block mb-4 border-b pb-2"
+      >
+        <h1
+          class="text-xl font-bold"
+        >
+          Reporte de Turnos
+        </h1>
+        <p
+          class="text-sm text-gray-500"
+        >
+          Generado el 
+          20/12/2025
+        </p>
+      </div>
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 min-h-[300px] print:shadow-none print:border-none print:p-0"
+        id="printable-area"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <button
+            class="relative h-8 px-4 rounded flex items-center justify-center font-bold uppercase tracking-wider text-[10px] transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-[#222] hover:bg-gray-50 dark:hover:bg-[#333] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm active:translate-y-0.5 !px-2 !w-8 h-7"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-4 h-4 w-4 h-4 text-gray-700 dark:text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h2
+            class="text-xs font-black text-center text-gray-900 ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/CalendarView.test.tsx:97:32
+     95| 
+     96|       // Should show the current month name somewhere
+     97|       const monthText = screen.queryByText(/diciembre/i);
+       |                                ^
+     98|       expect(monthText).toBeTruthy();
+     99| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[3/11]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Monthly Statistics > should display total earnings
+TestingLibraryElementError: Found multiple elements with the text: /180/
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<span
+  class="text-xs font-bold text-green-600 dark:text-green-400"
+>
+  180.00
+  Ôé¼
+</span>
+
+Ignored nodes: comments, script, style
+<div
+  class="text-xs font-bold text-green-600 dark:text-green-400"
+>
+  180.00
+  Ôé¼
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+      id="calendar-container"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 print:hidden bg-white dark:bg-[#111]"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between gap-2 py-1"
+        >
+          <div
+            class="flex grow items-center gap-1 min-w-0"
+          >
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              A├▒o
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Mes
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Sem
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              D├¡a
+            </button>
+          </div>
+          <div
+            class="flex grow items-center min-w-0 justify-end gap-1 "
+          >
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="hidden print:block mb-4 border-b pb-2"
+      >
+        <h1
+          class="text-xl font-bold"
+        >
+          Reporte de Turnos
+        </h1>
+        <p
+          class="text-sm text-gray-500"
+        >
+          Generado el 
+          20/12/2025
+        </p>
+      </div>
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 min-h-[300px] print:shadow-none print:border-none print:p-0"
+        id="printable-area"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <button
+            class="relative h-8 px-4 rounded flex items-center justify-center font-bold uppercase tracking-wider text-[10px] transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-[#222] hover:bg-gray-50 dark:hover:bg-[#333] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm active:translate-y-0.5 !px-2 !w-8 h-7"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-4 h-4 w-4 h-4 text-gray-700 dark:text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h2
+            class="text-xs font-black text-center text-gray-900 ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/CalendarView.test.tsx:149:32
+    147|       // (8h * 10Ôé¼) + (4h * 15Ôé¼) + (4h * 10Ôé¼) = 180Ôé¼
+    148|       // May be in "Total Diciembre" card
+    149|       const totalText = screen.queryByText(/180/);
+       |                                ^
+    150|       expect(totalText).toBeTruthy();
+    151|     });
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[4/11]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Navigation > should allow navigation between months
+TestingLibraryElementError: Found multiple elements with the text: /diciembre/i
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<h2
+  class="text-xs font-black text-center text-gray-900 dark:text-white uppercase tracking-wide"
+>
+  Diciembre 2025
+</h2>
+
+Ignored nodes: comments, script, style
+<div
+  class="text-[9px] font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wide mb-1"
+>
+  Total Diciembre
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+      id="calendar-container"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 print:hidden bg-white dark:bg-[#111]"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between gap-2 py-1"
+        >
+          <div
+            class="flex grow items-center gap-1 min-w-0"
+          >
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              A├▒o
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Mes
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Sem
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              D├¡a
+            </button>
+          </div>
+          <div
+            class="flex grow items-center min-w-0 justify-end gap-1 "
+          >
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="hidden print:block mb-4 border-b pb-2"
+      >
+        <h1
+          class="text-xl font-bold"
+        >
+          Reporte de Turnos
+        </h1>
+        <p
+          class="text-sm text-gray-500"
+        >
+          Generado el 
+          20/12/2025
+        </p>
+      </div>
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 min-h-[300px] print:shadow-none print:border-none print:p-0"
+        id="printable-area"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <button
+            class="relative h-8 px-4 rounded flex items-center justify-center font-bold uppercase tracking-wider text-[10px] transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-[#222] hover:bg-gray-50 dark:hover:bg-[#333] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm active:translate-y-0.5 !px-2 !w-8 h-7"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-4 h-4 w-4 h-4 text-gray-700 dark:text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h2
+            class="text-xs font-black text-center text-gray-900 ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/CalendarView.test.tsx:183:35
+    181| 
+    182|       // Verify current month is shown
+    183|       const currentMonth = screen.queryByText(/diciembre/i);
+       |                                   ^
+    184|       expect(currentMonth).toBeTruthy();
+    185| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[5/11]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Calculations > should calculate earnings correctly
+TestingLibraryElementError: Found multiple elements with the text: /180/
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+<span
+  class="text-xs font-bold text-green-600 dark:text-green-400"
+>
+  180.00
+  Ôé¼
+</span>
+
+Ignored nodes: comments, script, style
+<div
+  class="text-xs font-bold text-green-600 dark:text-green-400"
+>
+  180.00
+  Ôé¼
+</div>
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+<body>
+  <div>
+    <div
+      class="space-y-2"
+      id="calendar-container"
+    >
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 print:hidden bg-white dark:bg-[#111]"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between gap-2 py-1"
+        >
+          <div
+            class="flex grow items-center gap-1 min-w-0"
+          >
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              A├▒o
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Mes
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              Sem
+            </button>
+            <button
+              class="px-1 h-8 uppercase rounded-lg h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer"
+            >
+              D├¡a
+            </button>
+          </div>
+          <div
+            class="flex grow items-center min-w-0 justify-end gap-1 "
+          >
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+            <input
+              class="uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]"
+              type="date"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="hidden print:block mb-4 border-b pb-2"
+      >
+        <h1
+          class="text-xl font-bold"
+        >
+          Reporte de Turnos
+        </h1>
+        <p
+          class="text-sm text-gray-500"
+        >
+          Generado el 
+          20/12/2025
+        </p>
+      </div>
+      <div
+        class="bg-white dark:bg-[#111] p-3 rounded-lg shadow-sm border border-gray-100 dark:border-white/10 min-h-[300px] print:shadow-none print:border-none print:p-0"
+        id="printable-area"
+        style="opacity: 0; transform: scale(0.95);"
+      >
+        <div
+          class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100 dark:border-white/5"
+        >
+          <button
+            class="relative h-8 px-4 rounded flex items-center justify-center font-bold uppercase tracking-wider text-[10px] transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-offset-1 dark:focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed bg-white dark:bg-[#222] hover:bg-gray-50 dark:hover:bg-[#333] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 shadow-sm active:translate-y-0.5 !px-2 !w-8 h-7"
+            tabindex="0"
+          >
+            <svg
+              aria-hidden="true"
+              class="w-4 h-4 w-4 h-4 text-gray-700 dark:text-yellow-500"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.75 19.5 8.25 12l7.5-7.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <h2
+            class="text-xs font-black text-center text-gray-900 ...
+ ÔØ» Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ÔØ» getElementError node_modules/@testing-library/dom/dist/query-helpers.js:20:35
+ ÔØ» getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:23:10
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+ ÔØ» node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ÔØ» src/__tests__/CalendarView.test.tsx:245:35
+    243|       // (8 * 10) + (4 * 15) + (4 * 10) = 180Ôé¼
+    244|       // Should appear in summary card
+    245|       const earningsText = screen.queryByText(/180/);
+       |                                   ^
+    246|       expect(earningsText).toBeTruthy();
+    247|     });
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[6/11]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Calculations > should handle shifts without price
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:262:30
+    260|       ];
+    261| 
+    262|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    263|         const state = {
+    264|           shifts: shiftsWithoutPrice,
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[7/11]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Edge Cases > should handle month with no shifts
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:300:30
+    298|   describe("Edge Cases", () => {
+    299|     it("should handle month with no shifts", () => {
+    300|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    301|         const state = {
+    302|           shifts: [],
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[8/11]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Edge Cases > should handle overnight shifts
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:331:30
+    329|       ];
+    330| 
+    331|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    332|         const state = {
+    333|           shifts: overnightShifts,
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[9/11]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Edge Cases > should display correct data for leap year
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:360:30
+    358|       ];
+    359| 
+    360|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    361|         const state = {
+    362|           shifts: leapYearShifts,
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[10/11]ÔÄ»
+
+ FAIL  src/__tests__/CalendarView.test.tsx > CalendarView > Performance > should handle large number of shifts
+TypeError: __vite_ssr_import_0__.vi.mocked(...).mockImplementation is not a function
+ ÔØ» src/__tests__/CalendarView.test.tsx:427:30
+    425|       }));
+    426| 
+    427|       vi.mocked(useAppStore).mockImplementation((selector: any) => {
+       |                              ^
+    428|         const state = {
+    429|           shifts: manyShifts,
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[11/11]ÔÄ»
+
+
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[31m9 failed[39m[22m[2m | [22m[1m[32m85 passed[39m[22m[90m (94)[39m
+[2m   Start at [22m 22:00:45
+[2m   Duration [22m 5.06s[2m (transform 888ms, setup 1.43s, import 3.97s, tests 2.59s, environment 10.32s)[22m
+

@@ -1,0 +1,85 @@
+
+> apuntiti@1.0.0 test
+> vitest run --run
+
+
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90mD:/Proyectos/ApunTiti[39m
+
+ [32mÔ£ô[39m src/hooks/useLocalStorage.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould set syncStatus to success on successful sync
+[22m[39mSync completed successfully: { shiftsCount: [33m0[39m, timestamp: [32m'2025-12-20T21:07:23.791Z'[39m }
+
+stderr | src/__tests__/useAppStore.test.ts > useAppStore > Sync Functionality > should set syncStatus to error on failed sync
+Sync failed: { success: false, message: 'Sync failed' }
+
+stderr | src/__tests__/useAppStore.test.ts > useAppStore > Sync Functionality > should handle sync exception
+Sync error: {
+  error: Error: Network error
+      at D:/Proyectos/ApunTiti/src/__tests__/useAppStore.test.ts:484:34
+      at file:///D:/Proyectos/ApunTiti/node_modules/@vitest/runner/dist/index.js:915:20,
+  message: 'Network error',
+  stack: 'Error: Network error\n' +
+    '    at D:/Proyectos/ApunTiti/src/__tests__/useAppStore.test.ts:484:34\n' +
+    '    at file:///D:/Proyectos/ApunTiti/node_modules/@vitest/runner/dist/index.js:915:20'
+}
+
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould reset syncStatus to idle after timeout
+[22m[39mSync completed successfully: { shiftsCount: [33m0[39m, timestamp: [32m'2025-12-20T21:07:23.812Z'[39m }
+
+[90mstdout[2m | src/__tests__/useAppStore.test.ts[2m > [22m[2museAppStore[2m > [22m[2mSync Functionality[2m > [22m[2mshould call sync with current state data
+[22m[39mSync completed successfully: { shiftsCount: [33m1[39m, timestamp: [32m'2025-12-20T21:07:23.819Z'[39m }
+
+ [32mÔ£ô[39m src/__tests__/useAppStore.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 104[2mms[22m[39m
+ [32mÔ£ô[39m src/components/UI.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+ [32mÔ£ô[39m src/__tests__/ClockView.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 1265[2mms[22m[39m
+       [33m[2mÔ£ô[22m[39m should allow user to input notes [33m 325[2mms[22m[39m
+ [32mÔ£ô[39m src/__tests__/CalendarView.test.tsx [2m([22m[2m29 tests[22m[2m)[22m[33m 1241[2mms[22m[39m
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ» Failed Suites 2 ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+
+ FAIL  tests/e2e/basic.spec.ts [ tests/e2e/basic.spec.ts ]
+Error: Playwright Test did not expect test() to be called here.
+Most common reasons include:
+- You are calling test() in a configuration file.
+- You are calling test() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ÔØ» TestTypeImpl._currentSuite node_modules/playwright/lib/common/testType.js:75:13
+ ÔØ» TestTypeImpl._createTest node_modules/playwright/lib/common/testType.js:88:24
+ ÔØ» node_modules/playwright/lib/transform/transform.js:275:12
+ ÔØ» tests/e2e/basic.spec.ts:3:1
+      1| import { test, expect } from "@playwright/test";
+      2| 
+      3| test("has title", async ({ page }) => {
+       | ^
+      4|   await page.goto("/");
+      5| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/2]ÔÄ»
+
+ FAIL  tests/e2e/flow.spec.ts [ tests/e2e/flow.spec.ts ]
+Error: Playwright Test did not expect test() to be called here.
+Most common reasons include:
+- You are calling test() in a configuration file.
+- You are calling test() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ÔØ» TestTypeImpl._currentSuite node_modules/playwright/lib/common/testType.js:75:13
+ ÔØ» TestTypeImpl._createTest node_modules/playwright/lib/common/testType.js:88:24
+ ÔØ» node_modules/playwright/lib/transform/transform.js:275:12
+ ÔØ» tests/e2e/flow.spec.ts:3:1
+      1| import { test, expect } from "@playwright/test";
+      2| 
+      3| test("add shift and verify in calendar", async ({ page }) => {
+       | ^
+      4|   await page.goto("/");
+      5| 
+
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[2/2]ÔÄ»
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m94 passed[39m[22m[90m (94)[39m
+[2m   Start at [22m 22:07:21
+[2m   Duration [22m 5.07s[2m (transform 783ms, setup 1.24s, import 3.95s, tests 2.71s, environment 10.55s)[22m
+

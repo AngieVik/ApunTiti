@@ -10,6 +10,9 @@ export interface CalendarDayViewProps {
   hourTypes: HourType[];
   onEdit: (shift: Shift) => void;
   onDelete: (shiftId: string) => void;
+  rangeMode?: boolean;
+  workedDays?: Date[]; // Only used when rangeMode is true
+  onDayClick?: (date: Date) => void; // For range mode day selection
 }
 
 export const CalendarDayView: React.FC<CalendarDayViewProps> = ({
@@ -18,6 +21,9 @@ export const CalendarDayView: React.FC<CalendarDayViewProps> = ({
   hourTypes,
   onEdit,
   onDelete,
+  rangeMode = false,
+  workedDays = [],
+  onDayClick,
 }) => {
   const dateStr = toLocalISOString(currentDate);
   const dayShifts = shiftsByDate[dateStr] || [];
@@ -40,6 +46,61 @@ export const CalendarDayView: React.FC<CalendarDayViewProps> = ({
     return { total: totalHours, money: totalMoney };
   }, [dayShifts, hourTypes]);
 
+  // Range mode: Show grid of worked days
+  if (rangeMode && workedDays.length > 0) {
+    return (
+      <div className={APP_STYLES.CALENDARIO.dayViewContainer}>
+        <div className={APP_STYLES.CALENDARIO.dayGridContainer}>
+          {workedDays.map((date) => {
+            const dateStr = toLocalISOString(date);
+            const shifts = shiftsByDate[dateStr] || [];
+
+            let dayHours = 0;
+            let dayMoney = 0;
+
+            shifts.forEach((shift) => {
+              const duration = calculateDuration(
+                shift.startTime,
+                shift.endTime
+              );
+              dayHours += duration;
+
+              if (shift.hourTypeId) {
+                const hType = hourTypes.find((h) => h.id === shift.hourTypeId);
+                const price = hType ? hType.price : 0;
+                dayMoney += duration * price;
+              }
+            });
+
+            return (
+              <div
+                key={dateStr}
+                onClick={() => onDayClick && onDayClick(date)}
+                className={APP_STYLES.CALENDARIO.dayGridCard}
+              >
+                <div className={APP_STYLES.CALENDARIO.dayGridDate}>
+                  {date.toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "short",
+                  })}
+                </div>
+                <div className={APP_STYLES.CALENDARIO.dayGridHours}>
+                  {dayHours.toFixed(1)}h
+                </div>
+                {dayMoney > 0 && (
+                  <div className={APP_STYLES.CALENDARIO.dayGridEarnings}>
+                    {dayMoney.toFixed(2)}€
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Normal mode: Show single day with shift details
   return (
     <div className={APP_STYLES.CALENDARIO.dayViewContainer}>
       <div className={APP_STYLES.CALENDARIO.dayViewTitle}>

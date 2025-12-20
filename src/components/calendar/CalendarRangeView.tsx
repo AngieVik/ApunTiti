@@ -7,22 +7,14 @@ import { List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
 export interface CalendarRangeViewProps {
-  rangeStart: string;
-  rangeEnd: string;
   rangeDays: Date[];
   shiftsByDate: Record<string, Shift[]>;
-  totalRangeHours: number;
-  totalRangeMoney: number;
   onDayClick: (date: Date) => void;
 }
 
 export const CalendarRangeView: React.FC<CalendarRangeViewProps> = ({
-  rangeStart,
-  rangeEnd,
   rangeDays,
   shiftsByDate,
-  totalRangeHours,
-  totalRangeMoney,
   onDayClick,
 }) => {
   const Row = ({ index, style, days, shiftsByDate, handleDayClick }: any) => {
@@ -84,26 +76,6 @@ export const CalendarRangeView: React.FC<CalendarRangeViewProps> = ({
 
   return (
     <div className={APP_STYLES.CALENDARIO.rangeContainer}>
-      <div className={APP_STYLES.CALENDARIO.rangeHeader}>
-        <div>
-          <h3 className={APP_STYLES.CALENDARIO.rangeTitle}>Resumen Rango</h3>
-          <p className={APP_STYLES.CALENDARIO.rangeSubtitle}>
-            {new Date(rangeStart).toLocaleDateString()} -{" "}
-            {new Date(rangeEnd).toLocaleDateString()}
-          </p>
-        </div>
-        <div className="text-right">
-          <span className={APP_STYLES.CALENDARIO.rangeTotalValue}>
-            {totalRangeHours.toFixed(2)}h
-          </span>
-          {totalRangeMoney > 0 && (
-            <span className={APP_STYLES.CALENDARIO.rangeTotalEarnings}>
-              {totalRangeMoney.toFixed(2)}€
-            </span>
-          )}
-        </div>
-      </div>
-
       <div style={{ height: 500, width: "100%" }}>
         <AutoSizer>
           {() => (
