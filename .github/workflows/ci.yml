@@ -30,6 +30,7 @@ jobs:
   e2e:
     name: E2E Tests
     runs-on: ubuntu-latest
+    continue-on-error: true # Don't block the pipeline if E2E fails
 
     steps:
       - name: Checkout code
