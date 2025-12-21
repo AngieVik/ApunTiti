@@ -8,12 +8,14 @@ import { motion, AnimatePresence, HTMLMotionProps } from "framer-motion";
 interface ButtonProps extends HTMLMotionProps<"button"> {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "danger";
+  "aria-label"?: string;
 }
 
 const ButtonComponent: React.FC<ButtonProps> = ({
   children,
   className,
   variant = "primary",
+  type = "button",
   ...props
 }) => {
   const variantClass =
@@ -25,6 +27,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 
   return (
     <motion.button
+      type={type}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.95 }}
       className={`${APP_STYLES.MODOS.uiButtonBase} ${variantClass} ${
@@ -163,6 +166,17 @@ const ConfirmDialogComponent: React.FC<ConfirmDialogProps> = ({
   const titleId = useId();
   const descId = useId();
 
+  // Handle Escape key to close dialog
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onCancel();
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onCancel]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -175,12 +189,14 @@ const ConfirmDialogComponent: React.FC<ConfirmDialogProps> = ({
           aria-modal="true"
           aria-labelledby={titleId}
           aria-describedby={descId}
+          onClick={onCancel}
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             className={APP_STYLES.MODOS.confirmDialogContent}
+            onClick={(e) => e.stopPropagation()}
           >
             <h3 id={titleId} className={APP_STYLES.MODOS.confirmDialogTitle}>
               {title}
@@ -236,7 +252,12 @@ export const Toast: React.FC<ToastProps> = ({ notification, onClose }) => {
   };
 
   return (
-    <div className={`${APP_STYLES.MODOS.toastContainer} ${bgClass}`}>
+    <div
+      className={`${APP_STYLES.MODOS.toastContainer} ${bgClass}`}
+      role="alert"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       {icons[notification.type]}
       <p className={APP_STYLES.MODOS.toastText}>{notification.message}</p>
     </div>

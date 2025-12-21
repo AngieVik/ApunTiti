@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { CalendarView } from "../components/CalendarView";
 import type { Shift, Settings } from "../types";
-import { useAppStore } from "../store/useAppStore";
 
 // Mock de useAnalytics
 vi.mock("../hooks/useAnalytics", () => ({

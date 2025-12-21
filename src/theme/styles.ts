@@ -128,12 +128,12 @@ export const APP_STYLES = {
     viewButtonActive:
       "h-8 text-xs text-gray-900 dark:text-gray-900 bg-yellow-500 font-bold border border-yellow-500 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 transition-all cursor-pointer",
     viewButtonInactive:
-      "h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer",
+      "h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-[#1a1a1a] font-mono border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer",
 
     // Date range selectors
     dateSelectorsGroup: "flex grow items-center min-w-0 justify-end gap-1 ",
     dateInput:
-      "uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-bold border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]",
+      "uppercase px-1 h-8 text-xs text-gray-900 dark:text-gray-100 bg-gray-200 rounded-lg dark:bg-[#1a1a1a] font-mono border border-gray-200 dark:border dark:border-gray-800 shadow-sm focus:outline-none focus:ring-1 focus:ring-yellow-500/50 focus:border-yellow-500 hover:border-yellow-500 dark:hover:border-yellow-500 transition-all cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:-ml-2 [&::-webkit-calendar-picker-indicator]:w-5 [&::-webkit-calendar-picker-indicator]:h-5 [&::-webkit-calendar-picker-indicator]:[filter:invert(69%)_sepia(58%)_saturate(543%)_hue-rotate(2deg)_brightness(96%)_contrast(90%)]",
     // Print header
     printHeader: "hidden print:block mb-4 border-b pb-2",
     printTitle: "text-xl font-bold",
@@ -305,11 +305,31 @@ export const APP_STYLES = {
     filtersContainer: "flex gap-2 items-center print:hidden",
     filterDropdown: "min-w-[120px]",
 
-    // Controls bar layout
-    controlsBarContainer: "flex items-center gap-3 print:hidden mb-2",
-    controlsBarLeft: "flex gap-2", // Filters
-    controlsBarCenter: "flex-1", // Flexible space
-    controlsBarRight: "flex gap-2 items-center", // Summary cards + Download
+    // Controls bar layout - Responsive con flex-wrap y justify-between
+    controlsBarContainer:
+      "flex flex-wrap items-start justify-between gap-2 print:hidden mb-2",
+
+    // Sección Filtros
+    controlsBarFiltersSection:
+      "flex flex-wrap gap-2 min-w-[140px] max-w-[400px] flex-1",
+    controlsBarFilterWrapper: "min-w-[100px] flex-1",
+
+    // Sección Totales
+    controlsBarTotalsSection: "min-w-[110px] max-w-[140px]",
+    controlsBarTotalsCard: "p-2",
+    controlsBarTotalItem:
+      "mb-2 pb-2 border-b-2 border-gray-200 dark:border-gray-700 last:mb-0 last:pb-0 last:border-b-0",
+    controlsBarTotalTitle:
+      "text-[9px] font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wide mb-1",
+    controlsBarTotalHours:
+      "text-sm font-mono font-black text-gray-900 dark:text-white leading-none mb-0.5",
+    controlsBarTotalMoney:
+      "text-xs font-bold text-green-600 dark:text-green-400 leading-none",
+
+    // Sección Botones
+    controlsBarButtonsSection:
+      "flex flex-wrap gap-2 min-w-[90px] max-w-[240px]",
+    controlsBarButton: "h-8 text-xs px-3 min-w-[90px] flex-1",
 
     // Day grid for range mode
     dayGridContainer: "grid grid-cols-7 gap-2",

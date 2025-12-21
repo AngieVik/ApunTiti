@@ -13,7 +13,6 @@ import {
   CalendarMonthView,
   CalendarWeekView,
   CalendarDayView,
-  SummaryCard,
   FilterDropdown,
 } from "./calendar";
 
@@ -652,66 +651,87 @@ export const CalendarView: React.FC = () => {
         )}
       </Card>
 
-      {/* CONTROLS BAR: Filters | Space | Summary Cards + Download */}
+      {/* CONTROLS BAR: Flex-wrap con justify-between */}
       <div className={APP_STYLES.CALENDARIO.controlsBarContainer}>
-        {/* Left: Filters */}
-        <div className={APP_STYLES.CALENDARIO.controlsBarLeft}>
-          <FilterDropdown
-            label="Categoría"
-            value={filterCategory}
-            options={settings.categories.map((cat) => ({
-              value: cat,
-              label: cat,
-            }))}
-            onChange={setFilterCategory}
-          />
-          <FilterDropdown
-            label="Tipo de Hora"
-            value={filterHourType}
-            options={hourTypes.map((ht) => ({
-              value: ht.id,
-              label: `${ht.name} (${ht.price}€)`,
-            }))}
-            onChange={setFilterHourType}
-          />
+        {/* SECCIÓN 1: Filtros - se alinean en fila cuando hay espacio */}
+        <div className={APP_STYLES.CALENDARIO.controlsBarFiltersSection}>
+          <div className={APP_STYLES.CALENDARIO.controlsBarFilterWrapper}>
+            <FilterDropdown
+              label="Categoría"
+              value={filterCategory}
+              options={settings.categories.map((cat) => ({
+                value: cat,
+                label: cat,
+              }))}
+              onChange={setFilterCategory}
+            />
+          </div>
+          <div className={APP_STYLES.CALENDARIO.controlsBarFilterWrapper}>
+            <FilterDropdown
+              label="Tipo de Hora"
+              value={filterHourType}
+              options={[
+                { value: "", label: "Sin tipo" },
+                ...hourTypes.map((ht) => ({
+                  value: ht.id,
+                  label: `${ht.name} (${ht.price}€)`,
+                })),
+              ]}
+              onChange={setFilterHourType}
+            />
+          </div>
         </div>
 
-        {/* Center: Flexible space */}
-        <div className={APP_STYLES.CALENDARIO.controlsBarCenter} />
+        {/* SECCIÓN 2: Totales en UNA SOLA tarjeta */}
+        <div className={APP_STYLES.CALENDARIO.controlsBarTotalsSection}>
+          <Card className={APP_STYLES.CALENDARIO.controlsBarTotalsCard}>
+            {/* Total de la vista actual */}
+            <div className={APP_STYLES.CALENDARIO.controlsBarTotalItem}>
+              <p className={APP_STYLES.CALENDARIO.controlsBarTotalTitle}>
+                {currentViewTotals.scopeName}
+              </p>
+              <p className={APP_STYLES.CALENDARIO.controlsBarTotalHours}>
+                {currentViewTotals.totalHours.toFixed(2)}h
+              </p>
+              <p className={APP_STYLES.CALENDARIO.controlsBarTotalMoney}>
+                {currentViewTotals.totalMoney.toFixed(2)}€
+              </p>
+            </div>
 
-        {/* Right: Summary Cards + Download */}
-        <div className={APP_STYLES.CALENDARIO.controlsBarRight}>
-          {/* Current view total */}
-          <SummaryCard
-            title={currentViewTotals.scopeName}
-            hours={currentViewTotals.totalHours}
-            earnings={currentViewTotals.totalMoney}
-          />
+            {/* Total del rango (si está activo) */}
+            {rangeStart && rangeEnd && (
+              <div>
+                <p className={APP_STYLES.CALENDARIO.controlsBarTotalTitle}>
+                  Total Rango
+                </p>
+                <p className={APP_STYLES.CALENDARIO.controlsBarTotalHours}>
+                  {rangeTotals.totalRangeHours.toFixed(2)}h
+                </p>
+                <p className={APP_STYLES.CALENDARIO.controlsBarTotalMoney}>
+                  {rangeTotals.totalRangeMoney.toFixed(2)}€
+                </p>
+              </div>
+            )}
+          </Card>
+        </div>
 
-          {/* Range total (if range is active) */}
-          {rangeStart && rangeEnd && (
-            <SummaryCard
-              title="Total Rango"
-              hours={rangeTotals.totalRangeHours}
-              earnings={rangeTotals.totalRangeMoney}
-            />
-          )}
-
-          {/* Clear range button (if range is active) */}
+        {/* SECCIÓN 3: Botones - se alinean en fila cuando hay espacio */}
+        <div className={APP_STYLES.CALENDARIO.controlsBarButtonsSection}>
+          {/* Botón Limpiar (si rango activo) */}
           {rangeStart && rangeEnd && (
             <Button
               onClick={handleClearRange}
               variant="secondary"
-              className={APP_STYLES.CALENDARIO.downloadButton}
+              className={APP_STYLES.CALENDARIO.controlsBarButton}
             >
               Limpiar
             </Button>
           )}
 
-          {/* Download button */}
+          {/* Botón Descargar */}
           <Button
             onClick={handleSave}
-            className={APP_STYLES.CALENDARIO.downloadButton}
+            className={APP_STYLES.CALENDARIO.controlsBarButton}
           >
             Descargar
           </Button>

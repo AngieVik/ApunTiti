@@ -1,0 +1,137 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - paragraph [ref=e7]: domingo, 21/12/2025
+        - heading "12:07:22 AM" [level=2] [ref=e8]
+      - navigation [ref=e9]:
+        - generic [ref=e10]:
+          - button "Reloj" [ref=e11]:
+            - img [ref=e13]
+          - button "Calendario" [ref=e15]:
+            - img [ref=e17]
+          - button "Ajustes" [active] [ref=e19]:
+            - img [ref=e21]
+      - button "Cambiar tema" [ref=e24]:
+        - img [ref=e25]
+  - main [ref=e27]:
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - heading "General" [level=2] [ref=e31]
+        - generic [ref=e32]:
+          - generic [ref=e33]: Formato de Guardado
+          - generic [ref=e34]:
+            - combobox "Formato de Guardado" [ref=e35] [cursor=pointer]:
+              - option "Texto (.txt)" [selected]
+              - option "Documento (.pdf)"
+            - generic:
+              - img
+        - generic [ref=e37]:
+          - generic [ref=e38]: Notificaciones
+          - generic [ref=e39]:
+            - combobox "Notificaciones" [ref=e40] [cursor=pointer]:
+              - option "Desactivadas" [selected]
+              - option "Activadas"
+            - generic:
+              - img
+      - generic [ref=e41]:
+        - heading "Categorías" [level=2] [ref=e42]
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - generic [ref=e45]: Nueva Categoría
+            - textbox "Nueva Categoría" [ref=e46]:
+              - /placeholder: "Ej: Vacaciones"
+          - button "Añadir" [ref=e47]
+        - list [ref=e48]:
+          - listitem [ref=e49]:
+            - generic [ref=e50]: Programado
+            - generic [ref=e51]:
+              - button "Editar" [ref=e52]:
+                - img [ref=e53]
+              - button "Eliminar" [ref=e55]:
+                - img [ref=e56]
+          - listitem [ref=e58]:
+            - generic [ref=e59]: DRP
+            - generic [ref=e60]:
+              - button "Editar" [ref=e61]:
+                - img [ref=e62]
+              - button "Eliminar" [ref=e64]:
+                - img [ref=e65]
+          - listitem [ref=e67]:
+            - generic [ref=e68]: Traslado
+            - generic [ref=e69]:
+              - button "Editar" [ref=e70]:
+                - img [ref=e71]
+              - button "Eliminar" [ref=e73]:
+                - img [ref=e74]
+          - listitem [ref=e76]:
+            - generic [ref=e77]: Guardia
+            - generic [ref=e78]:
+              - button "Editar" [ref=e79]:
+                - img [ref=e80]
+              - button "Eliminar" [ref=e82]:
+                - img [ref=e83]
+      - generic [ref=e85]:
+        - heading "Tipos de Hora" [level=2] [ref=e86]
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - generic [ref=e89]: Nombre
+            - textbox "Nombre" [ref=e90]:
+              - /placeholder: "Ej: Festivo"
+          - generic [ref=e91]:
+            - generic [ref=e92]: Precio (€)
+            - spinbutton "Precio (€)" [ref=e93]
+          - button "Añadir" [ref=e94]
+        - list [ref=e95]:
+          - listitem [ref=e96]:
+            - generic [ref=e97]:
+              - generic [ref=e98]: Normal
+              - generic [ref=e99]: 10€
+            - generic [ref=e100]:
+              - button "Editar" [ref=e101]:
+                - img [ref=e102]
+              - button "Eliminar" [ref=e104]:
+                - img [ref=e105]
+          - listitem [ref=e107]:
+            - generic [ref=e108]:
+              - generic [ref=e109]: Especial
+              - generic [ref=e110]: 15€
+            - generic [ref=e111]:
+              - button "Editar" [ref=e112]:
+                - img [ref=e113]
+              - button "Eliminar" [ref=e115]:
+                - img [ref=e116]
+          - listitem [ref=e118]:
+            - generic [ref=e119]:
+              - generic [ref=e120]: Extra
+              - generic [ref=e121]: 20€
+            - generic [ref=e122]:
+              - button "Editar" [ref=e123]:
+                - img [ref=e124]
+              - button "Eliminar" [ref=e126]:
+                - img [ref=e127]
+      - generic [ref=e129]:
+        - heading "Copia de Seguridad" [level=2] [ref=e130]
+        - paragraph [ref=e131]: Exporta tus datos para no perderlos si borras la caché o cambias de dispositivo.
+        - generic [ref=e132]:
+          - button "Exportar Datos" [ref=e133]:
+            - generic [ref=e134]: Exportar Datos
+          - button "Importar Datos" [ref=e135]:
+            - img [ref=e136]
+            - generic [ref=e138]: Importar Datos
+      - generic [ref=e139]:
+        - heading "Sincronización Nube" [level=2] [ref=e141]
+        - paragraph [ref=e142]: Simula la sincronización de tus datos con un servidor remoto.
+        - button "Sincronizar Ahora" [ref=e144]:
+          - img [ref=e145]
+          - generic [ref=e147]: Sincronizar Ahora
+      - generic [ref=e148]:
+        - heading "Zona de Peligro" [level=2] [ref=e149]
+        - paragraph [ref=e150]: Elimina permanentemente todos los registros y configuración.
+        - button "Borrar Todos los Datos" [ref=e152]:
+          - img [ref=e153]
+          - generic [ref=e155]: Borrar Todos los Datos
+```

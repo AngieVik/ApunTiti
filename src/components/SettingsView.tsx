@@ -409,12 +409,14 @@ export const SettingsView: React.FC = () => {
                     <button
                       onClick={saveEditCategory}
                       className={APP_STYLES.CONFIGURACIÓN.categoryEditSave}
+                      aria-label="Guardar categoría"
                     >
                       <CheckIcon className={APP_STYLES.MODOS.iconSmall} />
                     </button>
                     <button
                       onClick={cancelEditCategory}
                       className={APP_STYLES.CONFIGURACIÓN.categoryEditCancel}
+                      aria-label="Cancelar edición"
                     >
                       <XMarkIcon className={APP_STYLES.MODOS.iconSmall} />
                     </button>
@@ -428,6 +430,7 @@ export const SettingsView: React.FC = () => {
                       <button
                         onClick={() => startEditCategory(cat)}
                         className={APP_STYLES.CONFIGURACIÓN.categoryEditButton}
+                        aria-label="Editar"
                       >
                         <PencilIcon className={APP_STYLES.MODOS.iconGreyBlue} />
                       </button>
@@ -436,6 +439,7 @@ export const SettingsView: React.FC = () => {
                         className={
                           APP_STYLES.CONFIGURACIÓN.categoryDeleteButton
                         }
+                        aria-label="Eliminar"
                       >
                         <TrashIcon className={APP_STYLES.MODOS.iconGreyBlue} />
                       </button>
@@ -501,12 +505,14 @@ export const SettingsView: React.FC = () => {
                   <button
                     onClick={saveEditHour}
                     className={APP_STYLES.CONFIGURACIÓN.hourTypeEditSave}
+                    aria-label="Guardar tipo de hora"
                   >
                     <CheckIcon className={APP_STYLES.MODOS.iconSmall} />
                   </button>
                   <button
                     onClick={cancelEditHour}
                     className={APP_STYLES.CONFIGURACIÓN.hourTypeEditCancel}
+                    aria-label="Cancelar edición"
                   >
                     <XMarkIcon className={APP_STYLES.MODOS.iconSmall} />
                   </button>
@@ -525,12 +531,14 @@ export const SettingsView: React.FC = () => {
                     <button
                       onClick={() => startEditHour(type)}
                       className={APP_STYLES.CONFIGURACIÓN.hourTypeEditButton}
+                      aria-label="Editar"
                     >
                       <PencilIcon className={APP_STYLES.MODOS.iconGreyBlue} />
                     </button>
                     <button
                       onClick={() => confirmRemoveHourType(type.id)}
                       className={APP_STYLES.CONFIGURACIÓN.hourTypeDeleteButton}
+                      aria-label="Eliminar"
                     >
                       <TrashIcon className={APP_STYLES.MODOS.iconGreyBlue} />
                     </button>

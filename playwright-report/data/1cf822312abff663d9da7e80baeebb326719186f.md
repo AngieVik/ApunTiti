@@ -1,0 +1,77 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - paragraph [ref=e7]: domingo, 21/12/2025
+        - heading "12:07:32 AM" [level=2] [ref=e8]
+      - navigation [ref=e9]:
+        - generic [ref=e10]:
+          - button "Reloj" [ref=e11]:
+            - img [ref=e13]
+          - button "Calendario" [ref=e15]:
+            - img [ref=e17]
+          - button "Ajustes" [ref=e19]:
+            - img [ref=e21]
+      - button "Cambiar tema" [ref=e24]:
+        - img [ref=e25]
+  - main [ref=e27]:
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - heading "Registrar Turno" [level=2] [ref=e32]
+        - generic [ref=e33]:
+          - generic [ref=e36] [cursor=pointer]:
+            - generic [ref=e37]: Fecha
+            - textbox "Fecha" [ref=e38]: 2025-12-21
+          - generic [ref=e40]:
+            - generic [ref=e41]: Categoría
+            - generic [ref=e42]:
+              - combobox "Categoría" [ref=e43] [cursor=pointer]:
+                - option "Sin especificar" [selected]
+                - option "Programado"
+                - option "DRP"
+                - option "Traslado"
+                - option "Guardia"
+              - generic:
+                - img
+          - generic [ref=e45]:
+            - generic [ref=e46]: Tipo de Hora
+            - generic [ref=e47]:
+              - combobox "Tipo de Hora" [ref=e48] [cursor=pointer]:
+                - option "Sin tipo" [selected]
+                - option "Normal (10€)"
+                - option "Especial (15€)"
+                - option "Extra (20€)"
+              - generic:
+                - img
+          - generic [ref=e50]:
+            - generic [ref=e51]: Notas
+            - textbox "Notas" [ref=e52]:
+              - /placeholder: Opcional...
+          - generic [ref=e55] [cursor=pointer]:
+            - generic [ref=e56]: Entrada
+            - textbox "Entrada" [ref=e57]: 09:00
+          - generic [ref=e60] [cursor=pointer]:
+            - generic [ref=e61]: Salida
+            - textbox "Salida" [ref=e62]: 17:00
+        - button "Guardar" [ref=e64]
+      - generic [ref=e65]:
+        - generic [ref=e68]:
+          - heading "Resumen" [level=3] [ref=e69]
+          - generic [ref=e70]:
+            - button [ref=e71]:
+              - img [ref=e72]
+            - heading "Diciembre 2025" [level=2] [ref=e74]
+            - button [ref=e75]:
+              - img [ref=e76]
+        - generic [ref=e78]:
+          - generic [ref=e80]:
+            - generic [ref=e81]: Horas
+            - generic [ref=e82]: 0.00h
+          - generic [ref=e84]:
+            - generic [ref=e85]: Turnos
+            - generic [ref=e86]: "0"
+          - generic [ref=e89]: Sin datos
+```

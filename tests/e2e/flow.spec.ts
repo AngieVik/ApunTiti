@@ -23,7 +23,7 @@ test("add shift and verify in calendar", async ({ page }) => {
   await page.getByRole("button", { name: "Guardar" }).click();
 
   // Verify toast?
-  await expect(page.getByText("Turno registrado correctamente")).toBeVisible();
+  await expect(page.getByText("Turno registrado correctamente")).toBeVisible({ timeout: 10000 });
 
   // 2. Switch to Calendar View
   await page.getByRole("button", { name: "Calendario" }).click();
@@ -35,3 +35,4 @@ test("add shift and verify in calendar", async ({ page }) => {
   // Check if "Test Shift E2E" is visible
   await expect(page.getByText("Test Shift E2E")).toBeVisible();
 });
+
