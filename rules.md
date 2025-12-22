@@ -485,10 +485,6 @@ const toLocalISOString = (date: Date): string => {
   // Implementación
 };
 
-const calculateDuration = (start: string, end: string): number => {
-  // Implementación
-};
-
 // --- CONSTANTS ---
 
 const monthNamesES = ["Enero", "Febrero", ...];
@@ -500,16 +496,43 @@ export const MyComponent: React.FC<Props> = () => {
 };
 ```
 
-### Helpers Comunes
+### Utilidades de Tiempo Disponibles
 
-- `toLocalISOString(date: Date): string` - Convertir Date a 'YYYY-MM-DD' en zona local
-- `calculateDuration(start: string, end: string): number` - Calcular duración en horas (formato 'HH:mm')
-- `getDaysInMonth(year: number, month: number): number`
-- `getFirstDayOfMonth(year: number, month: number): number`
+**Ubicación**: `src/utils/time.ts`
+
+Este archivo contiene utilidades compartidas para manejo de fechas y tiempos:
+
+- `toLocalISOString(date: Date): string` - Convierte Date a 'YYYY-MM-DD' en zona local
+- `calculateDuration(start: string, end: string): number` - Calcula duración en horas (maneja turnos nocturnos y de 24h)
+- `parseDateString(dateStr: string)` - Parsea fecha YYYY-MM-DD sin problemas de zona horaria (retorna `{year, month, day}`)
+- `parseTimeToMinutes(timeStr: string): number` - Convierte 'HH:mm' a minutos desde medianoche
+- `formatDuration(hours: number): string` - Formatea horas decimales a "8h 30m"
+
+**Usar estas funciones en lugar de reimplementarlas** cuando sea necesario.
 
 ---
 
 ## 📅 Manejo de Fechas
+
+### ⚠️ IMPORTANTE: Evitar Bug de Zona Horaria
+
+**NO usar** `new Date("YYYY-MM-DD")` para parsear fechas almacenadas en strings:
+
+```typescript
+// ❌ INCORRECTO - Interpreta como UTC medianoche, puede restar un día según zona horaria
+const monthShifts = shifts.filter((s) => {
+  const d = new Date(s.date); // BUG: puede dar mes incorrecto
+  return d.getMonth() === currentMonth;
+});
+
+// ✅ CORRECTO - Parsing manual sin zona horaria
+import { parseDateString } from "../utils/time";
+
+const monthShifts = shifts.filter((s) => {
+  const { year, month } = parseDateString(s.date);
+  return month === currentMonth && year === currentYear;
+});
+```
 
 ### Formato Estándar
 
@@ -521,11 +544,12 @@ export const MyComponent: React.FC<Props> = () => {
 ### Inputs de Fecha/Hora
 
 ```typescript
-// Input de fecha
+// Input de fecha con clickToEdit para mejor UX móvil
 <Input
   type="date"
   value={date} // 'YYYY-MM-DD'
   onChange={(e) => setDate(e.target.value)}
+  clickToEdit // Abre picker automáticamente al hacer click
 />
 
 // Input de hora
@@ -533,6 +557,7 @@ export const MyComponent: React.FC<Props> = () => {
   type="time"
   value={time} // 'HH:mm'
   onChange={(e) => setTime(e.target.value)}
+  clickToEdit
 />
 ```
 

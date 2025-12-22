@@ -635,6 +635,8 @@ export const CalendarView: React.FC = () => {
             shiftsByDate={shiftsByDate}
             hourTypes={hourTypes}
             onDayClick={handleDayClick}
+            rangeMode={!!(rangeStart && rangeEnd)}
+            workedWeeks={rangeStart && rangeEnd ? workedWeeksInRange : []}
           />
         )}
         {viewType === "day" && (

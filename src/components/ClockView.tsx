@@ -5,6 +5,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
 import { useAnalytics } from "../hooks/useAnalytics";
 import { useAppStore } from "../store/useAppStore";
+import { calculateDuration, parseDateString } from "../utils/time";
 
 // --- HELPER FUNCTIONS ---
 
@@ -27,22 +28,6 @@ const monthNamesES = [
   "Noviembre",
   "Diciembre",
 ];
-
-const calculateDuration = (start: string, end: string) => {
-  const s = parseInt(start.split(":")[0]) + parseInt(start.split(":")[1]) / 60;
-  const e = parseInt(end.split(":")[0]) + parseInt(end.split(":")[1]) / 60;
-
-  // 24-hour shift: start time equals end time
-  if (s === e) {
-    return 24;
-  }
-
-  // Handle overnight shifts
-  if (e < s) {
-    return 24 - s + e;
-  }
-  return e - s;
-};
 
 // --- COMPONENT ---
 
@@ -73,8 +58,8 @@ export const ClockView: React.FC = () => {
     const currentYear = statsDate.getFullYear();
 
     const monthShifts = shifts.filter((s) => {
-      const d = new Date(s.date);
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+      const { year: shiftYear, month: shiftMonth } = parseDateString(s.date);
+      return shiftMonth === currentMonth && shiftYear === currentYear;
     });
 
     let totalHours = 0;
@@ -225,21 +210,14 @@ export const ClockView: React.FC = () => {
 
         <div className={APP_STYLES.REGISTRO.formGrid}>
           <div className={APP_STYLES.REGISTRO.formColSpan1}>
-            <div
-              onClick={(e) => {
-                const input = e.currentTarget.querySelector("input");
-                if (input) { if (input.showPicker) { input.showPicker(); } else { input.click(); } }
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <Input
-                label="Fecha"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className={APP_STYLES.REGISTRO.dateInput}
-              />
-            </div>
+            <Input
+              label="Fecha"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className={APP_STYLES.REGISTRO.dateInput}
+              clickToEdit
+            />
           </div>
           <div className={APP_STYLES.REGISTRO.formColSpan1}>
             <Select
@@ -280,38 +258,24 @@ export const ClockView: React.FC = () => {
           </div>
 
           <div>
-            <div
-              onClick={(e) => {
-                const input = e.currentTarget.querySelector("input");
-                if (input) { if (input.showPicker) { input.showPicker(); } else { input.click(); } }
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <Input
-                label="Entrada"
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className={APP_STYLES.REGISTRO.timeInput}
-              />
-            </div>
+            <Input
+              label="Entrada"
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className={APP_STYLES.REGISTRO.timeInput}
+              clickToEdit
+            />
           </div>
           <div>
-            <div
-              onClick={(e) => {
-                const input = e.currentTarget.querySelector("input");
-                if (input) { if (input.showPicker) { input.showPicker(); } else { input.click(); } }
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <Input
-                label="Salida"
-                type="time"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className={APP_STYLES.REGISTRO.timeInput}
-              />
-            </div>
+            <Input
+              label="Salida"
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              className={APP_STYLES.REGISTRO.timeInput}
+              clickToEdit
+            />
           </div>
         </div>
 
@@ -416,4 +380,3 @@ export const ClockView: React.FC = () => {
     </div>
   );
 };
-

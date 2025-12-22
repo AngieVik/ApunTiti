@@ -1,4 +1,4 @@
-import React, { useEffect, useId, memo } from "react";
+import React, { useEffect, useId, memo, useRef } from "react";
 import { Notification } from "../types";
 import { CheckIcon, XMarkIcon, FlagIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
@@ -70,23 +70,41 @@ Card.displayName = "Card";
 // Input
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  clickToEdit?: boolean;
 }
 
 const InputComponent: React.FC<InputProps> = ({
   label,
   id,
   className,
+  clickToEdit = false,
   ...props
 }) => {
   const generatedId = useId();
   const inputId = id || generatedId;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleWrapperClick = () => {
+    if (clickToEdit && inputRef.current) {
+      if (inputRef.current.showPicker) {
+        inputRef.current.showPicker();
+      } else {
+        inputRef.current.click();
+      }
+    }
+  };
 
   return (
-    <div className={APP_STYLES.MODOS.uiInputWrapper}>
+    <div
+      className={APP_STYLES.MODOS.uiInputWrapper}
+      onClick={handleWrapperClick}
+      style={clickToEdit ? { cursor: "pointer" } : undefined}
+    >
       <label htmlFor={inputId} className={APP_STYLES.MODOS.uiInputLabel}>
         {label}
       </label>
       <input
+        ref={inputRef}
         id={inputId}
         className={`${APP_STYLES.MODOS.uiInputField} ${className || ""}`}
         {...props}

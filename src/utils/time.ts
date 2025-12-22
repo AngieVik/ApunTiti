@@ -93,3 +93,23 @@ export const formatDuration = (hours: number): string => {
   if (m === 0) return `${h}h`;
   return `${h}h ${m}m`;
 };
+
+/**
+ * Parses a date string in YYYY-MM-DD format without timezone issues
+ * Avoids the bug where new Date("YYYY-MM-DD") interprets dates as UTC midnight
+ *
+ * @param dateStr - Date string in "YYYY-MM-DD" format
+ * @returns Object with year, month (0-indexed), and day
+ *
+ * @example
+ * ```ts
+ * parseDateString("2025-12-18")  // { year: 2025, month: 11, day: 18 }
+ * parseDateString("2025-01-05")  // { year: 2025, month: 0, day: 5 }
+ * ```
+ */
+export const parseDateString = (
+  dateStr: string
+): { year: number; month: number; day: number } => {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return { year, month: month - 1, day };
+};

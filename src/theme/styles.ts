@@ -196,26 +196,26 @@ export const APP_STYLES = {
     yearMonthHours: "text-xs font-mono text-gray-600 dark:text-gray-300",
     yearMonthMoney: "text-xs font-bold text-green-600 dark:text-green-500",
 
-    // Week view
+    // Week view - Responsive: compact on mobile, spacious on desktop
     weekContainer:
-      "flex border border-gray-100 dark:border-white/5 rounded-lg overflow-hidden bg-white dark:bg-[#111]",
+      "flex border border-gray-100 dark:border-white/5 rounded-lg overflow-x-auto overflow-y-hidden bg-white dark:bg-[#111] min-w-full",
     weekDayColumn:
-      "flex-1 min-h-[140px] border-r border-gray-100 dark:border-white/5 last:border-r-0 p-1.5 hover:bg-gray-50 dark:hover:bg-[#1a1a1a] cursor-pointer transition-colors",
+      "flex-1 min-w-[50px] sm:min-w-[80px] md:min-w-[100px] min-h-[120px] sm:min-h-[140px] border-r border-gray-100 dark:border-white/5 last:border-r-0 p-1 sm:p-1.5 hover:bg-gray-50 dark:hover:bg-[#1a1a1a] cursor-pointer transition-colors",
     weekDayHeader:
-      "text-center border-b border-gray-100 dark:border-white/5 pb-1 mb-1",
+      "text-center border-b border-gray-100 dark:border-white/5 pb-0.5 sm:pb-1 mb-0.5 sm:mb-1",
     weekDayName:
-      "block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest",
-    weekDayNumber: "block text-lg font-black",
+      "block text-[8px] sm:text-[9px] md:text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest",
+    weekDayNumber: "block text-sm sm:text-base md:text-lg font-black",
     weekDayNumberToday: "text-yellow-500",
     weekDayNumberDefault: "text-gray-900 dark:text-white",
     weekShiftsList: "space-y-0.5",
     weekShiftBadge:
-      "text-xs p-0.5 bg-yellow-100 dark:bg-yellow-900/20 border-l-2 border-yellow-500 rounded mb-0.5",
-    weekShiftTime: "font-bold dark:text-yellow-200 leading-tight",
+      "text-[9px] sm:text-[10px] md:text-xs p-0.5 bg-yellow-100 dark:bg-yellow-900/20 border-l-2 border-yellow-500 rounded mb-0.5",
+    weekShiftTime: "font-bold dark:text-yellow-200 leading-tight truncate",
     weekShiftCategory:
       "truncate text-gray-700 dark:text-gray-300 leading-tight",
     weekDayTotal:
-      "mt-auto pt-1 text-center font-mono font-bold text-gray-500 dark:text-gray-400 text-xs",
+      "mt-auto pt-0.5 sm:pt-1 text-center font-mono font-bold text-gray-500 dark:text-gray-400 text-[9px] sm:text-[10px] md:text-xs",
     weekTotal:
       "mt-2 p-2 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-100 dark:border-white/5 flex justify-between items-center",
 
@@ -302,20 +302,20 @@ export const APP_STYLES = {
     summaryCardEarnings: "text-xs font-bold text-green-600 dark:text-green-400",
 
     // Filter dropdowns
-    filtersContainer: "flex gap-2 items-center print:hidden",
-    filterDropdown: "min-w-[120px]",
+    filtersContainer: "flex flex-wrap gap-2 items-center print:hidden",
+    filterDropdown: "min-w-[90px]",
 
-    // Controls bar layout - Responsive con flex-wrap y justify-between
+    // Controls bar layout - Responsive: Grid 3 cols (Móvil) / Flex (PC)
     controlsBarContainer:
-      "flex flex-wrap items-start justify-between gap-2 print:hidden mb-2",
+      "grid grid-cols-3 md:flex md:flex-row md:items-start items-start gap-2 print:hidden mb-2",
 
-    // Sección Filtros
+    // Sección Filtros: Vertical en móvil, Horizontal en PC
     controlsBarFiltersSection:
-      "flex flex-wrap gap-2 min-w-[140px] max-w-[400px] flex-1",
-    controlsBarFilterWrapper: "min-w-[100px] flex-1",
+      "col-span-1 flex flex-col md:flex-row gap-2 w-full md:w-auto",
+    controlsBarFilterWrapper: "w-full md:w-auto min-w-[120px]",
 
     // Sección Totales
-    controlsBarTotalsSection: "min-w-[110px] max-w-[140px]",
+    controlsBarTotalsSection: "col-span-1 w-full md:w-auto min-w-[100px]",
     controlsBarTotalsCard: "p-2",
     controlsBarTotalItem:
       "mb-2 pb-2 border-b-2 border-gray-200 dark:border-gray-700 last:mb-0 last:pb-0 last:border-b-0",
@@ -326,10 +326,10 @@ export const APP_STYLES = {
     controlsBarTotalMoney:
       "text-xs font-bold text-green-600 dark:text-green-400 leading-none",
 
-    // Sección Botones
+    // Sección Botones: Vertical en móvil, Horizontal en PC (CORREGIDO AQUI)
     controlsBarButtonsSection:
-      "flex flex-wrap gap-2 min-w-[90px] max-w-[240px]",
-    controlsBarButton: "h-8 text-xs px-3 min-w-[90px] flex-1",
+      "col-span-1 flex flex-col md:flex-row gap-2 w-full md:w-auto",
+    controlsBarButton: "h-8 text-xs px-3 w-full md:w-auto",
 
     // Day grid for range mode
     dayGridContainer: "grid grid-cols-7 gap-2",

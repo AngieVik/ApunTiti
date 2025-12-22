@@ -9,6 +9,8 @@ export interface CalendarWeekViewProps {
   shiftsByDate: Record<string, Shift[]>;
   hourTypes: HourType[];
   onDayClick: (date: Date) => void;
+  rangeMode?: boolean;
+  workedWeeks?: Date[];
 }
 
 export const CalendarWeekView: React.FC<CalendarWeekViewProps> = ({
@@ -16,12 +18,36 @@ export const CalendarWeekView: React.FC<CalendarWeekViewProps> = ({
   shiftsByDate,
   hourTypes,
   onDayClick,
+  rangeMode = false,
+  workedWeeks = [],
 }) => {
   const { weekDays, weekTotal, weekMoney } = useMemo(() => {
-    const startOfWeek = new Date(currentDate);
-    const day = startOfWeek.getDay(); // 0 Sun
-    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
-    startOfWeek.setDate(diff);
+    // En modo rango, usar las semanas con días trabajados
+    // Si no hay semanas trabajadas en el rango, no mostrar nada
+    if (rangeMode && workedWeeks.length === 0) {
+      return { weekDays: [], weekTotal: 0, weekMoney: 0 };
+    }
+
+    // Determinar la fecha de inicio de la semana
+    let startOfWeek: Date;
+
+    if (rangeMode && workedWeeks.length > 0) {
+      // En modo rango, buscar la semana que coincida con currentDate
+      // Si currentDate no está en workedWeeks, usar la primera semana trabajada
+      const currentWeekStr = toLocalISOString(currentDate);
+      const matchingWeek = workedWeeks.find(
+        (w) => toLocalISOString(w) === currentWeekStr
+      );
+      startOfWeek = matchingWeek
+        ? new Date(matchingWeek)
+        : new Date(workedWeeks[0]);
+    } else {
+      // Modo normal: calcular inicio de semana desde currentDate
+      startOfWeek = new Date(currentDate);
+      const day = startOfWeek.getDay(); // 0 Sun
+      const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1);
+      startOfWeek.setDate(diff);
+    }
 
     const days = [];
     let total = 0;
@@ -55,7 +81,7 @@ export const CalendarWeekView: React.FC<CalendarWeekViewProps> = ({
     }
 
     return { weekDays: days, weekTotal: total, weekMoney: money };
-  }, [currentDate, shiftsByDate, hourTypes]);
+  }, [currentDate, shiftsByDate, hourTypes, rangeMode, workedWeeks]);
 
   return (
     <>
