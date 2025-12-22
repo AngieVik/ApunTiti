@@ -594,6 +594,13 @@ export const SettingsView: React.FC = () => {
               )}
             </li>
           ))}
+          {(settings.hourTypes || []).length === 0 ? (
+            <li className={APP_STYLES.CONFIGURACIÓN.hourTypeItem}>
+              <span className="text-gray-500 dark:text-gray-400 text-sm">
+                No hay tipos de hora personalizados
+              </span>
+            </li>
+          ) : null}
         </ul>
       </Card>
       {/* BACKUP CARD */}
@@ -636,24 +643,26 @@ export const SettingsView: React.FC = () => {
 
       {/* SYNC CARD */}
       <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex justify-between items-center">
           <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
             Sincronización Nube
           </h2>
           {syncStatus === "syncing" && (
             <span
-              className={`${APP_STYLES.MODOS.textYellow} text-sm ${APP_STYLES.MODOS.animateSpin}`}
+              className={`${APP_STYLES.MODOS.textAccent} text-sm ${APP_STYLES.MODOS.animateSpin}`}
             >
               Sincronizando...
             </span>
           )}
           {syncStatus === "success" && (
-            <span className={`${APP_STYLES.MODOS.textGreen} text-sm`}>
+            <span className={`${APP_STYLES.MODOS.textSuccess} text-sm`}>
               Sincronizado
             </span>
           )}
           {syncStatus === "error" && (
-            <span className={`${APP_STYLES.MODOS.textRed} text-sm`}>Error</span>
+            <span className={`${APP_STYLES.MODOS.textError} text-sm`}>
+              Error
+            </span>
           )}
         </div>
 

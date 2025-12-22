@@ -47,7 +47,7 @@ export const CARD_VARIANTS = {
     bordered:
       "bg-white dark:bg-[#111] p-3 border-2 border-gray-200 dark:border-gray-700",
     interactive:
-      "bg-white dark:bg-[#111] p-3 border border-gray-100 dark:border-white/5 cursor-pointer hover:border-yellow-500 hover:shadow-md",
+      "bg-white dark:bg-[#111] p-3 border border-gray-100 dark:border-white/5 cursor-pointer hover:border-[var(--theme-accent-primary)] hover:shadow-md",
     flush: "bg-transparent p-0",
   },
 
@@ -55,10 +55,6 @@ export const CARD_VARIANTS = {
     none: "",
     top: "border-t-2 border-t-[var(--theme-accent-primary)]",
     left: "border-l-4 border-l-[var(--theme-accent-primary)]",
-    topBlue: "border-t-2 border-t-blue-500",
-    leftBlue: "border-l-4 border-l-blue-500",
-    topRed: "border-t-2 border-t-red-500",
-    leftRed: "border-l-4 border-l-red-500",
   },
 } as const;
 

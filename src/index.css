@@ -1,47 +1,66 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   ApunTiti Design System - CSS Custom Properties
-   These variables enable hot theme swapping and centralized theming.
+   ApunTiti Design System - Aggressive Theming Engine
+   Complete token-based theming with hot-swappable color palettes
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* --- TAILWIND V4 THEME EXTENSION --- */
 @theme {
-  /* Custom gray shades for dark mode */
+  /* Legacy gray overrides */
   --color-gray-900: #111;
   --color-gray-800: #222;
 
-  /* Semantic color tokens (consumed from CSS variables) */
+  /* ─── SURFACE COLORS ─────────────────────────────────────────────────────── */
   --color-surface-base: var(--theme-surface-base);
   --color-surface-elevated: var(--theme-surface-elevated);
   --color-surface-highest: var(--theme-surface-highest);
+  --color-surface-subtle: var(--theme-surface-subtle);
   --color-surface-interactive: var(--theme-surface-interactive);
 
-  --color-border-default: var(--theme-border-default);
+  /* ─── BORDER COLORS ──────────────────────────────────────────────────────── */
+  --color-border: var(--theme-border-default);
   --color-border-subtle: var(--theme-border-subtle);
   --color-border-accent: var(--theme-border-accent);
 
+  /* ─── TEXT COLORS ────────────────────────────────────────────────────────── */
   --color-text-primary: var(--theme-text-primary);
   --color-text-secondary: var(--theme-text-secondary);
   --color-text-muted: var(--theme-text-muted);
+  --color-text-accent: var(--theme-accent-primary);
 
-  --color-accent-primary: var(--theme-accent-primary);
+  /* ─── ACCENT COLORS ──────────────────────────────────────────────────────── */
+  --color-accent: var(--theme-accent-primary);
   --color-accent-hover: var(--theme-accent-hover);
   --color-accent-on: var(--theme-accent-on);
+  --color-accent-subtle: var(--theme-accent-subtle);
+
+  /* ─── FEEDBACK COLORS ────────────────────────────────────────────────────── */
+  --color-success: var(--theme-success);
+  --color-success-bg: var(--theme-success-bg);
+  --color-error: var(--theme-error);
+  --color-error-bg: var(--theme-error-bg);
+  --color-info: var(--theme-info);
+  --color-info-bg: var(--theme-info-bg);
+
+  /* ─── RADIUS ─────────────────────────────────────────────────────────────── */
+  --radius-theme: var(--theme-radius);
 }
 
 /* --- DARK MODE STRATEGY --- */
 @variant dark (&:is(.dark *));
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   THEME: Light Mode (Default)
+   THEME: Básico (Default - Yellow/Gold accent)
+   Light Mode
    ═══════════════════════════════════════════════════════════════════════════ */
 :root {
   /* Surfaces */
   --theme-surface-base: #f3f4f6;
   --theme-surface-elevated: #ffffff;
   --theme-surface-highest: #ffffff;
-  --theme-surface-interactive: #f9fafb;
+  --theme-surface-subtle: #f9fafb;
+  --theme-surface-interactive: #e5e7eb;
 
   /* Borders */
   --theme-border-default: #e5e7eb;
@@ -57,6 +76,7 @@
   --theme-accent-primary: #eab308;
   --theme-accent-hover: #fbbf24;
   --theme-accent-on: #000000;
+  --theme-accent-subtle: rgba(234, 179, 8, 0.1);
 
   /* Feedback */
   --theme-success: #16a34a;
@@ -65,21 +85,24 @@
   --theme-error-bg: #fee2e2;
   --theme-info: #2563eb;
   --theme-info-bg: #dbeafe;
+
+  /* Radius */
+  --theme-radius: 0.5rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   THEME: Dark Mode
-   Activated via .dark class on <html>
+   THEME: Básico - Dark Mode
    ═══════════════════════════════════════════════════════════════════════════ */
 :root.dark {
   /* Surfaces */
   --theme-surface-base: #000000;
   --theme-surface-elevated: #111111;
   --theme-surface-highest: #1a1a1a;
+  --theme-surface-subtle: #0a0a0a;
   --theme-surface-interactive: #222222;
 
   /* Borders */
-  --theme-border-default: rgba(255, 255, 255, 0.05);
+  --theme-border-default: rgba(255, 255, 255, 0.08);
   --theme-border-subtle: rgba(255, 255, 255, 0.05);
   --theme-border-accent: #eab308;
 
@@ -88,81 +111,102 @@
   --theme-text-secondary: #d1d5db;
   --theme-text-muted: #6b7280;
 
-  /* Accent (same as light for brand consistency) */
+  /* Accent */
   --theme-accent-primary: #eab308;
   --theme-accent-hover: #fbbf24;
   --theme-accent-on: #000000;
+  --theme-accent-subtle: rgba(234, 179, 8, 0.15);
 
   /* Feedback */
   --theme-success: #22c55e;
-  --theme-success-bg: rgba(34, 197, 94, 0.1);
+  --theme-success-bg: rgba(34, 197, 94, 0.15);
   --theme-error: #ef4444;
-  --theme-error-bg: rgba(239, 68, 68, 0.1);
+  --theme-error-bg: rgba(239, 68, 68, 0.15);
   --theme-info: #3b82f6;
-  --theme-info-bg: rgba(59, 130, 246, 0.1);
+  --theme-info-bg: rgba(59, 130, 246, 0.15);
+
+  /* Radius */
+  --theme-radius: 0.5rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   THEME: Básico (Default - Yellow accent)
-   No data-theme attribute needed, this is the default
-   ═══════════════════════════════════════════════════════════════════════════ */
-/* Already defined in :root and :root.dark above */
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   THEME: Rosa Pastel
-   Activated via data-theme="rosa-pastel" on <html>
-   Soft pink and rose tones for a gentle, warm aesthetic
+   THEME: Rosa Pastel - Light Mode
+   Warm cream tones, pink accents, softer corners
    ═══════════════════════════════════════════════════════════════════════════ */
 :root[data-theme="rosa-pastel"] {
-  /* Surfaces - Warmer tones */
-  --theme-surface-base: #fdf2f8;
+  /* Surfaces - Warm cream/pink tones */
+  --theme-surface-base: #fdf8f6;
   --theme-surface-elevated: #ffffff;
   --theme-surface-highest: #ffffff;
-  --theme-surface-interactive: #fce7f3;
+  --theme-surface-subtle: #fcf0ed;
+  --theme-surface-interactive: #fce7e3;
 
-  /* Borders */
-  --theme-border-default: #fbcfe8;
-  --theme-border-subtle: #fce7f3;
+  /* Borders - Soft pink */
+  --theme-border-default: #f5d5ce;
+  --theme-border-subtle: #fae8e3;
   --theme-border-accent: #f472b6;
 
-  /* Accent - Rose/Pink */
+  /* Text - Warm tones (not pure black) */
+  --theme-text-primary: #4a3c39;
+  --theme-text-secondary: #7a6b66;
+  --theme-text-muted: #a89890;
+
+  /* Accent - Pink/Rose */
   --theme-accent-primary: #f472b6;
   --theme-accent-hover: #f9a8d4;
   --theme-accent-on: #ffffff;
+  --theme-accent-subtle: rgba(244, 114, 182, 0.12);
 
-  /* Feedback - Softer tones */
+  /* Feedback */
   --theme-success: #059669;
   --theme-success-bg: #d1fae5;
   --theme-error: #e11d48;
   --theme-error-bg: #ffe4e6;
   --theme-info: #0891b2;
   --theme-info-bg: #cffafe;
+
+  /* Radius - More rounded */
+  --theme-radius: 1rem;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: Rosa Pastel - Dark Mode
+   Dark with pink undertones and warm shadows
+   ═══════════════════════════════════════════════════════════════════════════ */
 :root.dark[data-theme="rosa-pastel"] {
   /* Surfaces - Dark with pink undertones */
-  --theme-surface-base: #0f0f0f;
-  --theme-surface-elevated: #1a1118;
-  --theme-surface-highest: #231520;
-  --theme-surface-interactive: #2d1f28;
+  --theme-surface-base: #120f10;
+  --theme-surface-elevated: #1a1518;
+  --theme-surface-highest: #231c1f;
+  --theme-surface-subtle: #0e0c0d;
+  --theme-surface-interactive: #2d2427;
 
   /* Borders */
-  --theme-border-default: rgba(244, 114, 182, 0.15);
+  --theme-border-default: rgba(244, 114, 182, 0.18);
   --theme-border-subtle: rgba(244, 114, 182, 0.1);
   --theme-border-accent: #f472b6;
 
-  /* Accent - Rose/Pink */
+  /* Text - Warm cream tones */
+  --theme-text-primary: #f5ebe8;
+  --theme-text-secondary: #c9b5af;
+  --theme-text-muted: #8a7872;
+
+  /* Accent - Pink/Rose */
   --theme-accent-primary: #f472b6;
   --theme-accent-hover: #f9a8d4;
-  --theme-accent-on: #ffffff;
+  --theme-accent-on: #120f10;
+  --theme-accent-subtle: rgba(244, 114, 182, 0.2);
 
   /* Feedback */
   --theme-success: #34d399;
-  --theme-success-bg: rgba(52, 211, 153, 0.1);
+  --theme-success-bg: rgba(52, 211, 153, 0.15);
   --theme-error: #fb7185;
-  --theme-error-bg: rgba(251, 113, 133, 0.1);
+  --theme-error-bg: rgba(251, 113, 133, 0.15);
   --theme-info: #22d3ee;
-  --theme-info-bg: rgba(34, 211, 238, 0.1);
+  --theme-info-bg: rgba(34, 211, 238, 0.15);
+
+  /* Radius - More rounded */
+  --theme-radius: 1rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -183,4 +227,11 @@ body {
 :focus-visible {
   outline: 2px solid var(--theme-accent-primary);
   outline-offset: 2px;
+}
+
+/* Smooth theme transitions */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }

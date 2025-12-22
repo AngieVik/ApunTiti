@@ -550,20 +550,36 @@ export const CalendarView: React.FC = () => {
             ))}
           </div>
 
-          {/* GRUPO 2: Selectores de Fecha - Estilo exacto a UI.tsx pero inline */}
+          {/* GRUPO 2: Selectores de Fecha - Clickable anywhere */}
           <div className={APP_STYLES.CALENDARIO.dateSelectorsGroup}>
-            <input
-              type="date"
-              value={rangeStart}
-              onChange={handleRangeStartChange}
-              className={APP_STYLES.CALENDARIO.dateInput}
-            />
-            <input
-              type="date"
-              value={rangeEnd}
-              onChange={handleRangeEndChange}
-              className={APP_STYLES.CALENDARIO.dateInput}
-            />
+            <div
+              className="cursor-pointer"
+              onClick={(e) => {
+                const input = e.currentTarget.querySelector("input");
+                if (input?.showPicker) input.showPicker();
+              }}
+            >
+              <input
+                type="date"
+                value={rangeStart}
+                onChange={handleRangeStartChange}
+                className={APP_STYLES.CALENDARIO.dateInput}
+              />
+            </div>
+            <div
+              className="cursor-pointer"
+              onClick={(e) => {
+                const input = e.currentTarget.querySelector("input");
+                if (input?.showPicker) input.showPicker();
+              }}
+            >
+              <input
+                type="date"
+                value={rangeEnd}
+                onChange={handleRangeEndChange}
+                className={APP_STYLES.CALENDARIO.dateInput}
+              />
+            </div>
           </div>
         </div>
       </Card>

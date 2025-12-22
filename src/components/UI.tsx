@@ -157,11 +157,17 @@ const InputComponent: React.FC<InputProps> = ({
 
   return (
     <div
-      className={INPUT_VARIANTS.wrapper}
+      className={`${INPUT_VARIANTS.wrapper} ${
+        clickToEdit && !disabled ? "group cursor-pointer" : ""
+      }`}
       onClick={handleWrapperClick}
-      style={clickToEdit && !disabled ? { cursor: "pointer" } : undefined}
     >
-      <label htmlFor={inputId} className={INPUT_VARIANTS.label}>
+      <label
+        htmlFor={inputId}
+        className={`${INPUT_VARIANTS.label} ${
+          clickToEdit && !disabled ? "cursor-pointer" : ""
+        }`}
+      >
         {label}
       </label>
       <input
@@ -170,11 +176,15 @@ const InputComponent: React.FC<InputProps> = ({
         disabled={disabled}
         className={`${INPUT_VARIANTS.field.base} ${
           INPUT_VARIANTS.field.sizes.md
-        } ${stateClass} ${className || ""}`}
+        } ${stateClass} ${
+          clickToEdit
+            ? "cursor-pointer [&::-webkit-calendar-picker-indicator]:group-hover:scale-110 [&::-webkit-calendar-picker-indicator]:transition-transform"
+            : ""
+        } ${className || ""}`}
         {...props}
       />
       {errorMessage && state === "error" && (
-        <p className="text-[9px] text-red-500 mt-0.5">{errorMessage}</p>
+        <p className="text-[9px] text-error mt-0.5">{errorMessage}</p>
       )}
     </div>
   );

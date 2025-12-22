@@ -11,10 +11,14 @@ ApunTiti es una aplicación de seguimiento de turnos de trabajo (time tracker) c
 - **Framework**: React 19 (última versión estable)
 - **Lenguaje**: TypeScript (TypeScript 5.5+)
 - **Build Tool**: Vite 6 (última versión)
-- **Styling**: Tailwind CSS v4 (Oxide engine)
-- **PWA**: Vite Plugin PWA 0.20.5+
-- **Gestión de Estado**: React Hooks (useState, useEffect, useMemo, custom hooks)
-- **Persistencia**: LocalStorage (con custom hook `useLocalStorage`)
+- **Styling**: Tailwind CSS v4 (Oxide engine) + Sistema de CSS Variables
+- **PWA**: Vite Plugin PWA 1.2.0+
+- **Gestión de Estado**: Zustand 5 con middleware `persist`
+- **Persistencia**: LocalStorage (via Zustand persist middleware)
+- **Validación**: Zod 4+ para schemas
+- **Animaciones**: Framer Motion 12+
+- **PDF**: jsPDF + jspdf-autotable
+- **Virtualización**: react-window + react-virtualized-auto-sizer
 
 ---
 
@@ -22,24 +26,52 @@ ApunTiti es una aplicación de seguimiento de turnos de trabajo (time tracker) c
 
 ```
 src/
-├── components/          # Componentes React (.tsx)
-│   ├── CalendarView.tsx   # Vista de calendario con múltiples modos (mes, semana, día, año, rango)
-│   ├── ClockView.tsx      # Vista de registro de turnos y resumen mensual
-│   ├── Header.tsx         # Barra de navegación superior con fecha/hora en vivo
-│   ├── Icons.tsx          # Componentes de iconos SVG exportados individualmente
-│   ├── SettingsView.tsx   # Vista de configuración (categorías, tipos de hora, backup)
-│   ├── UI.tsx             # Componentes UI reutilizables (Button, Card, Input, Select, Toast, ConfirmDialog)
-│   └── Views.tsx          # Archivo de índice para exportar vistas principales
-├── hooks/               # Custom React Hooks (.ts)
-│   └── useLocalStorage.ts # Hook para sincronizar estado con localStorage
-├── theme/               # Sistema de estilos centralizado
-│   └── styles.ts          # ÚNICO archivo con TODAS las clases de Tailwind (exporta APP_STYLES)
-├── types.ts             # Definiciones de tipos TypeScript globales
-├── App.tsx              # Componente raíz de la aplicación
-├── index.tsx            # Punto de entrada de React (ReactDOM.render)
-├── index.css            # Estilos globales CSS (configuración Tailwind v4, dark mode)
-├── icons.json           # Datos de iconos de PWA
-└── metadata.json        # Metadatos de la aplicación
+├── components/              # Componentes React (.tsx)
+│   ├── CalendarView.tsx       # Vista de calendario con múltiples modos
+│   ├── ClockView.tsx          # Vista de registro de turnos y resumen mensual
+│   ├── Header.tsx             # Barra de navegación superior con fecha/hora en vivo
+│   ├── Icons.tsx              # Componentes de iconos SVG exportados individualmente
+│   ├── SettingsView.tsx       # Vista de configuración (categorías, tipos de hora, backup)
+│   ├── UI.tsx                 # Componentes UI reutilizables (Button, Card, Input, Select, Toast)
+│   ├── Views.tsx              # Archivo de índice para exportar vistas principales
+│   ├── ErrorBoundary.tsx      # Error boundary para manejo de errores
+│   └── calendar/              # Sub-componentes de calendario
+│       ├── CalendarDayView.tsx
+│       ├── CalendarWeekView.tsx
+│       ├── CalendarMonthView.tsx
+│       ├── CalendarYearView.tsx
+│       ├── CalendarRangeView.tsx
+│       ├── FilterDropdown.tsx
+│       ├── SummaryCard.tsx
+│       └── index.ts           # Barrel export
+├── hooks/                   # Custom React Hooks (.ts)
+│   ├── useLocalStorage.ts    # Hook legacy para sincronizar con localStorage
+│   └── useAnalytics.ts       # Hook para métricas y análisis
+├── store/                   # Zustand Store
+│   └── useAppStore.ts        # Store global con persist middleware
+├── services/                # Servicios externos
+│   └── api.ts                # Mock sync service para cloud backup
+├── constants/               # Constantes de la aplicación
+│   └── app.ts                # Constantes globales (SPECIAL_CATEGORY, etc.)
+├── theme/                   # Sistema de estilos centralizado
+│   ├── index.ts               # Barrel export (tokens + styles)
+│   ├── styles.ts              # Clases Tailwind organizadas por vista (APP_STYLES)
+│   └── tokens/                # Design tokens atómicos
+│       ├── index.ts             # Barrel export de todos los tokens
+│       ├── primitives.ts        # Valores atómicos (colores, espaciado, tipografía)
+│       ├── semantic.ts          # Tokens semánticos (surfaces, borders, states)
+│       ├── components.ts        # Variantes de componentes (BUTTON_VARIANTS, CARD_VARIANTS)
+│       └── layout.ts            # Tokens de layout (grids, containers)
+├── utils/                   # Utilidades compartidas
+│   ├── time.ts                # Utilidades de fecha/hora (parseDateString, calculateDuration)
+│   ├── notifications.ts       # Sistema de notificaciones push
+│   ├── pdfGenerator.ts        # Generación de PDF con jsPDF
+│   └── validationSchemas.ts   # Schemas Zod para validación
+├── __tests__/               # Tests unitarios (Vitest)
+├── types.ts                 # Definiciones de tipos TypeScript globales
+├── App.tsx                  # Componente raíz de la aplicación
+├── index.tsx                # Punto de entrada de React
+└── index.css                # CSS global + CSS variables de temas + Tailwind v4
 ```
 
 ---
@@ -209,42 +241,76 @@ console.log("Debugging shifts:", shifts);
 
 ---
 
-## 🎣 Hooks y Gestión de Estado
+## 🎣 Estado Global con Zustand
 
-### Custom Hooks
+### Store Principal: `useAppStore`
 
-**Custom hook principal**: `useLocalStorage<T>(key: string, initialValue: T)`
+**Ubicación**: `src/store/useAppStore.ts`
 
-- Sincroniza automáticamente el estado de React con `localStorage`
-- Escucha cambios del storage API para sincronización multi-tab
-- Usado para persistir: theme, shifts, settings
+El estado global de la aplicación se gestiona con **Zustand 5** usando el middleware `persist`:
 
-### Hooks Nativos Permitidos
+```typescript
+import { useAppStore } from "../store/useAppStore";
 
-- `useState` - Estado local del componente
-- `useEffect` - Efectos secundarios (timers, event listeners, sincronización)
-- `useMemo` - Memoización de cálculos costosos
-- **NO usar** `useContext`, `useReducer` o estado global complejo (Zustand, Redux) a menos que sea absolutamente necesario
+// En componentes - obtener estado
+const shifts = useAppStore((state) => state.shifts);
+const settings = useAppStore((state) => state.settings);
+const theme = useAppStore((state) => state.theme);
+
+// Obtener acciones
+const setShifts = useAppStore((state) => state.setShifts);
+const updateSettings = useAppStore((state) => state.updateSettings);
+const notify = useAppStore((state) => state.notify);
+
+// O desestructurar múltiples selectores
+const { shifts, settings, setShifts, notify } = useAppStore();
+```
+
+### Estado Persistido
+
+El store persiste automáticamente en `localStorage` bajo la clave `apuntiti-storage`:
+
+- `shifts` - Array de turnos registrados
+- `settings` - Configuración (categorías, tipos de hora, formato)
+- `theme` - Tema actual (light/dark)
+
+**NO se persiste**: `notification`, `syncStatus`
+
+### Acciones Disponibles
+
+```typescript
+interface AppState {
+  // Estado
+  shifts: Shift[];
+  settings: Settings;
+  theme: Theme;
+  notification: Notification | null;
+  syncStatus: "idle" | "syncing" | "success" | "error";
+
+  // Acciones
+  setShifts: (shifts: Shift[] | ((prev: Shift[]) => Shift[])) => void;
+  addShift: (shift: Shift) => void;
+  updateSettings: (settings: Settings | ((prev: Settings) => Settings)) => void;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
+  notify: (message: string, type?: "success" | "error" | "info") => void;
+  sync: () => Promise<void>;
+}
+```
 
 ### Pattern de Notificaciones
 
-Usar el sistema de notificaciones Toast integrado:
+Usar `notify` del store en lugar de props:
 
 ```typescript
-// En componentes principales (App.tsx)
-const [notification, setNotification] = useState<Notification | null>(null);
-
-const notify = (message: string, type: NotificationType = "success") => {
-  setNotification({ message, type });
-};
-
-// Pasar como prop a componentes hijos
-<ClockView notify={notify} />;
-
-// Usar en componentes
+// CORRECTO ✅ - Usar notify del store
+const notify = useAppStore((state) => state.notify);
 notify("Turno guardado correctamente", "success");
 notify("Error al eliminar turno", "error");
 notify("Datos importados", "info");
+
+// OBSOLETO ❌ - Ya no se pasa como prop
+// <ClockView notify={notify} />
 ```
 
 ---
@@ -599,40 +665,84 @@ const monthShifts = shifts.filter((s) => {
 
 ---
 
-## 🎨 Paleta de Colores y Filosofía Visual
+## 🎨 Sistema de Aggressive Theming
 
-### Colores Principales
+### Arquitectura de 3 Capas
 
-- **Acento primario**: `yellow-500` (amarillo intenso para CTAs, botones primarios, highlights)
-- **Fondo claro**: `gray-100`, `white`
-- **Fondo oscuro**: `black`, `#111`, `#1a1a1a`, `#222`
-- **Bordes claros**: `gray-100`, `gray-200`
-- **Bordes oscuros**: `white/5`, `white/10`, `gray-800`
-- **Texto claro**: `gray-900`, `gray-700`
-- **Texto oscuro**: `white`, `gray-100`, `gray-300`
-- **Success**: `green-500`, `green-600`
-- **Error**: `red-500`, `red-600`
-- **Info**: `blue-500`
+El sistema de estilos usa un enfoque de **Aggressive Theming** donde los temas pueden cambiar completamente la identidad visual (no solo colores de acento):
 
-### Espaciado
+1. **CSS Variables** (`index.css`) - Definen valores por tema
+2. **Tailwind Semantic Classes** (via `@theme` en `index.css`) - Mapean variables a utilidades
+3. **APP_STYLES** (`styles.ts`) - Consumen únicamente clases semánticas
 
-- **Container principal**: `p-2 sm:p-4 lg:p-6` (responsive)
-- **Cards**: `p-3` (padding interno)
-- **Gaps entre elementos**: `gap-2` (default), `gap-1` (compacto)
-- **Tamaños de fuente**:
-  - Muy pequeño: `text-[9px]`, `text-[10px]`
-  - Pequeño: `text-xs` (12px)
-  - Normal: `text-sm` (14px)
-  - Grande: `text-lg` (18px)
+### CSS Variables de Tema
 
-### Tipografía
+```css
+/* index.css - Variables definidas por tema */
+:root[data-theme="basico"] {
+  --theme-surface-base: #ffffff;
+  --theme-surface-elevated: #f9fafb;
+  --theme-text-primary: #1f2937;
+  --theme-accent-primary: #eab308;
+  --theme-accent-hover: #facc15;
+  --theme-accent-on: #000000;
+  --theme-radius: 0.5rem;
+}
 
-- **Font family**: System font stack (default de Tailwind)
-- **Font weights**:
-  - `font-medium` (500) - Texto normal
-  - `font-bold` (700) - Etiquetas, badges
-  - `font-black` (900) - Títulos destacados
-- **Font mono**: Usar `font-mono` para horas, números de duración, precios
+:root[data-theme="rosa-pastel"] {
+  --theme-surface-base: #fdf2f8;
+  --theme-accent-primary: #f472b6;
+  --theme-radius: 1rem;
+}
+```
+
+### Clases Semánticas Disponibles
+
+Estas utilidades se generan en el bloque `@theme` de `index.css`:
+
+| CSS Variable               | Clase Tailwind               | Uso                |
+| -------------------------- | ---------------------------- | ------------------ |
+| `--theme-surface-base`     | `bg-surface-base`            | Fondos principales |
+| `--theme-surface-elevated` | `bg-surface-elevated`        | Cards, modales     |
+| `--theme-text-primary`     | `text-text-primary`          | Texto principal    |
+| `--theme-text-secondary`   | `text-text-secondary`        | Texto secundario   |
+| `--theme-accent-primary`   | `bg-accent`, `text-accent`   | Acento principal   |
+| `--theme-border-default`   | `border-border`              | Bordes estándar    |
+| `--theme-success`          | `text-success`, `bg-success` | Estados de éxito   |
+| `--theme-error`            | `text-error`, `bg-error`     | Estados de error   |
+
+### Uso en Estilos (OBLIGATORIO)
+
+```typescript
+// CORRECTO ✅ - Usar clases semánticas
+container: "bg-surface-base text-text-primary border-border";
+button: "bg-accent text-accent-on hover:bg-accent-hover";
+
+// INCORRECTO ❌ - Clases hardcoded
+container: "bg-white dark:bg-black text-gray-900 dark:text-white";
+button: "bg-yellow-500 text-black hover:bg-yellow-600";
+```
+
+### Agregar Nuevo Tema
+
+1. Agregar config en `types.ts`:
+
+```typescript
+export const COLOR_THEMES: ColorThemeConfig[] = [
+  { id: "nuevo-tema", name: "Nuevo Tema", preview: "#hexcolor" },
+];
+```
+
+2. Definir variables en `index.css` (light y dark):
+
+```css
+:root[data-theme="nuevo-tema"] {
+  /* light mode variables */
+}
+:root.dark[data-theme="nuevo-tema"] {
+  /* dark mode overrides */
+}
+```
 
 ---
 
@@ -720,16 +830,40 @@ const calculateDuration = (start: string, end: string): number => {
 
 ---
 
-## 🧪 Testing (Futuro)
+## 🧪 Testing
 
-**Estado actual**: No hay tests implementados.
+### Infraestructura de Tests
 
-**Cuando se implementen**:
+- **Unit Tests**: Vitest 4.x + Testing Library
+- **E2E Tests**: Playwright
+- **Accesibilidad**: @axe-core/playwright
 
-- Usar Vitest (integrado con Vite)
-- Testing Library para componentes React
-- Priorizar tests de lógica de negocio (helpers, cálculos)
-- Tests de integración para flujos críticos (guardar turno, calcular ganancias)
+### Scripts Disponibles
+
+```bash
+npm run test        # Ejecutar tests una vez
+npm run test:watch  # Tests en modo watch
+```
+
+### Estructura de Tests
+
+```
+src/__tests__/              # Tests unitarios de lógica
+├── CalendarView.test.tsx
+├── ClockView.test.tsx
+└── useAppStore.test.ts
+
+src/components/UI.test.tsx  # Tests de componentes UI
+
+tests/                      # Tests E2E con Playwright
+└── *.spec.ts
+```
+
+### Prioridades de Testing
+
+1. **Crítico**: Lógica de negocio (`utils/time.ts`, store actions)
+2. **Alto**: Componentes de formulario y validación
+3. **Medio**: Flujos de usuario (E2E)
 
 ---
 
@@ -807,4 +941,4 @@ Este archivo debe actualizarse cuando:
 
 **Autor**: AngieVik
 **Proyecto**: ApunTiti - Time Tracker PWA
-**Última actualización**: 2025-12-18
+**Última actualización**: 2025-12-22
