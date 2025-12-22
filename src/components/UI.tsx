@@ -2,12 +2,30 @@ import React, { useEffect, useId, memo, useRef } from "react";
 import { Notification } from "../types";
 import { CheckIcon, XMarkIcon, FlagIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
+import {
+  BUTTON_VARIANTS,
+  CARD_VARIANTS,
+  INPUT_VARIANTS,
+  SELECT_VARIANTS,
+  type ButtonVariant,
+  type ButtonSize,
+  type CardVariant,
+  type CardAccent,
+  type InputState,
+} from "../theme/tokens";
 import { motion, AnimatePresence, HTMLMotionProps } from "framer-motion";
 
-// Button
+// ─── BUTTON ────────────────────────────────────────────────────────────────
 interface ButtonProps extends HTMLMotionProps<"button"> {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "danger";
+  /** Button style variant */
+  variant?: ButtonVariant;
+  /** Button size */
+  size?: ButtonSize;
+  /** Show loading spinner */
+  loading?: boolean;
+  /** Icon-only button (no text padding) */
+  iconOnly?: boolean;
   "aria-label"?: string;
 }
 
@@ -15,27 +33,34 @@ const ButtonComponent: React.FC<ButtonProps> = ({
   children,
   className,
   variant = "primary",
+  size = "md",
+  loading = false,
+  iconOnly = false,
   type = "button",
+  disabled,
   ...props
 }) => {
-  const variantClass =
-    variant === "primary"
-      ? APP_STYLES.MODOS.uiButtonPrimary
-      : variant === "secondary"
-      ? APP_STYLES.MODOS.uiButtonSecondary
-      : APP_STYLES.MODOS.uiButtonDanger;
+  const variantClass = BUTTON_VARIANTS.variants[variant];
+  const sizeClass = iconOnly
+    ? BUTTON_VARIANTS.iconOnly[size]
+    : BUTTON_VARIANTS.sizes[size];
 
   return (
     <motion.button
       type={type}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.95 }}
-      className={`${APP_STYLES.MODOS.uiButtonBase} ${variantClass} ${
+      whileHover={!disabled && !loading ? { scale: 1.02 } : undefined}
+      whileTap={!disabled && !loading ? { scale: 0.95 } : undefined}
+      disabled={disabled || loading}
+      className={`${BUTTON_VARIANTS.base} ${variantClass} ${sizeClass} ${
         className || ""
       }`}
       {...props}
     >
-      {children}
+      {loading ? (
+        <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+      ) : (
+        children
+      )}
     </motion.button>
   );
 };
@@ -43,21 +68,45 @@ const ButtonComponent: React.FC<ButtonProps> = ({
 export const Button = memo(ButtonComponent);
 Button.displayName = "Button";
 
-// Card
+// ─── CARD ──────────────────────────────────────────────────────────────────
 interface CardProps {
   children: React.ReactNode;
   className?: string;
   id?: string;
+  /** Card style variant */
+  variant?: CardVariant;
+  /** Accent border position */
+  accent?: CardAccent;
+  /** Disable entrance animation */
+  noAnimation?: boolean;
 }
 
-const CardComponent: React.FC<CardProps> = ({ children, className, id }) => {
+const CardComponent: React.FC<CardProps> = ({
+  children,
+  className,
+  id,
+  variant = "default",
+  accent = "none",
+  noAnimation = false,
+}) => {
+  const variantClass = CARD_VARIANTS.variants[variant];
+  const accentClass = CARD_VARIANTS.accents[accent];
+
+  const motionProps = noAnimation
+    ? {}
+    : {
+        initial: { opacity: 0, scale: 0.95 },
+        animate: { opacity: 1, scale: 1 },
+        transition: { duration: 0.3 },
+      };
+
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
+      {...motionProps}
       id={id}
-      className={`${APP_STYLES.MODOS.uiCard} ${className || ""}`}
+      className={`${CARD_VARIANTS.base} ${variantClass} ${accentClass} ${
+        className || ""
+      }`}
     >
       {children}
     </motion.div>
@@ -67,10 +116,15 @@ const CardComponent: React.FC<CardProps> = ({ children, className, id }) => {
 export const Card = memo(CardComponent);
 Card.displayName = "Card";
 
-// Input
+// ─── INPUT ─────────────────────────────────────────────────────────────────
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  /** Open picker on wrapper click (useful for date/time inputs) */
   clickToEdit?: boolean;
+  /** Validation state */
+  state?: InputState;
+  /** Error message to display */
+  errorMessage?: string;
 }
 
 const InputComponent: React.FC<InputProps> = ({
@@ -78,6 +132,9 @@ const InputComponent: React.FC<InputProps> = ({
   id,
   className,
   clickToEdit = false,
+  state = "default",
+  errorMessage,
+  disabled,
   ...props
 }) => {
   const generatedId = useId();
@@ -85,7 +142,7 @@ const InputComponent: React.FC<InputProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleWrapperClick = () => {
-    if (clickToEdit && inputRef.current) {
+    if (clickToEdit && inputRef.current && !disabled) {
       if (inputRef.current.showPicker) {
         inputRef.current.showPicker();
       } else {
@@ -94,21 +151,31 @@ const InputComponent: React.FC<InputProps> = ({
     }
   };
 
+  const stateClass = disabled
+    ? INPUT_VARIANTS.field.states.disabled
+    : INPUT_VARIANTS.field.states[state];
+
   return (
     <div
-      className={APP_STYLES.MODOS.uiInputWrapper}
+      className={INPUT_VARIANTS.wrapper}
       onClick={handleWrapperClick}
-      style={clickToEdit ? { cursor: "pointer" } : undefined}
+      style={clickToEdit && !disabled ? { cursor: "pointer" } : undefined}
     >
-      <label htmlFor={inputId} className={APP_STYLES.MODOS.uiInputLabel}>
+      <label htmlFor={inputId} className={INPUT_VARIANTS.label}>
         {label}
       </label>
       <input
         ref={inputRef}
         id={inputId}
-        className={`${APP_STYLES.MODOS.uiInputField} ${className || ""}`}
+        disabled={disabled}
+        className={`${INPUT_VARIANTS.field.base} ${
+          INPUT_VARIANTS.field.sizes.md
+        } ${stateClass} ${className || ""}`}
         {...props}
       />
+      {errorMessage && state === "error" && (
+        <p className="text-[9px] text-red-500 mt-0.5">{errorMessage}</p>
+      )}
     </div>
   );
 };
@@ -116,10 +183,12 @@ const InputComponent: React.FC<InputProps> = ({
 export const Input = memo(InputComponent);
 Input.displayName = "Input";
 
-// Select
+// ─── SELECT ────────────────────────────────────────────────────────────────
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   children: React.ReactNode;
+  /** Validation state */
+  state?: "default" | "error";
 }
 
 const SelectComponent: React.FC<SelectProps> = ({
@@ -127,28 +196,37 @@ const SelectComponent: React.FC<SelectProps> = ({
   id,
   children,
   className,
+  state = "default",
+  disabled,
   ...props
 }) => {
   const generatedId = useId();
   const selectId = id || generatedId;
 
+  const stateClass = disabled
+    ? SELECT_VARIANTS.field.states.disabled
+    : SELECT_VARIANTS.field.states[state];
+
   return (
-    <div className={APP_STYLES.MODOS.uiSelectWrapper}>
+    <div className={SELECT_VARIANTS.wrapper}>
       {label && (
-        <label htmlFor={selectId} className={APP_STYLES.MODOS.uiSelectLabel}>
+        <label htmlFor={selectId} className={SELECT_VARIANTS.label}>
           {label}
         </label>
       )}
-      <div className={APP_STYLES.MODOS.uiSelectContainer}>
+      <div className={SELECT_VARIANTS.container}>
         <select
           id={selectId}
-          className={`${APP_STYLES.MODOS.uiSelectField} ${className || ""}`}
+          disabled={disabled}
+          className={`${SELECT_VARIANTS.field.base} ${
+            SELECT_VARIANTS.field.sizes.md
+          } ${stateClass} ${className || ""}`}
           {...props}
         >
           {children}
         </select>
         {/* Custom arrow for cleaner look */}
-        <div className={APP_STYLES.MODOS.uiSelectArrow} aria-hidden="true">
+        <div className={SELECT_VARIANTS.arrow} aria-hidden="true">
           <svg
             className="fill-current h-3 w-3"
             xmlns="http://www.w3.org/2000/svg"

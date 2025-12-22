@@ -9,6 +9,22 @@ export enum Theme {
   Dark = "dark",
 }
 
+/** Available color themes for the app */
+export type ColorTheme = "basico" | "rosa-pastel";
+
+/** Color theme configuration */
+export interface ColorThemeConfig {
+  id: ColorTheme;
+  name: string;
+  preview: string; // CSS color for preview
+}
+
+/** Available color themes list */
+export const COLOR_THEMES: ColorThemeConfig[] = [
+  { id: "basico", name: "Básico", preview: "#eab308" },
+  { id: "rosa-pastel", name: "Rosa Pastel", preview: "#f472b6" },
+];
+
 export interface HourType {
   id: string;
   name: string;
@@ -30,6 +46,7 @@ export interface Settings {
   hourTypes: HourType[];
   downloadFormat: "txt" | "pdf";
   pushEnabled?: boolean;
+  colorTheme?: ColorTheme;
 }
 
 export interface BackupData {

@@ -1,20 +1,186 @@
 @import "tailwindcss";
 
-/* Tailwind v4 Configuration */
+/* ═══════════════════════════════════════════════════════════════════════════
+   ApunTiti Design System - CSS Custom Properties
+   These variables enable hot theme swapping and centralized theming.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* --- TAILWIND V4 THEME EXTENSION --- */
 @theme {
-  /* Custom colors */
+  /* Custom gray shades for dark mode */
   --color-gray-900: #111;
   --color-gray-800: #222;
+
+  /* Semantic color tokens (consumed from CSS variables) */
+  --color-surface-base: var(--theme-surface-base);
+  --color-surface-elevated: var(--theme-surface-elevated);
+  --color-surface-highest: var(--theme-surface-highest);
+  --color-surface-interactive: var(--theme-surface-interactive);
+
+  --color-border-default: var(--theme-border-default);
+  --color-border-subtle: var(--theme-border-subtle);
+  --color-border-accent: var(--theme-border-accent);
+
+  --color-text-primary: var(--theme-text-primary);
+  --color-text-secondary: var(--theme-text-secondary);
+  --color-text-muted: var(--theme-text-muted);
+
+  --color-accent-primary: var(--theme-accent-primary);
+  --color-accent-hover: var(--theme-accent-hover);
+  --color-accent-on: var(--theme-accent-on);
 }
 
-/* Configure dark mode to use class strategy */
+/* --- DARK MODE STRATEGY --- */
 @variant dark (&:is(.dark *));
 
-/* Global styles */
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: Light Mode (Default)
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* Surfaces */
+  --theme-surface-base: #f3f4f6;
+  --theme-surface-elevated: #ffffff;
+  --theme-surface-highest: #ffffff;
+  --theme-surface-interactive: #f9fafb;
+
+  /* Borders */
+  --theme-border-default: #e5e7eb;
+  --theme-border-subtle: #f3f4f6;
+  --theme-border-accent: #eab308;
+
+  /* Text */
+  --theme-text-primary: #111827;
+  --theme-text-secondary: #374151;
+  --theme-text-muted: #6b7280;
+
+  /* Accent */
+  --theme-accent-primary: #eab308;
+  --theme-accent-hover: #fbbf24;
+  --theme-accent-on: #000000;
+
+  /* Feedback */
+  --theme-success: #16a34a;
+  --theme-success-bg: #dcfce7;
+  --theme-error: #dc2626;
+  --theme-error-bg: #fee2e2;
+  --theme-info: #2563eb;
+  --theme-info-bg: #dbeafe;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: Dark Mode
+   Activated via .dark class on <html>
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root.dark {
+  /* Surfaces */
+  --theme-surface-base: #000000;
+  --theme-surface-elevated: #111111;
+  --theme-surface-highest: #1a1a1a;
+  --theme-surface-interactive: #222222;
+
+  /* Borders */
+  --theme-border-default: rgba(255, 255, 255, 0.05);
+  --theme-border-subtle: rgba(255, 255, 255, 0.05);
+  --theme-border-accent: #eab308;
+
+  /* Text */
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #d1d5db;
+  --theme-text-muted: #6b7280;
+
+  /* Accent (same as light for brand consistency) */
+  --theme-accent-primary: #eab308;
+  --theme-accent-hover: #fbbf24;
+  --theme-accent-on: #000000;
+
+  /* Feedback */
+  --theme-success: #22c55e;
+  --theme-success-bg: rgba(34, 197, 94, 0.1);
+  --theme-error: #ef4444;
+  --theme-error-bg: rgba(239, 68, 68, 0.1);
+  --theme-info: #3b82f6;
+  --theme-info-bg: rgba(59, 130, 246, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: Básico (Default - Yellow accent)
+   No data-theme attribute needed, this is the default
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* Already defined in :root and :root.dark above */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME: Rosa Pastel
+   Activated via data-theme="rosa-pastel" on <html>
+   Soft pink and rose tones for a gentle, warm aesthetic
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root[data-theme="rosa-pastel"] {
+  /* Surfaces - Warmer tones */
+  --theme-surface-base: #fdf2f8;
+  --theme-surface-elevated: #ffffff;
+  --theme-surface-highest: #ffffff;
+  --theme-surface-interactive: #fce7f3;
+
+  /* Borders */
+  --theme-border-default: #fbcfe8;
+  --theme-border-subtle: #fce7f3;
+  --theme-border-accent: #f472b6;
+
+  /* Accent - Rose/Pink */
+  --theme-accent-primary: #f472b6;
+  --theme-accent-hover: #f9a8d4;
+  --theme-accent-on: #ffffff;
+
+  /* Feedback - Softer tones */
+  --theme-success: #059669;
+  --theme-success-bg: #d1fae5;
+  --theme-error: #e11d48;
+  --theme-error-bg: #ffe4e6;
+  --theme-info: #0891b2;
+  --theme-info-bg: #cffafe;
+}
+
+:root.dark[data-theme="rosa-pastel"] {
+  /* Surfaces - Dark with pink undertones */
+  --theme-surface-base: #0f0f0f;
+  --theme-surface-elevated: #1a1118;
+  --theme-surface-highest: #231520;
+  --theme-surface-interactive: #2d1f28;
+
+  /* Borders */
+  --theme-border-default: rgba(244, 114, 182, 0.15);
+  --theme-border-subtle: rgba(244, 114, 182, 0.1);
+  --theme-border-accent: #f472b6;
+
+  /* Accent - Rose/Pink */
+  --theme-accent-primary: #f472b6;
+  --theme-accent-hover: #f9a8d4;
+  --theme-accent-on: #ffffff;
+
+  /* Feedback */
+  --theme-success: #34d399;
+  --theme-success-bg: rgba(52, 211, 153, 0.1);
+  --theme-error: #fb7185;
+  --theme-error-bg: rgba(251, 113, 133, 0.1);
+  --theme-info: #22d3ee;
+  --theme-info-bg: rgba(34, 211, 238, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
 body {
-  @apply bg-gray-200 dark:bg-black text-gray-900 dark:text-gray-100 transition-colors duration-300;
+  background-color: var(--theme-surface-base);
+  color: var(--theme-text-primary);
+  @apply transition-colors duration-300;
 }
 
 ::selection {
-  @apply bg-yellow-500 text-black;
+  background-color: var(--theme-accent-primary);
+  color: var(--theme-accent-on);
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--theme-accent-primary);
+  outline-offset: 2px;
 }

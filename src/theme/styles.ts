@@ -200,7 +200,7 @@ export const APP_STYLES = {
     weekContainer:
       "flex border border-gray-100 dark:border-white/5 rounded-lg overflow-x-auto overflow-y-hidden bg-white dark:bg-[#111] min-w-full",
     weekDayColumn:
-      "flex-1 min-w-[50px] sm:min-w-[80px] md:min-w-[100px] min-h-[120px] sm:min-h-[140px] border-r border-gray-100 dark:border-white/5 last:border-r-0 p-1 sm:p-1.5 hover:bg-gray-50 dark:hover:bg-[#1a1a1a] cursor-pointer transition-colors",
+      "flex-1 min-w-12 sm:min-w-20 md:min-w-24 min-h-28 sm:min-h-36 border-r border-gray-100 dark:border-white/5 last:border-r-0 p-1 sm:p-1.5 hover:bg-gray-50 dark:hover:bg-[#1a1a1a] cursor-pointer transition-colors",
     weekDayHeader:
       "text-center border-b border-gray-100 dark:border-white/5 pb-0.5 sm:pb-1 mb-0.5 sm:mb-1",
     weekDayName:
@@ -275,7 +275,7 @@ export const APP_STYLES = {
       "block font-bold text-xs text-green-600 dark:text-green-500",
     rangeGrid: "grid grid-cols-7 gap-1",
     rangeDayCard:
-      "min-h-[35px] border border-gray-100 dark:border-white/5 bg-white dark:bg-[#1a1a1a] p-0.5 rounded cursor-pointer hover:border-yellow-500 transition-colors flex flex-col",
+      "min-h-9 border border-gray-100 dark:border-white/5 bg-white dark:bg-[#1a1a1a] p-0.5 rounded cursor-pointer hover:border-yellow-500 transition-colors flex flex-col",
     rangeDayHeader:
       "text-center border-b border-gray-100 dark:border-white/5 pb-0.5 mb-0.5 flex justify-between items-center px-0.5",
     rangeDayName:
@@ -294,7 +294,7 @@ export const APP_STYLES = {
     // Summary cards (for totals display)
     summaryCardsContainer: "flex gap-2 items-center print:hidden",
     summaryCard:
-      "bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/5 rounded-lg p-2 min-w-[100px]",
+      "bg-white dark:bg-[#1a1a1a] border border-gray-200 dark:border-white/5 rounded-lg p-2 min-w-24",
     summaryCardTitle:
       "text-[9px] font-bold uppercase text-gray-500 dark:text-gray-400 tracking-wide mb-1",
     summaryCardValue:
@@ -303,7 +303,7 @@ export const APP_STYLES = {
 
     // Filter dropdowns
     filtersContainer: "flex flex-wrap gap-2 items-center print:hidden",
-    filterDropdown: "min-w-[90px]",
+    filterDropdown: "min-w-24",
 
     // Controls bar layout - Responsive: Grid 3 cols (Móvil) / Flex (PC)
     controlsBarContainer:
@@ -312,10 +312,10 @@ export const APP_STYLES = {
     // Sección Filtros: Vertical en móvil, Horizontal en PC
     controlsBarFiltersSection:
       "col-span-1 flex flex-col md:flex-row gap-2 w-full md:w-auto",
-    controlsBarFilterWrapper: "w-full md:w-auto min-w-[120px]",
+    controlsBarFilterWrapper: "w-full md:w-auto min-w-28",
 
     // Sección Totales
-    controlsBarTotalsSection: "col-span-1 w-full md:w-auto min-w-[100px]",
+    controlsBarTotalsSection: "col-span-1 w-full md:w-auto min-w-24",
     controlsBarTotalsCard: "p-2",
     controlsBarTotalItem:
       "mb-2 pb-2 border-b-2 border-gray-200 dark:border-gray-700 last:mb-0 last:pb-0 last:border-b-0",

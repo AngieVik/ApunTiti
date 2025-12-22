@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { HourType, BackupData } from "../types";
+import React, { useState, useRef, useEffect } from "react";
+import { HourType, BackupData, COLOR_THEMES } from "../types";
 import { Card, Button, Input, Select, ConfirmDialog } from "./UI";
 import {
   ArrowPathIcon,
@@ -47,6 +47,16 @@ export const SettingsView: React.FC = () => {
   const [confirmClearAll, setConfirmClearAll] = useState<1 | 2 | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Apply color theme to document
+  useEffect(() => {
+    const theme = settings.colorTheme || "basico";
+    if (theme === "basico") {
+      document.documentElement.removeAttribute("data-theme");
+    } else {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+  }, [settings.colorTheme]);
 
   // Constants
   const MAX_CATEGORIES = 10;
@@ -371,6 +381,43 @@ export const SettingsView: React.FC = () => {
             <option value="disabled">Desactivadas</option>
             <option value="enabled">Activadas</option>
           </Select>
+        </div>
+
+        {/* Theme Selector */}
+        <div className="mt-2">
+          <label className="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-1 uppercase tracking-wider">
+            Tema de Color
+          </label>
+          <div className="flex gap-2">
+            {COLOR_THEMES.map((theme) => (
+              <button
+                key={theme.id}
+                onClick={() => {
+                  updateSettings((prev) => ({ ...prev, colorTheme: theme.id }));
+                  notify(`Tema "${theme.name}" aplicado`, "success");
+                }}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all ${
+                  (settings.colorTheme || "basico") === theme.id
+                    ? "border-2 border-current bg-gray-50 dark:bg-[#1a1a1a] font-bold"
+                    : "border-gray-200 dark:border-gray-700 hover:border-gray-400"
+                }`}
+                style={{
+                  borderColor:
+                    (settings.colorTheme || "basico") === theme.id
+                      ? theme.preview
+                      : undefined,
+                }}
+              >
+                <span
+                  className="w-4 h-4 rounded-full border border-white/20 shadow-sm"
+                  style={{ backgroundColor: theme.preview }}
+                />
+                <span className="text-xs text-gray-700 dark:text-gray-200">
+                  {theme.name}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
       </Card>
 
