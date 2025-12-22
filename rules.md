@@ -18,6 +18,8 @@ ApunTiti es una aplicación de seguimiento de turnos de trabajo (time tracker) c
 - **Validación**: Zod 4+ para schemas
 - **Animaciones**: Framer Motion 12+
 - **PDF**: jsPDF + jspdf-autotable
+- **Excel**: xlsx (SheetJS)
+- **i18n**: react-i18next + i18next
 - **Virtualización**: react-window + react-virtualized-auto-sizer
 
 ---
@@ -45,8 +47,12 @@ src/
 │       ├── SummaryCard.tsx
 │       └── index.ts           # Barrel export
 ├── hooks/                   # Custom React Hooks (.ts)
-│   ├── useLocalStorage.ts    # Hook legacy para sincronizar con localStorage
 │   └── useAnalytics.ts       # Hook para métricas y análisis
+├── i18n/                    # Internacionalización
+│   ├── index.ts              # Configuración i18next
+│   └── locales/              # Traducciones
+│       ├── es.json             # Español (idioma base)
+│       └── en.json             # English
 ├── store/                   # Zustand Store
 │   └── useAppStore.ts        # Store global con persist middleware
 ├── services/                # Servicios externos
@@ -66,6 +72,7 @@ src/
 │   ├── time.ts                # Utilidades de fecha/hora (parseDateString, calculateDuration)
 │   ├── notifications.ts       # Sistema de notificaciones push
 │   ├── pdfGenerator.ts        # Generación de PDF con jsPDF
+│   ├── excelGenerator.ts      # Generación de Excel con xlsx
 │   └── validationSchemas.ts   # Schemas Zod para validación
 ├── __tests__/               # Tests unitarios (Vitest)
 ├── types.ts                 # Definiciones de tipos TypeScript globales
@@ -196,6 +203,7 @@ const calculateDuration = (start: string, end: string): number => {
 ```typescript
 // 1. React y librerías externas
 import React, { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 // 2. Types locales
 import { View, Theme, Shift, Settings } from "./types";
@@ -205,7 +213,8 @@ import Header from "./components/Header";
 import { ClockView, CalendarView } from "./components/Views";
 
 // 4. Hooks personalizados
-import useLocalStorage from "./hooks/useLocalStorage";
+import { useAppStore } from "./store/useAppStore";
+import { useAnalytics } from "./hooks/useAnalytics";
 
 // 5. Estilos (siempre al final de los imports de código)
 import { APP_STYLES } from "./theme/styles";
@@ -238,6 +247,45 @@ console.log("Debugging shifts:", shifts);
     console.log("Dev mode log");
   }
   ```
+
+---
+
+## 🌐 Internacionalización (i18n)
+
+### Estructura
+
+- Configuración: `src/i18n/index.ts`
+- Traducciones: `src/i18n/locales/{lang}.json`
+- Idiomas soportados: Español (es), English (en)
+
+### Uso en Componentes
+
+```typescript
+import { useTranslation } from "react-i18next";
+
+const MyComponent = () => {
+  const { t } = useTranslation();
+  return <h1>{t("settings.title")}</h1>;
+};
+```
+
+### Añadir Traducciones
+
+Al añadir nuevos textos, siempre:
+
+1. Añadir la key en `es.json` primero (idioma base)
+2. Añadir la traducción equivalente en `en.json`
+3. Usar keys semánticas anidadas: `seccion.subseccion.texto`
+
+```json
+// es.json
+{
+  "settings": {
+    "title": "Configuración",
+    "categories": "Categorías"
+  }
+}
+```
 
 ---
 

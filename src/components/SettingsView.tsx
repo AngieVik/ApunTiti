@@ -14,10 +14,15 @@ import {
   sendLocalNotification,
 } from "../utils/notifications";
 import { HourTypeSchema, BackupDataSchema } from "../utils/validationSchemas";
+import { useTranslation } from "react-i18next";
+import { LANGUAGES } from "../i18n";
 
 import { useAppStore } from "../store/useAppStore";
 
 export const SettingsView: React.FC = () => {
+  // i18n
+  const { t, i18n } = useTranslation();
+
   // Store
   const settings = useAppStore((state) => state.settings);
   const { updateSettings, notify, sync, syncStatus } = useAppStore();
@@ -348,16 +353,17 @@ export const SettingsView: React.FC = () => {
           onChange={(e) => {
             setSettings((prev) => ({
               ...prev,
-              downloadFormat: e.target.value as "txt" | "pdf",
+              downloadFormat: e.target.value as "txt" | "pdf" | "xlsx",
             }));
             notify("Formato actualizado", "info");
           }}
         >
           <option value="txt">Texto (.txt)</option>
           <option value="pdf">Documento (.pdf)</option>
+          <option value="xlsx">Excel (.xlsx)</option>
         </Select>
 
-        <div className="mt-2">
+        <div className={APP_STYLES.CONFIGURACIÓN.themeSelectWrapper}>
           <Select
             label="Notificaciones"
             value={settings.pushEnabled ? "enabled" : "disabled"}
@@ -384,11 +390,11 @@ export const SettingsView: React.FC = () => {
         </div>
 
         {/* Theme Selector */}
-        <div className="mt-2">
-          <label className="block text-[9px] font-bold text-gray-700 dark:text-gray-200 mb-1 uppercase tracking-wider">
+        <div className={APP_STYLES.CONFIGURACIÓN.themeSelectWrapper}>
+          <label className={APP_STYLES.CONFIGURACIÓN.themeSelectLabel}>
             Tema de Color
           </label>
-          <div className="flex gap-2">
+          <div className={APP_STYLES.CONFIGURACIÓN.themeSelectGrid}>
             {COLOR_THEMES.map((theme) => (
               <button
                 key={theme.id}
@@ -396,10 +402,10 @@ export const SettingsView: React.FC = () => {
                   updateSettings((prev) => ({ ...prev, colorTheme: theme.id }));
                   notify(`Tema "${theme.name}" aplicado`, "success");
                 }}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all ${
+                className={`${APP_STYLES.CONFIGURACIÓN.themeButton} ${
                   (settings.colorTheme || "basico") === theme.id
-                    ? "border-2 border-current bg-gray-50 dark:bg-[#1a1a1a] font-bold"
-                    : "border-gray-200 dark:border-gray-700 hover:border-gray-400"
+                    ? APP_STYLES.CONFIGURACIÓN.themeButtonActive
+                    : APP_STYLES.CONFIGURACIÓN.themeButtonInactive
                 }`}
                 style={{
                   borderColor:
@@ -409,11 +415,38 @@ export const SettingsView: React.FC = () => {
                 }}
               >
                 <span
-                  className="w-4 h-4 rounded-full border border-white/20 shadow-sm"
+                  className={APP_STYLES.CONFIGURACIÓN.themePreview}
                   style={{ backgroundColor: theme.preview }}
                 />
-                <span className="text-xs text-gray-700 dark:text-gray-200">
+                <span className={APP_STYLES.CONFIGURACIÓN.themeButtonLabel}>
                   {theme.name}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Language Selector */}
+        <div className={APP_STYLES.CONFIGURACIÓN.themeSelectWrapper}>
+          <label className={APP_STYLES.CONFIGURACIÓN.themeSelectLabel}>
+            {t("settings.language")}
+          </label>
+          <div className={APP_STYLES.CONFIGURACIÓN.themeSelectGrid}>
+            {LANGUAGES.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => {
+                  i18n.changeLanguage(lang.code);
+                  notify(t("toast.languageChanged"), "success");
+                }}
+                className={`${APP_STYLES.CONFIGURACIÓN.themeButton} ${
+                  i18n.language === lang.code
+                    ? APP_STYLES.CONFIGURACIÓN.themeButtonActive
+                    : APP_STYLES.CONFIGURACIÓN.themeButtonInactive
+                }`}
+              >
+                <span className={APP_STYLES.CONFIGURACIÓN.themeButtonLabel}>
+                  {lang.name}
                 </span>
               </button>
             ))}
@@ -499,7 +532,7 @@ export const SettingsView: React.FC = () => {
           (settings.categories.length === 1 &&
             settings.categories[0] === SPECIAL_CATEGORY) ? (
             <li className={APP_STYLES.CONFIGURACIÓN.categoryItem}>
-              <span className="text-gray-500 dark:text-gray-400 text-sm">
+              <span className={APP_STYLES.CONFIGURACIÓN.emptyStateText}>
                 No hay categorías personalizadas
               </span>
             </li>
@@ -596,7 +629,7 @@ export const SettingsView: React.FC = () => {
           ))}
           {(settings.hourTypes || []).length === 0 ? (
             <li className={APP_STYLES.CONFIGURACIÓN.hourTypeItem}>
-              <span className="text-gray-500 dark:text-gray-400 text-sm">
+              <span className={APP_STYLES.CONFIGURACIÓN.emptyStateText}>
                 No hay tipos de hora personalizados
               </span>
             </li>
@@ -643,7 +676,7 @@ export const SettingsView: React.FC = () => {
 
       {/* SYNC CARD */}
       <Card className={APP_STYLES.CONFIGURACIÓN.backupCard}>
-        <div className="flex justify-between items-center">
+        <div className={APP_STYLES.CONFIGURACIÓN.syncHeader}>
           <h2 className={APP_STYLES.CONFIGURACIÓN.sectionTitle}>
             Sincronización Nube
           </h2>

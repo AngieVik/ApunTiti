@@ -44,7 +44,7 @@ export interface Shift {
 export interface Settings {
   categories: string[];
   hourTypes: HourType[];
-  downloadFormat: "txt" | "pdf";
+  downloadFormat: "txt" | "pdf" | "xlsx";
   pushEnabled?: boolean;
   colorTheme?: ColorTheme;
 }

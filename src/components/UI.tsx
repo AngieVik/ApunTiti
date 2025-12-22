@@ -57,7 +57,7 @@ const ButtonComponent: React.FC<ButtonProps> = ({
       {...props}
     >
       {loading ? (
-        <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+        <span className={APP_STYLES.MODOS.loadingSpinner} />
       ) : (
         children
       )}
@@ -184,7 +184,7 @@ const InputComponent: React.FC<InputProps> = ({
         {...props}
       />
       {errorMessage && state === "error" && (
-        <p className="text-[9px] text-error mt-0.5">{errorMessage}</p>
+        <p className={APP_STYLES.MODOS.inputErrorText}>{errorMessage}</p>
       )}
     </div>
   );
@@ -238,7 +238,7 @@ const SelectComponent: React.FC<SelectProps> = ({
         {/* Custom arrow for cleaner look */}
         <div className={SELECT_VARIANTS.arrow} aria-hidden="true">
           <svg
-            className="fill-current h-3 w-3"
+            className={APP_STYLES.MODOS.selectArrowIcon}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
           >
@@ -352,9 +352,9 @@ export const Toast: React.FC<ToastProps> = ({ notification, onClose }) => {
       : APP_STYLES.MODOS.toastInfo;
 
   const icons = {
-    success: <CheckIcon className="w-4 h-4 text-white" />,
-    error: <XMarkIcon className="w-4 h-4 text-white" />,
-    info: <FlagIcon className="w-4 h-4 text-white" />,
+    success: <CheckIcon className={APP_STYLES.MODOS.toastIconWhite} />,
+    error: <XMarkIcon className={APP_STYLES.MODOS.toastIconWhite} />,
+    info: <FlagIcon className={APP_STYLES.MODOS.toastIconWhite} />,
   };
 
   return (

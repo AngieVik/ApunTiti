@@ -6,6 +6,7 @@ import { Card, Button, Input, Select, ConfirmDialog } from "./UI";
 import { ChevronLeftIcon, ChevronRightIcon, XMarkIcon } from "./Icons";
 import { APP_STYLES } from "../theme/styles";
 import { toLocalISOString, calculateDuration } from "../utils/time";
+import { generateExcel } from "../utils/excelGenerator";
 import { MONTH_NAMES_ES } from "../constants/app";
 import { useAppStore } from "../store/useAppStore";
 import {
@@ -481,6 +482,13 @@ export const CalendarView: React.FC = () => {
         name: "export_data",
         properties: { format: "pdf", scope: title },
       });
+    } else if (settings.downloadFormat === "xlsx") {
+      generateExcel(filteredShifts, title, hourTypes);
+      notify("Excel descargado", "success");
+      trackEvent({
+        name: "export_data",
+        properties: { format: "xlsx", scope: title },
+      });
     } else {
       handleDownloadTxt(filteredShifts, title);
       trackEvent({
@@ -553,7 +561,7 @@ export const CalendarView: React.FC = () => {
           {/* GRUPO 2: Selectores de Fecha - Clickable anywhere */}
           <div className={APP_STYLES.CALENDARIO.dateSelectorsGroup}>
             <div
-              className="cursor-pointer"
+              className={APP_STYLES.CALENDARIO.datePickerWrapper}
               onClick={(e) => {
                 const input = e.currentTarget.querySelector("input");
                 if (input?.showPicker) input.showPicker();
@@ -567,7 +575,7 @@ export const CalendarView: React.FC = () => {
               />
             </div>
             <div
-              className="cursor-pointer"
+              className={APP_STYLES.CALENDARIO.datePickerWrapper}
               onClick={(e) => {
                 const input = e.currentTarget.querySelector("input");
                 if (input?.showPicker) input.showPicker();
@@ -773,7 +781,7 @@ export const CalendarView: React.FC = () => {
               </h3>
               <button
                 onClick={() => setIsEditOpen(false)}
-                className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                className={APP_STYLES.CALENDARIO.editModalCloseButton}
               >
                 <XMarkIcon className={APP_STYLES.MODOS.iconContent} />
               </button>

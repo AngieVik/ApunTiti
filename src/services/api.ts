@@ -27,7 +27,9 @@ export const MockSyncService = {
             timestamp: new Date().toISOString(),
           });
         } else {
-          console.error("Sync failed");
+          if (import.meta.env.DEV) {
+            console.error("Sync failed");
+          }
           resolve({
             success: false,
             message: "Error de conexión con el servidor",

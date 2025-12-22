@@ -338,6 +338,11 @@ export const APP_STYLES = {
     editModalGrid: "grid grid-cols-2 gap-3 mb-4",
     editModalColSpan: "col-span-2",
     editModalActions: "flex justify-end gap-2",
+    editModalCloseButton:
+      "text-text-muted hover:text-text-primary transition-colors",
+
+    // Date selector wrapper
+    datePickerWrapper: "cursor-pointer",
   },
 
   /**
@@ -408,6 +413,24 @@ export const APP_STYLES = {
       "p-1 text-text-muted hover:text-info hover:bg-info-bg rounded transition-colors",
     hourTypeDeleteButton:
       "p-1 text-text-muted hover:text-error hover:bg-error-bg rounded transition-colors",
+
+    // Theme selector section
+    themeSelectWrapper: "mt-2",
+    themeSelectLabel:
+      "block text-[9px] font-bold text-text-secondary mb-1 uppercase tracking-wider",
+    themeSelectGrid: "flex gap-2",
+    themeButton:
+      "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all",
+    themeButtonActive: "border-2 border-current bg-surface-subtle font-bold",
+    themeButtonInactive: "border-border hover:border-text-muted",
+    themePreview: "w-4 h-4 rounded-full border border-white/20 shadow-sm",
+    themeButtonLabel: "text-xs text-text-secondary",
+
+    // Empty state text
+    emptyStateText: "text-text-muted text-sm",
+
+    // Sync header
+    syncHeader: "flex justify-between items-center",
   },
 
   /**
@@ -482,6 +505,20 @@ export const APP_STYLES = {
     textAccent: "text-accent",
     textSuccess: "text-success",
     textError: "text-error",
+    cursorPointer: "cursor-pointer",
+
+    // Loading spinner
+    loadingSpinner:
+      "animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full",
+
+    // Input states
+    inputErrorText: "text-[9px] text-error mt-0.5",
+
+    // Select arrow icon
+    selectArrowIcon: "fill-current h-3 w-3",
+
+    // Toast icons (white variant)
+    toastIconWhite: "w-4 h-4 text-white",
   },
 } as const;
 
